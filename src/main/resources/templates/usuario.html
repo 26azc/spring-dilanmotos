@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios Autenticados</title>
+</head>
+<body>
+    <h1>Información del usuario</h1>
+    <ul>
+        <li><strong>Nombre:</strong> <span th:text="${usuario.nombre}"></span></li>
+        <li><strong>Correo:</strong> <span th:text="${usuario.correo}"></span></li>
+        <li><strong>Contraseña:</strong> <span th:text="${usuario.contrasena}"></span></li>
+        <li><strong>ID de usuario:</strong> <span th:text="${usuario.id_usuario}"></span></li>
+    </ul>
+</body>
+</html>
