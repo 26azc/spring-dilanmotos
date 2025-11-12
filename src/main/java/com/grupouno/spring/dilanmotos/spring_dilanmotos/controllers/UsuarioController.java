@@ -12,7 +12,6 @@ public class UsuarioController {
     @GetMapping("/usuario")
 
     
-    
     public String Usuario(Model model){
         Usuarios user1 = new Usuarios( "Juan Andres ",
         " juan@gmail.com", "flow123", 1);
