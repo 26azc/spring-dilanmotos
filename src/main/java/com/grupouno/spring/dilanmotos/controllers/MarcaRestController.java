@@ -1,4 +1,4 @@
-package com.grupouno.spring.dilanmotos.spring_dilanmotos.controllers;
+package com.grupouno.spring.dilanmotos.controllers;
 
 import java.util.HashMap;
 import java.util.Map;

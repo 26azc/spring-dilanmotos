@@ -1,4 +1,4 @@
-package com.grupouno.spring.dilanmotos.spring_dilanmotos.models;
+package com.grupouno.spring.dilanmotos.models;
 
 public class Caracteristicas {
 

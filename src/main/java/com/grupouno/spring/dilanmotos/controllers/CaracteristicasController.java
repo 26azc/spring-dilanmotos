@@ -1,4 +1,11 @@
-package com.grupouno.spring.dilanmotos.spring_dilanmotos.controllers;
+package com.grupouno.spring.dilanmotos.controllers;
+
+public class CaracteristicasController {
+
+}
+/*
+ * 
+ * package com.grupouno.spring.dilanmotos.spring_dilanmotos.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,3 +28,5 @@ public String Usuario(Model model){
     return "usuario";
     }
 }
+
+ */

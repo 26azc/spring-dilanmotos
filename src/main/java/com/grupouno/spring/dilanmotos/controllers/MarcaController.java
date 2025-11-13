@@ -1,4 +1,4 @@
-package com.grupouno.spring.dilanmotos.spring_dilanmotos.controllers;
+package com.grupouno.spring.dilanmotos.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
