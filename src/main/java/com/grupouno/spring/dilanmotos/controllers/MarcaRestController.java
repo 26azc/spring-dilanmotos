@@ -1,25 +1,21 @@
 package com.grupouno.spring.dilanmotos.controllers;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.grupouno.spring.dilanmotos.models.Marca;
+import com.grupouno.spring.dilanmotos.repositories.MarcaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class MarcaRestController {
 
+    @Autowired
+    private MarcaRepository marcaRepository;
 
-    @GetMapping("/marca2")
-    
-    public Map<String, Object> marca2() {
-       Map<String, Object> respuesta = new HashMap<>();
-       respuesta.put("titulo", "marca");
-       respuesta.put("Servidor", "nombre del servidor");
-       respuesta.put("Ip", "12345");
-       return respuesta;
-
+    @GetMapping("/marca")
+    public List<Marca> listarMarcas() {
+        return marcaRepository.findAll();
     }
-
 }
