@@ -14,7 +14,7 @@ public class MarcaRestController {
     @Autowired
     private MarcaRepository marcaRepository;
 
-    @GetMapping("/marca")
+    @GetMapping("/marcas")
     public List<Marca> listarMarcas() {
         return marcaRepository.findAll();
     }
