@@ -14,7 +14,7 @@
         <div class="card-body" style="width: 1200px;">
             <h3>Modulo Marcas</h3>
             <hr>
-
+            
             <!-- Formulario de búsqueda -->
             <form th:action="@{/marca}" method="get">
                 <div class="row g-2 align-items-center mb-3">
@@ -78,7 +78,7 @@
             <div th:if="${marca == null or #lists.isEmpty(marca)}" class="alert alert-info text-center mt-3">
                 <i class="fas fa-info-circle"></i>
                 <span th:if="${param.search != null}">
-                    No se encontraron marcas con el dato "<span th:text="${param.search}"></span>"
+                    No se encontraron marca con el dato "<span th:text="${param.search}"></span>"
                 </span>
                 <span th:unless="${param.search != null}">
                     No hay marcas registradas.

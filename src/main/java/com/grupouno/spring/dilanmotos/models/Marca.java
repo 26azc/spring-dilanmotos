@@ -19,8 +19,8 @@ public class Marca {
 
     public Marca() {}
 
-    public int getIdUsuario() { return id_marca; }
-    public void setIdUsuario(int id_marca) { this.id_marca = id_marca; }
+    public int getId_marca() { return id_marca; }
+    public void setId_marca(int id_marca) { this.id_marca = id_marca; }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }

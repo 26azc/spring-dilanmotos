@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface MarcaRepository extends JpaRepository<Marca, Integer> {
-    
+
     List<Marca> findByNombreContainingIgnoreCase(String nombre); 
 }

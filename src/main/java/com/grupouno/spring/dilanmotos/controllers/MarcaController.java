@@ -60,4 +60,4 @@ public class MarcaController {
         marcaRepository.deleteById(id);
         return "redirect:/marca";
     }
-}
+} 
