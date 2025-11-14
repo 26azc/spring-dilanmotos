@@ -12,10 +12,10 @@ import java.util.List;
 public class MarcaRestController {
 
     @Autowired
-    private MarcaRepository marcaRepository;
+    private MarcaRepository MarcaRepository;
 
     @GetMapping("/marcas")
     public List<Marca> listarMarcas() {
-        return marcaRepository.findAll();
+        return MarcaRepository.findAll();
     }
 }
