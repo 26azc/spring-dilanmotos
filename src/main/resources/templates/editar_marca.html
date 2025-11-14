@@ -9,7 +9,7 @@
 <div class="container mt-5">
     <h3>Editar Marca</h3>
     <form th:action="@{/marca/actualizar}" th:object="${marcaEditada}" method="post">
-        <input type="hidden" th:field="*{id_marca}">
+        <input type="hidden" th:field="*{idMarca}">
         <div class="mb-3">
             <label class="form-label">Nombre</label>
             <input type="text" class="form-control" th:field="*{nombre}" required>

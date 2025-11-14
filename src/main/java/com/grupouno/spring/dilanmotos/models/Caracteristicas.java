@@ -1,33 +1,35 @@
 package com.grupouno.spring.dilanmotos.models;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+
+@Entity
 public class Caracteristicas {
 
-    private int idCaracteristica;
-    private int idMoto;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id_caracteristica;
+
+    private Integer id_moto;
+
+    @NotBlank(message = "La descripción no puede estar vacía")
     private String descripcion;
 
-
-public Caracteristicas(int idCaracteristica, int idMoto, String descripcion){
-
-    this.idCaracteristica = idCaracteristica;
-    this.idMoto = idMoto;
-    this.descripcion = descripcion;
-}
-
-    public int getIdCaracteristica() {
-        return idCaracteristica;
+    // Getters y setters
+    public Integer getId_caracteristica() {
+        return id_caracteristica;
     }
 
-    public void setIdCaracteristica(int idCaracteristica) {
-        this.idCaracteristica = idCaracteristica;
+    public void setId_caracteristica(Integer id_caracteristica) {
+        this.id_caracteristica = id_caracteristica;
     }
 
-    public int getIdMoto() {
-        return idMoto;
+    public Integer getId_moto() {
+        return id_moto;
     }
 
-    public void setIdMoto(int idMoto) {
-        this.idMoto = idMoto;
+    public void setId_moto(Integer id_moto) {
+        this.id_moto = id_moto;
     }
 
     public String getDescripcion() {
