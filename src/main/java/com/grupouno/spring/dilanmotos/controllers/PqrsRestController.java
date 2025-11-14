@@ -1,7 +1,7 @@
 package com.grupouno.spring.dilanmotos.controllers;
 
-import com.grupouno.spring.dilanmotos.models.Usuarios;
-import com.grupouno.spring.dilanmotos.repositories.UsuarioRepository;
+import com.grupouno.spring.dilanmotos.models.PQRS;
+import com.grupouno.spring.dilanmotos.repositories.PqrsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +12,10 @@ import java.util.List;
 public class PqrsRestController {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private PqrsRepository PqrsRepository;
 
-    @GetMapping("/usuarios")
-    public List<pqrs> listarPqrs() {
-        return usuarioRepository.findAll();
+    @GetMapping("/PQRS")
+    public List<PQRS> listarPqrs() {
+        return PqrsRepository.findAll();
     }
 }
