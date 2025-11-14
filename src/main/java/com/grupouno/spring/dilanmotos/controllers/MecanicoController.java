@@ -18,8 +18,8 @@ public class MecanicoController {
     @GetMapping("/mecanico")
     public String mostrarMecanicos(@RequestParam(value = "search", required = false) String search, Model model) {
     List<Mecanico> mecanico = (search != null && !search.isEmpty())
-            
-            ? mecanicoRepository.findByNombreContainingIgnoreCaseOrCorreoContainingIgnoreCase(search, search)
+         
+            ? mecanicoRepository.findByNombreContainingIgnoreCase(search)
             : mecanicoRepository.findAll();
 
     model.addAttribute("mecanicos", mecanico);
