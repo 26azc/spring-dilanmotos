@@ -1,6 +1,5 @@
 package com.grupouno.spring.dilanmotos.repositories;
 
-import com.grupouno.spring.dilanmotos.models.Marca;
 import com.grupouno.spring.dilanmotos.models.Mecanico;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
