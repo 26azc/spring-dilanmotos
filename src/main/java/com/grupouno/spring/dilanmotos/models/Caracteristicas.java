@@ -15,7 +15,7 @@ public class Caracteristicas {
     @NotBlank(message = "La descripción no puede estar vacía")
     private String descripcion;
 
-    // Getters y setters
+ 
     public Integer getId_caracteristica() {
         return id_caracteristica;
     }
