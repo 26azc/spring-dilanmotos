@@ -10,7 +10,7 @@ public class Caracteristicas {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_caracteristica;
 
-    private Integer id_moto;
+    public Integer id_moto;
 
     @NotBlank(message = "La descripción no puede estar vacía")
     private String descripcion;
