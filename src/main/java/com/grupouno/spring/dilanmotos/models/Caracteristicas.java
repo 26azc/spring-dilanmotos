@@ -8,28 +8,28 @@ public class Caracteristicas {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_caracteristica;
+    private Integer idCaracteristica;
 
-    private Integer id_moto;
+    private Integer idMoto;
 
     @NotBlank(message = "La descripción no puede estar vacía")
     private String descripcion;
 
     // Getters y setters
-    public Integer getId_caracteristica() {
-        return id_caracteristica;
+    public Integer getIdCaracteristica() {
+        return idCaracteristica;
     }
 
-    public void setId_caracteristica(Integer id_caracteristica) {
-        this.id_caracteristica = id_caracteristica;
+    public void setIdCaracteristica(Integer idCaracteristica) {
+        this.idCaracteristica = idCaracteristica;
     }
 
-    public Integer getId_moto() {
-        return id_moto;
+    public Integer getIdMoto() {
+        return idMoto;
     }
 
-    public void setId_moto(Integer id_moto) {
-        this.id_moto = id_moto;
+    public void setIdMoto(Integer idMoto) {
+        this.idMoto = idMoto;
     }
 
     public String getDescripcion() {

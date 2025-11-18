@@ -2,94 +2,125 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Módulo Características</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #f8f9fa;
+            padding-top: 1rem;
+            border-right: 1px solid #dee2e6;
+        }
+        .sidebar .nav-link {
+            color: #333;
+            padding: 10px 20px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+        }
+    </style>
 </head>
 <body>
-<<div class="container-sm d-flex justify-content-center mt-5">
-    <div class="card">
-        <div class="card-body" style="width: 1200px;">
-            <h3>Módulo Características</h3>
-            <hr>
 
-            <!-- Formulario de búsqueda -->
-            <form th:action="@{/caracteristicas}" method="get">
-                <div class="row g-2 align-items-center mb-3">
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-search"></i></span>
-                            <input type="text" class="form-control"
-                                   placeholder="Buscar por descripción"
-                                   name="search"
-                                   th:value="${param.search}">
-                        </div>
-                    </div>
-                    <div class="col-md-6 text-end">
-                        <button type="submit" class="btn btn-info"><i class="fas fa-search"></i> Buscar</button>
-                        <a th:href="@{/caracteristicas}" class="btn btn-warning"><i class="fas fa-list"></i> Reset</a>
-                    </div>
-                </div>
-            </form>
+<!-- Menú lateral -->
+<div th:replace="menu :: sidebar"></div>
 
-            <!-- Formulario para agregar característica -->
-            <form th:action="@{/caracteristicas}" th:object="${nuevaCaracteristica}" method="post" class="mb-4">
-                <div class="row g-3">
-                    <div class="col-md-8">
-                        <label class="form-label">Descripción</label>
-                        <input type="text" class="form-control" th:field="*{descripcion}" required>
-                        <div class="text-danger" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
-                    </div>
-                </div>
-                <div class="text-end mt-3">
-                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Guardar</button>
-                </div>
-            </form>
+<!-- Contenido principal -->
+<div class="main-content">
+    <h3>Módulo Características</h3>
+    <hr>
 
-            <!-- Tabla de Características -->
-            <div th:if="${caracteristicas != null and #lists.size(caracteristicas) > 0}">
-                <table class="table table-striped table-hover table-bordered">
-                    <thead class="table-primary">
-                        <tr>
-                            <th>ID</th>
-                            <th>ID Moto</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="caracteristica : ${caracteristicas}">
-                            <td th:text="${caracteristica.id_caracteristica}"></td>
-                            <td th:text="${caracteristica.id_moto}"></td>
-                            <td th:text="${caracteristica.descripcion}"></td>
-                            <td>
-                                <a th:href="@{'/caracteristicas/editar/' + ${caracteristica.id_caracteristica}}" class="btn btn-success btn-sm">
-                                    <i class="fa-solid fa-pen-to-square"></i> Editar
-                                </a>
-                                <a th:href="@{'/caracteristicas/eliminar/' + ${caracteristica.id_caracteristica}}" class="btn btn-danger btn-sm"
-                                   onclick="return confirm('¿Estás seguro de que deseas eliminar esta característica?');">
-                                    <i class="fa-solid fa-trash"></i> Eliminar
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+    <!-- Mensajes -->
+    <div th:if="${param.creado}" class="alert alert-success">¡Característica creada exitosamente!</div>
+    <div th:if="${param.actualizado}" class="alert alert-success">¡Característica actualizada!</div>
+    <div th:if="${param.eliminado}" class="alert alert-warning">Característica eliminada.</div>
+
+    <!-- Formulario de búsqueda -->
+    <form th:action="@{/caracteristicas}" method="get">
+        <div class="row g-2 align-items-center mb-3">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Buscar por descripción" name="search" th:value="${param.search}">
+                </div>
             </div>
-
-            <!-- Mensaje si no hay resultados -->
-            <div th:if="${caracteristicas == null or #lists.isEmpty(caracteristicas)}" class="alert alert-info text-center mt-3">
-                <i class="fas fa-info-circle"></i>
-                <span th:if="${param.search != null}">
-                    No se encontraron características con el dato "<span th:text="${param.search}"></span>"
-                </span>
-                <span th:unless="${param.search != null}">
-                    No hay características registradas.
-                </span>
+            <div class="col-md-6 text-end">
+                <button type="submit" class="btn btn-info"><i class="fas fa-search"></i> Buscar</button>
+                <a th:href="@{/caracteristicas}" class="btn btn-warning"><i class="fas fa-list"></i> Reset</a>
             </div>
         </div>
+    </form>
+
+    <!-- Formulario para agregar característica -->
+    <form th:action="@{/caracteristicas}" th:object="${nuevaCaracteristica}" method="post" class="mb-4">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">ID Moto</label>
+                <input type="number" class="form-control" th:field="*{idMoto}">
+                <div class="text-danger" th:if="${#fields.hasErrors('idMoto')}" th:errors="*{idMoto}"></div>
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">Descripción</label>
+                <input type="text" class="form-control" th:field="*{descripcion}">
+                <div class="text-danger" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
+            </div>
+        </div>
+        <div class="text-end mt-3">
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Guardar</button>
+        </div>
+    </form>
+
+    <!-- Tabla de Características -->
+    <div th:if="${caracteristicas != null and #lists.size(caracteristicas) > 0}">
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>ID Moto</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="caracteristica : ${caracteristicas}">
+                    <td th:text="${caracteristica.idCaracteristica}"></td>
+                    <td th:text="${caracteristica.idMoto}"></td>
+                    <td th:text="${caracteristica.descripcion}"></td>
+                    <td>
+                        <a th:href="@{'/caracteristicas/editar/' + ${caracteristica.idCaracteristica}}" class="btn btn-success btn-sm">
+                            <i class="fa-solid fa-pen-to-square"></i> Editar
+                        </a>
+                        <a th:href="@{'/caracteristicas/eliminar/' + ${caracteristica.idCaracteristica}}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Estás seguro de que deseas eliminar esta característica?');">
+                            <i class="fa-solid fa-trash"></i> Eliminar
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-</container>
+
+    <!-- Mensaje si no hay resultados -->
+    <div th:if="${caracteristicas == null or #lists.isEmpty(caracteristicas)}" class="alert alert-info text-center mt-3">
+        <i class="fas fa-info-circle"></i>
+        <span th:if="${param.search != null}">
+            No se encontraron características con el dato "<span th:text="${param.search}"></span>"
+        </span>
+        <span th:unless="${param.search != null}">
+            No hay características registradas.
+        </span>
+    </div>
+</div>
+
 </body>
 </html>
