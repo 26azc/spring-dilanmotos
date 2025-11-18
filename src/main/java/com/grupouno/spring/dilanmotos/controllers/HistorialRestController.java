@@ -1,5 +1,7 @@
-/*
- * package com.grupouno.spring.dilanmotos.controllers;
+package com.grupouno.spring.dilanmotos.controllers;
+
+import com.grupouno.spring.dilanmotos.models.Historial;
+import com.grupouno.spring.dilanmotos.repositories.HistorialRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,4 +20,3 @@ public class HistorialRestController {
     }
 }
 
- */
