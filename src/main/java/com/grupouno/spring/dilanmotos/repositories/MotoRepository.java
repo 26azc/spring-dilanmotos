@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 @Repository
 
 public interface MotoRepository extends JpaRepository<Moto, Integer> {
-    List<Moto> findByNombreContainingIgnoreCase(String nombre);
+    List<Moto> findByModeloContainingIgnoreCase(String modelo);
 }
