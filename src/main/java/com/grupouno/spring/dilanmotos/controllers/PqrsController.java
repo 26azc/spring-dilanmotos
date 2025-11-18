@@ -1,4 +1,5 @@
-package com.grupouno.spring.dilanmotos.controllers;
+/*
+ * package com.grupouno.spring.dilanmotos.controllers;
 
 import com.grupouno.spring.dilanmotos.models.PQRS;
 import com.grupouno.spring.dilanmotos.repositories.PqrsRepository;
@@ -22,7 +23,7 @@ public class PqrsController {
     @GetMapping("/pqrs")
     public String mostrarPqrs(@RequestParam(value = "search", required = false) String search, Model model) {
         List<PQRS> pqrs = (search != null && !search.isEmpty())
-            ? pqrsRepository.findByPQRSContainingIgnoreCaseOrCorreoContainingIgnoreCase(search, search)
+            ? pqrsRepository.findByNombreContainingIgnoreCaseOrCorreoContainingIgnoreCase(search, search)
             : pqrsRepository.findAll();
 
         model.addAttribute("pqrs", pqrs);
@@ -77,3 +78,8 @@ public class PqrsController {
         return "redirect:/pqrs?error=not_found";
     }
 }
+
+ * 
+ * 
+ */
+

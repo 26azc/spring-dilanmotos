@@ -1,24 +1,19 @@
+
 package com.grupouno.spring.dilanmotos.controllers;
 
 import java.util.List;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import com.grupouno.spring.dilanmotos.models.Moto;
 import com.grupouno.spring.dilanmotos.repositories.MotoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class MotoController {
@@ -62,7 +57,7 @@ public class MotoController {
     }
 
  @PostMapping("/moto/actualizar")
-    public String actualizarMoto(@Valid @ModelAttribute("motoEditada") Moto moto, BindingResult result) {
+    public String actualizarMoto(@Valid @NonNull @ModelAttribute("motoEditada") Moto moto, BindingResult result) {
         if (result.hasErrors()) {
             return "editar_motos";
         }
