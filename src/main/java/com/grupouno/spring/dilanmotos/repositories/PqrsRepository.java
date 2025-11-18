@@ -8,5 +8,7 @@ import java.util.List;
 
 @Repository
 public interface PqrsRepository extends JpaRepository<PQRS, Integer> {
-   List<PQRS> findByAsuntoContainingIgnoreCaseOrDescripcionContainingIgnoreCase(String asunto, String descripcion);
+
+   public List<PQRS> findByTipoContainingIgnoreCaseOrAsuntoContainingIgnoreCase(String tipo, String asunto);
+
 }

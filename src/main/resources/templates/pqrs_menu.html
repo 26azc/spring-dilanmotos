@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú PQRS</title>
+    <title>Gestión de PQRS</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -35,45 +35,126 @@
 </head>
 <body>
 
-<!-- Menú lateral incluido desde fragmento -->
 <div th:replace="menu :: sidebar"></div>
 
-<!-- Contenido principal -->
 <div class="main-content">
     <div class="container">
+        
         <div class="card shadow">
             <div class="card-header bg-primary text-white text-center">
-                <h2><i class="fa-solid fa-envelope-circle-check"></i> Menú PQRS</h2>
+                <h2><i class="fa-solid fa-envelope-circle-check"></i> Gestión de PQRS</h2>
             </div>
+            
             <div class="card-body">
-                <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
-
-                    <div class="col text-center">
-                        <a href="/crear_pqrs" class="btn btn-outline-success w-100 py-3">
-                            <i class="fa-solid fa-plus-circle fa-lg"></i><br>Crear PQRS
+                
+                <div th:if="${param.creado}" class="alert alert-success alert-dismissible fade show" role="alert">¡PQRS creada exitosamente! <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+                <div th:if="${param.actualizado}" class="alert alert-info alert-dismissible fade show" role="alert">¡PQRS actualizada exitosamente! <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+                <div th:if="${param.eliminado}" class="alert alert-danger alert-dismissible fade show" role="alert">¡PQRS eliminada correctamente! <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+                
+                
+                <div class="mb-4 p-3 bg-light shadow-sm rounded">
+                    <h4 class="mb-3"><i class="fa-solid fa-magnifying-glass"></i> Filtro de Búsqueda</h4>
+                    <form th:action="@{/pqrs}" method="GET" class="d-flex">
+                        <input 
+                            type="search" 
+                            name="search" 
+                            class="form-control me-2" 
+                            placeholder="Buscar por Tipo o Asunto..." 
+                            th:value="${param.search}"
+                        >
+                        <button class="btn btn-primary" type="submit">Buscar</button>
+                        <a th:href="@{/pqrs}" class="btn btn-secondary ms-2">Limpiar</a>
+                    </form>
+                </div>
+                
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-success text-white">
+                        <a class="text-white text-decoration-none d-block" data-bs-toggle="collapse" href="#formularioCreacion" role="button" aria-expanded="true" aria-controls="formularioCreacion">
+                            <i class="fa-solid fa-plus-circle"></i> **Crear Nueva PQRS** (Click para desplegar)
                         </a>
                     </div>
+                    <div class="collapse show" id="formularioCreacion">
+                        <div class="p-4">
+                            <form th:action="@{/pqrs}" th:object="${nuevoPqrs}" method="POST">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="tipo" class="form-label">Tipo de PQRS</label>
+                                        <input type="text" id="tipo" th:field="*{tipo}" class="form-control" placeholder="Petición, Queja, Reclamo..." required>
+                                        <div class="text-danger" th:if="${#fields.hasErrors('tipo')}" th:errors="*{tipo}">Error de Tipo</div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="asunto" class="form-label">Asunto</label>
+                                        <input type="text" id="asunto" th:field="*{asunto}" class="form-control" required>
+                                        <div class="text-danger" th:if="${#fields.hasErrors('asunto')}" th:errors="*{asunto}">Error de Asunto</div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="descripcion" class="form-label">Descripción</label>
+                                    <textarea id="descripcion" th:field="*{descripcion}" class="form-control" rows="3" required></textarea>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">Error de Descripción</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="comentario_usuario" class="form-label">Comentario Usuario</label>
+                                    <textarea id="comentario_usuario" th:field="*{comentario_usuario}" class="form-control" rows="3" required></textarea>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('comentario_usuario')}" th:errors="*{comentario_usuario}">Error de Comentario</div>
+                                </div>
 
-                    <div class="col text-center">
-                        <a href="/listar_pqrs" class="btn btn-outline-info w-100 py-3">
-                            <i class="fa-solid fa-list fa-lg"></i><br>Listar PQRS
+                                <button type="submit" class="btn btn-success mt-2">Guardar PQRS</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-0"><i class="fa-solid fa-list"></i> Listado de PQRS</h4>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${pqrs.isEmpty()}" class="alert alert-warning">
+                            No se encontraron PQRS.
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table th:unless="${pqrs.isEmpty()}" class="table table-hover table-striped table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tipo</th>
+                                        <th>Asunto</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item : ${pqrs}">
+                                        <td th:text="${item.idPqrs}"></td>
+                                        <td th:text="${item.tipo}"></td>
+                                        <td th:text="${item.asunto}"></td>
+                                        <td th:text="${item.estado}"></td>
+                                        <td>
+                                            <a th:href="@{/pqrs/editar/{id}(id=${item.idPqrs})}" class="btn btn-sm btn-info me-2" title="Editar/Responder">
+                                                <i class="fa-solid fa-edit"></i>
+                                            </a>
+                                            <a th:href="@{/pqrs/eliminar/{id}(id=${item.idPqrs})}" class="btn btn-sm btn-danger" title="Eliminar"
+                                                onclick="return confirm('¿Está seguro de eliminar la PQRS?')"
+                                            >
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <a th:href="@{/dashboard}" class="btn btn-outline-secondary">
+                            <i class="fa-solid fa-arrow-left"></i> Volver al Dashboard
                         </a>
                     </div>
-
-                    <div class="col text-center">
-                        <a href="/estadisticas_pqrs" class="btn btn-outline-warning w-100 py-3">
-                            <i class="fa-solid fa-chart-column fa-lg"></i><br>Estadísticas PQRS
-                        </a>
-                    </div>
-
-                    <div class="col text-center">
-                        <a href="/dashboard" class="btn btn-outline-secondary w-100 py-3">
-                            <i class="fa-solid fa-arrow-left fa-lg"></i><br>Volver al Dashboard
-                        </a>
-                    </div>
-
                 </div>
             </div>
+            
             <div class="card-footer text-center">
                 <p class="mb-0">&copy; Todos los derechos reservados.</p>
             </div>
@@ -81,5 +162,6 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
