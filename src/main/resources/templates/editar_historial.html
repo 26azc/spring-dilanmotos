@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Historial</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h3>Editar Historial</h3>
+    <form th:action="@{/historial/actualizar}" th:object="${historialEditado}" method="post">
+        <!-- Campo oculto para el ID -->
+        <input type="hidden" th:field="*{id}">
+
+        <!-- Campo Acción -->
+        <div class="mb-3">
+            <label class="form-label">Acción</label>
+            <input type="text" class="form-control" th:field="*{accion}" required>
+            <div class="text-danger" th:if="${#fields.hasErrors('accion')}" th:errors="*{accion}"></div>
+        </div>
+
+        <!-- Campo Detalle -->
+        <div class="mb-3">
+            <label class="form-label">Detalle</label>
+            <textarea class="form-control" th:field="*{detalle}" required></textarea>
+            <div class="text-danger" th:if="${#fields.hasErrors('detalle')}" th:errors="*{detalle}"></div>
+        </div>
+
+        <!-- Campo Fecha (si lo manejas en la entidad) -->
+        <div class="mb-3">
+            <label class="form-label">Fecha</label>
+            <input type="datetime-local" class="form-control" th:field="*{fecha}">
+            <div class="text-danger" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></div>
+        </div>
+
+        <!-- Botones -->
+        <button type="submit" class="btn btn-success">Actualizar</button>
+        <a th:href="@{/historial}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>
