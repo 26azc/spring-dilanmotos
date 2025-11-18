@@ -25,7 +25,7 @@ public class TipoServicioController {
             ? tipoServicioRepository.findByNombreContainingIgnoreCase(search)
             : tipoServicioRepository.findAll();
 
-        model.addAttribute("tipoServicios", tipoServicios);
+        model.addAttribute("listaTipoServicio", tipoServicios); // ✅ nombre corregido
         model.addAttribute("nuevoTipoServicio", new TipoServicio());
         return "tipoServicio";
     }
@@ -38,7 +38,7 @@ public class TipoServicioController {
         Model model
     ) {
         if (result.hasErrors()) {
-            model.addAttribute("tipoServicio", tipoServicioRepository.findAll());
+            model.addAttribute("listaTipoServicio", tipoServicioRepository.findAll());
             return "tipoServicio";
         }
 

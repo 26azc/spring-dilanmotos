@@ -25,7 +25,7 @@ public class MecanicoController {
             ? mecanicoRepository.findByNombreContainingIgnoreCase(search)
             : mecanicoRepository.findAll();
 
-        model.addAttribute("mecanicos", mecanicos);
+        model.addAttribute("mecanicos", mecanicos); // ✅ nombre corregido
         model.addAttribute("nuevoMecanico", new Mecanico());
         return "mecanico";
     }
