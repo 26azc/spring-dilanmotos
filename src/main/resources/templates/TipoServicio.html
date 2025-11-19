@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo Marcas</title>
+    <title>Módulo Tipo de Servicio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -33,20 +32,25 @@
 </head>
 <body>
 
-<!-- Menú lateral incluido desde fragmento -->
+<!-- Menú lateral -->
 <div th:replace="menu :: sidebar"></div>
 
 <!-- Contenido principal -->
 <div class="main-content">
-    <h3>Módulo Marcas</h3>
+    <h3>Módulo Tipo de Servicio</h3>
     <hr>
 
+    <!-- Mensajes -->
+    <div th:if="${param.creado}" class="alert alert-success">¡Tipo de servicio creado exitosamente!</div>
+    <div th:if="${param.actualizado}" class="alert alert-success">¡Tipo de servicio actualizado!</div>
+    <div th:if="${param.eliminado}" class="alert alert-warning">Tipo de servicio eliminado.</div>
+
     <!-- Formulario de búsqueda -->
-    <form th:action="@{/marca}" method="get">
+    <form th:action="@{/tipoServicio}" method="get">
         <div class="row g-2 align-items-center mb-3">
             <div class="col-md-6">
                 <div class="input-group">
-                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <span class="input-group-text"><i class="fa-solid fa-search"></i></span>
                     <input type="text" class="form-control"
                            placeholder="Buscar por nombre"
                            name="search"
@@ -54,19 +58,24 @@
                 </div>
             </div>
             <div class="col-md-6 text-end">
-                <button type="submit" class="btn btn-info"><i class="fas fa-search"></i> Buscar</button>
-                <a th:href="@{/marca}" class="btn btn-warning"><i class="fas fa-list"></i> Reset</a>
+                <button type="submit" class="btn btn-info"><i class="fa-solid fa-search"></i> Buscar</button>
+                <a th:href="@{/tipoServicio}" class="btn btn-warning"><i class="fa-solid fa-list"></i> Reset</a>
             </div>
         </div>
     </form>
 
-    <!-- Formulario para agregar marca -->
-    <form th:action="@{/marca}" th:object="${nuevaMarca}" method="post" class="mb-4">
+    <!-- Formulario para agregar tipos de servicios -->
+    <form th:action="@{/tipoServicio}" th:object="${nuevoTipoServicio}" method="post" class="mb-4">
         <div class="row g-3">
             <div class="col-md-4">
                 <label class="form-label">Nombre</label>
                 <input type="text" class="form-control" th:field="*{nombre}" required>
                 <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Descripción</label>
+                <input type="text" class="form-control" th:field="*{descripcion}" required>
+                <div class="text-danger" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
             </div>
         </div>
         <div class="text-end mt-3">
@@ -74,26 +83,28 @@
         </div>
     </form>
 
-    <!-- Tabla de Marcas -->
-    <div th:if="${marcas != null and #lists.size(marcas) > 0}">
+    <!-- Tabla de tipos de servicios -->
+    <div th:if="${listaTipoServicio != null and #lists.size(listaTipoServicio) > 0}">
         <table class="table table-striped table-hover table-bordered">
             <thead class="table-primary">
                 <tr>
-                    <th>ID</th>
+                    <th>idTipoServicio</th>
                     <th>Nombre</th>
+                    <th>Descripción</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="marca : ${marcas}">
-                    <td th:text="${marca.idMarca}"></td>
-                    <td th:text="${marca.nombre}"></td>
+                <tr th:each="tipoServicio : ${listaTipoServicio}">
+                    <td th:text="${tipoServicio.idTipoServicio}"></td>
+                    <td th:text="${tipoServicio.nombre}"></td>
+                    <td th:text="${tipoServicio.descripcion}"></td>
                     <td>
-                        <a th:href="@{'/marca/editar/' + ${marca.idMarca}}" class="btn btn-success btn-sm">
+                        <a th:href="@{'/tipoServicio/editar/' + ${tipoServicio.idTipoServicio}}" class="btn btn-success btn-sm">
                             <i class="fa-solid fa-pen-to-square"></i> Editar
                         </a>
-                        <a th:href="@{'/marca/eliminar/' + ${marca.idMarca}}" class="btn btn-danger btn-sm"
-                           onclick="return confirm('¿Estás seguro de que deseas eliminar esta marca?');">
+                        <a th:href="@{'/tipoServicio/eliminar/' + ${tipoServicio.idTipoServicio}}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Estás seguro de que deseas eliminar este tipo de servicio?');">
                             <i class="fa-solid fa-trash"></i> Eliminar
                         </a>
                     </td>
@@ -103,16 +114,17 @@
     </div>
 
     <!-- Mensaje si no hay resultados -->
-    <div th:if="${marcas == null or #lists.isEmpty(marcas)}" class="alert alert-info text-center mt-3">
-        <i class="fas fa-info-circle"></i>
+    <div th:if="${listaTipoServicio == null or #lists.isEmpty(listaTipoServicio)}" class="alert alert-info text-center mt-3">
+        <i class="fa-solid fa-info-circle"></i>
         <span th:if="${param.search != null}">
-            No se encontraron marcas con el dato "<span th:text="${param.search}"></span>"
+            No se encontraron tipos de servicios con el dato "<span th:text="${param.search}"></span>"
         </span>
         <span th:unless="${param.search != null}">
-            No hay marcas registradas.
+            No hay tipos de servicios registrados.
         </span>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

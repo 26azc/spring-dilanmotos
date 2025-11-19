@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #f8f9fa;
+            padding-top: 1rem;
+            border-right: 1px solid #dee2e6;
+        }
+        .sidebar .nav-link {
+            color: #333;
+            padding: 10px 20px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Menú lateral incluido desde fragmento -->
+<div th:replace="menu :: sidebar"></div>
+
+<!-- Contenido principal -->
+<div class="main-content">
+    <h3>Módulo Productos</h3>
+    <hr>
+
+    <!-- Mensajes -->
+    <div th:if="${param.creado}" class="alert alert-success">¡Producto agregado exitosamente!</div>
+    <div th:if="${param.actualizado}" class="alert alert-success">¡Producto actualizado!</div>
+    <div th:if="${param.eliminado}" class="alert alert-warning">Producto eliminado.</div>
+
+    <!-- Formulario de búsqueda -->
+    <form th:action="@{/productos}" method="get" class="mb-3">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Buscar por nombre o descripción" name="search" th:value="${param.search}">
+                </div>
+            </div>
+            <div class="col-md-6 text-end">
+                <button type="submit" class="btn btn-info"><i class="fa-solid fa-search"></i> Buscar</button>
+                <a th:href="@{/productos}" class="btn btn-warning"><i class="fa-solid fa-list"></i> Reset</a>
+            </div>
+        </div>
+    </form>
+
+   <!-- Formulario para agregar producto -->
+<form th:action="@{/productos/guardar}" th:object="${nuevoProducto}" method="post" class="mb-4">
+    <div class="row g-3">
+        <div class="col-md-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" th:field="*{nombre}" required>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Descripción</label>
+            <input type="text" class="form-control" th:field="*{descripcion}" required>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Precio</label>
+            <input type="number" step="0.01" class="form-control" th:field="*{precio}" required>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Categoría ID</label>
+            <input type="number" class="form-control" th:field="*{idCategoria}" required 
+                   min="1" max="4" placeholder="1-4">
+            <small class="form-text text-muted">1=Repuestos, 2=Accesorios, 3=Lubricantes, 4=Herramientas</small>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Marca ID</label>
+            <input type="number" class="form-control" th:field="*{idMarca}" required
+                   min="1" max="4" placeholder="1-4">
+            <small class="form-text text-muted">1=Yamaha, 2=Honda, 3=Suzuki, 4=Kawasaki</small>
+        </div>
+    </div>
+    <div class="text-end mt-3">
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Guardar</button>
+    </div>
+</form>
+    <!-- Tabla de productos -->
+    <div th:if="${productos != null and #lists.size(productos) > 0}" class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="producto : ${productos}">
+                    <td th:text="${producto.idProducto}"></td>
+                    <td th:text="${producto.nombre}"></td>
+                    <td th:text="${producto.descripcion}"></td>
+                    <td th:text="'$' + ${#numbers.formatDecimal(producto.precio, 1, 2)}"></td>
+                    <td>
+                        <a th:href="@{/productos/editar/{id}(id=${producto.idProducto})}" class="btn btn-sm btn-warning">
+                            <i class="fa-solid fa-edit"></i>
+                        </a>
+                        <a th:href="@{/productos/eliminar/{id}(id=${producto.idProducto})}" class="btn btn-sm btn-danger"
+                           onclick="return confirm('¿Eliminar este producto?')">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Mensaje si no hay productos -->
+    <div th:if="${productos == null or #lists.isEmpty(productos)}" class="alert alert-info text-center mt-3">
+        <i class="fa-solid fa-info-circle"></i>
+        <span th:if="${param.search != null}">
+            No se encontraron productos con el dato "<span th:text="${param.search}"></span>"
+        </span>
+        <span th:unless="${param.search != null}">
+            No hay productos registrados.
+        </span>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

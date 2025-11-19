@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar tipo de servicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h3>Editar tipo de servicio.</h3>
+    <form th:action="@{/tipoServicio/actualizar}" th:object="${tipoServicioEditado}" method="post">
+        <input type="hidden" th:field="*{idTipoServicio}">
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" th:field="*{nombre}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <input type="text" class="form-control" th:field="*{descripcion}" required>
+        </div>
+        <button type="submit" class="btn btn-success">Actualizar</button>
+        <a th:href="@{/mecanico}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>
