@@ -12,10 +12,10 @@ import java.util.List;
 public class PqrsRestController {
 
     @Autowired
-    private PqrsRepository PqrsRepository;
+    private PqrsRepository pqrsRepository;
 
     @GetMapping("/PQRS")
-    public List<PQRS> listarPqrs() {
-        return PqrsRepository.findAll();
+    public List<PQRS> listarPQRS() {
+        return pqrsRepository.findAll();
     }
 }
