@@ -21,7 +21,7 @@ public class MotoController {
     private MotoRepository motoRepository;
 
     // Mostrar listado y formulario
-    @GetMapping("/motos")
+    @GetMapping("/moto")
     public String mostrarMotos(@RequestParam(value = "search", required = false) String search, Model model) {
         List<Moto> motos = (search != null && !search.isEmpty())
             ? motoRepository.findByModeloContainingIgnoreCase(search)

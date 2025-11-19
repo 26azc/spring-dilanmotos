@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar PQRS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <div class="card shadow">
+        <div class="card-header bg-warning text-white text-center">
+            <h2><i class="fa-solid fa-edit"></i> Editar PQRS</h2>
+        </div>
+
+        <div class="card-body">
+            <form th:action="@{/pqrs/actualizar}" th:object="${pqrsEditada}" method="post">
+                <input type="hidden" th:field="*{idPqrs}" />
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="tipo" class="form-label">Tipo</label>
+                        <input type="text" id="tipo" th:field="*{tipo}" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="asunto" class="form-label">Asunto</label>
+                        <input type="text" id="asunto" th:field="*{asunto}" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <textarea id="descripcion" th:field="*{descripcion}" class="form-control" rows="3" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="comentario_usuario" class="form-label">Comentario del Usuario</label>
+                    <textarea id="comentario_usuario" th:field="*{comentario_usuario}" class="form-control" rows="3" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="respuesta_admin" class="form-label">Respuesta del Administrador</label>
+                    <textarea id="respuesta_admin" th:field="*{respuesta_admin}" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="estado" class="form-label">Estado</label>
+                    <select id="estado" th:field="*{estado}" class="form-select">
+                        <option value="PENDIENTE">Pendiente</option>
+                        <option value="RESPONDIDA">Respondida</option>
+                        <option value="CERRADA">Cerrada</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="calificacion_servicio" class="form-label">Calificación del Servicio</label>
+                    <input type="text" id="calificacion_servicio" th:field="*{calificacion_servicio}" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="comentario_servicio" class="form-label">Comentario sobre el Servicio</label>
+                    <textarea id="comentario_servicio" th:field="*{comentario_servicio}" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success"><i class="fa-solid fa-check"></i> Guardar Cambios</button>
+                    <a th:href="@{/pqrs}" class="btn btn-secondary ms-2"><i class="fa-solid fa-arrow-left"></i> Cancelar</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="card-footer text-center">
+            <p class="mb-0">&copy; Gestión PQRS - Todos los derechos reservados.</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
