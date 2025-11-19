@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.lang.NonNull;
 @Controller
 public class MecanicoController {
 
@@ -28,7 +29,7 @@ public class MecanicoController {
     }
 
     @PostMapping("/mecanico")
-    public String guardarMecanico(@Valid @ModelAttribute("nuevoMecanico") Mecanico mecanico, BindingResult result, Model model) {
+    public String guardarMecanico(@NonNull @Valid @ModelAttribute("nuevoMecanico") Mecanico mecanico, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("mecanico", mecanicoRepository.findAll());
             return "mecanico";
@@ -45,7 +46,7 @@ public class MecanicoController {
     }
 
     @PostMapping("/mecanico/actualizar")
-    public String actualizarMecanico(@Valid @ModelAttribute("mecanicoEditado") Mecanico mecanico, BindingResult result) {
+    public String actualizarMecanico(@NonNull @Valid @ModelAttribute("mecanicoEditado") Mecanico mecanico, BindingResult result) {
         if (result.hasErrors()) {
             return "editar_mecanico";
         }
