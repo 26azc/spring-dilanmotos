@@ -7,7 +7,5 @@ import java.util.List;
 
 @Repository
 public interface TipoServicioRepository extends JpaRepository<TipoServicio, Integer>{
-
         List<TipoServicio> findByNombreContainingIgnoreCase(String nombre); 
-
 }
