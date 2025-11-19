@@ -1,14 +1,14 @@
-package com.grupouno.spring.dilanmotos.controllers;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    package com.grupouno.spring.dilanmotos.controllers;
 
 import com.grupouno.spring.dilanmotos.models.Historial;
 import com.grupouno.spring.dilanmotos.repositories.HistorialRepository;
+import org.springframework.lang.NonNull;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +35,7 @@ public class HistorialController {
     }
 
     @PostMapping
-    public String guardarHistorial(@Valid @ModelAttribute("nuevoHistorial") Historial historial,
+    public String guardarHistorial(@Valid @ModelAttribute("nuevoHistorial") Historial historial,RedirectAttributes redirectAttributes,
                                    BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("historiales", historialRepository.findAll());
@@ -52,7 +52,7 @@ public class HistorialController {
     }
 
    @GetMapping("/editar/{id}")
-    public String editarHistorial(@PathVariable("id") Integer id, Model model) {
+    public String editarHistorial(@NonNull @PathVariable("id") Integer id, Model model) {
     Optional<Historial> historialOpt = historialRepository.findById(id);
         if (historialOpt.isEmpty()) {
             return "redirect:/historial";
@@ -62,7 +62,7 @@ public class HistorialController {
     }
 
     @PostMapping("/actualizar")
-    public String actualizarHistorial(@Valid @ModelAttribute("historialEditado") Historial historial,
+    public String actualizarHistorial(@NonNull @Valid @ModelAttribute("historialEditado") Historial historial,RedirectAttributes redirectAttributes,
                                       BindingResult result) {
         if (result.hasErrors()) {
             return "editar_historial";
@@ -74,7 +74,7 @@ public class HistorialController {
     }
 
     @GetMapping("/eliminar/{id}")
-    public String eliminarHistorial(@PathVariable("id") Integer id) {
+    public String eliminarHistorial(@NonNull @PathVariable("id") Integer id) {
        historialRepository.deleteById(id);
        return "redirect:/historial";
     }
