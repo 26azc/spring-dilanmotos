@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizacion</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #f8f9fa;
+            padding-top: 1rem;
+            border-right: 1px solid #dee2e6;
+        }
+        .sidebar .nav-link {
+            color: #333;
+            padding: 10px 20px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+<!-- Menú lateral incluido desde fragmento -->
+<div th:replace="menu :: sidebar"></div>
+
+<!-- Contenido principal -->
+<div class="main-content">
+    <h3>Cotizacion</h3>
+    <hr>
+    
+    <!-- Formulario de búsqueda -->
+    <form th:action="@{/cotizacion}" method="get">
+        <div class="row g-2 align-items-center mb-3">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Buscar por usuario"
+                           name="search"
+                           th:value="${param.search}">
+                </div>
+            </div>
+            <div class="col-md-6 text-end">
+                <button type="submit" class="btn btn-info"><i class="fas fa-search"></i> Buscar</button>
+                <a th:href="@{/cotizacion}" class="btn btn-warning"><i class="fas fa-list"></i> Reset</a>
+            </div>
+        </div>
+    </form>
+
+    <!--Formulario para agregar cotizacion -->
+    <form th:action="@{/cotizacion}" th:object="${nuevaCotizacion}" method="post" class="mb-4">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Usuario</label>
+            <input th:field="*{usuario}" class="form-control" required>
+            <div class="text-danger" th:errors="*{usuario}"></div>
+
+            <label class="form-label mt-2">Producto</label>
+            <input th:field="*{producto}" class="form-control" required>
+            <div class="text-danger" th:errors="*{producto}"></div>
+
+            <label class="form-label mt-2">Cantidad</label>
+            <input type="number" th:field="*{cantidad}" class="form-control" required>
+            <div class="text-danger" th:errors="*{cantidad}"></div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Precio Unitario</label>
+            <input type="number" step="0.01" th:field="*{precioUnitario}" class="form-control" required>
+            <div class="text-danger" th:errors="*{precioUnitario}"></div>
+
+            <label class="form-label mt-2">Fecha</label>
+            <input type="date" th:field="*{fecha}" class="form-control" required>
+            <div class="text-danger" th:errors="*{fecha}"></div>
+
+            <label class="form-label mt-2">Producto Agregado</label>
+            <input th:field="*{productoAgregado}" class="form-control" required>
+            <div class="text-danger" th:errors="*{productoAgregado}"></div>
+          </div>
+        </div>
+
+        <div class="text-end mt-3">
+            <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Guardar</button>
+        </div>
+    </form>
+    <!-- Tabla de cotizaciones -->
+    <div th:if="${cotizacion != null and !#lists.isEmpty(cotizacion)}">
+        <table class="table table-striped table-hover table-bordered"> 
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Fecha</th>
+                    <th>Producto Agregado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cot : ${cotizacion}">
+                    <td th:text="${cot.id}"></td>
+                    <td th:text="${cot.usuario}"></td>
+                    <td th:text="${cot.producto}"></td>
+                    <td th:text="${cot.cantidad}"></td>
+                    <td th:text="${cot.precioUnitario}"></td>
+                    <td th:text="${#dates.format(cot.fecha, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${cot.productoAgregado}"></td>
+                    <td>
+                        <a th:href="@{|/cotizacion/editar/${cot.id}|}" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <a th:href="@{|/cotizacion/eliminar/${cot.id}|}" class="btn btn-sm btn-danger" 
+                           onclick="return confirm('¿Estás seguro de eliminar esta cotización?');">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Mensaje si no hay resultados -->
+    <div th:if="${cotizacion == null or #lists.isEmpty(cotizacion)}" class="alert alert-info text-center mt-3">
+        <i class="fas fa-info-circle"></i>
+        <span th:if="${param.search != null}">
+            No se encontraron resultados para: "<span th:text="${param.search}"></span>"
+        </span>
+        <span th:unless="${param.search != null}">
+            No hay cotizaciones registradas.
+        </span>
+    </div>
+</div>
+
+    
+</body>
+</html>

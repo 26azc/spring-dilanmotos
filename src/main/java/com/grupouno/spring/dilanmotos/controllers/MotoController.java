@@ -11,9 +11,8 @@ import com.grupouno.spring.dilanmotos.repositories.MotoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
-
-
 import org.springframework.web.bind.annotation.*;
+
 
 @Controller
 public class MotoController {
@@ -29,14 +28,14 @@ public class MotoController {
             : motoRepository.findAll();
 
         model.addAttribute("motos", motos);
-        model.addAttribute("nuevoMoto", new Moto());
+        model.addAttribute("nuevaMoto", new Moto());
         return "motos";
     }
 
     // Guardar nueva moto
     @PostMapping("/motos")
     public String guardarMoto(
-        @Valid @NonNull @ModelAttribute("nuevoMoto") Moto moto,
+        @Valid @NonNull @ModelAttribute("nuevaMoto") Moto moto,
         BindingResult result,
         Model model
     ) {
@@ -51,7 +50,7 @@ public class MotoController {
 
  @GetMapping("/moto/editar/{id}")
     public String editarMoto(@PathVariable("id") int id, Model model) {
-        Moto moto = motoRepository.findById(id).orElse(null);
+        Moto moto = motoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Moto no encontrada: " + id));
         model.addAttribute("motoEditada", moto);
         return "editar_motos";
     }
