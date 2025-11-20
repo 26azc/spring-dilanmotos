@@ -16,6 +16,8 @@ public class Categoria {
     @NotBlank(message = "El nombre de la categoría es obligatorio")
     private String nombre;
 
+    public Categoria() {}
+
     public int getIdCategoria() {return idCategoria;}
     public void setIdCategoria(int idCategoria) {this.idCategoria = idCategoria;}
 
