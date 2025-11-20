@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Categoria</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h3>Editar Categoria</h3>
+    <form th:action="@{/categoria/actualizar}" th:object="${categoriaEditada}" method="post">
+        <input type="hidden" th:field="*{idCategoria}">
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" th:field="*{nombre}" required>
+        </div>
+        <button type="submit" class="btn btn-success">Actualizar</button>
+        <a th:href="@{/categoria}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</body>
+</html>
