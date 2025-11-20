@@ -16,10 +16,10 @@ public class Historial {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idHistorial;
 
-    @Column(name = "idUsuario")
-    private Integer idUsuario;
+    @Column(name = "id_usuario")
+    private String idUsuario;
 
-    @Column(name = "idServicio")
+    @Column(name = "id_servicio")
     private Integer idServicio;
 
     @NotBlank(message = "Ingrese la accion realizada")
@@ -42,11 +42,11 @@ public class Historial {
         this.idHistorial = idHistorial;
     }
 
-    public Integer getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(Integer idUsuario) {
+    public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
 

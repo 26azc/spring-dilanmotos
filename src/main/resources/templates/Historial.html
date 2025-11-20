@@ -7,6 +7,8 @@
 </head>
 <body class="container mt-4">
 
+    <div th:replace="menu :: sidebar"></div>
+
     <h1 class="mb-4">Historial de acciones</h1>
 
     <!-- 🔍 Buscador -->
@@ -27,14 +29,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="historial : ${historiales}">
+           <td th:text="${historial.idHistorial}"></td>
                 <td th:text="${historial.id}"></td>
                 <td th:text="${historial.accion}"></td>
                 <td th:text="${historial.detalle}"></td>
                 <td th:text="${#temporals.format(historial.fecha, 'dd/MM/yyyy HH:mm')}"></td>
                 <td>
-                    <a th:href="@{/historial/editar/{id}(id=${historial.id})}" class="btn btn-sm btn-warning">Editar</a>
-                    <a th:href="@{/historial/eliminar/{id}(id=${historial.id})}" 
+                    <a th:href="@{/historial/editar/{id}(id=${historial.idHistorial})}" class="btn btn-sm btn-warning">Editar</a>
+                    <a th:href="@{/historial/eliminar/{id}(id=${historial.idHistorial})}" 
                        class="btn btn-sm btn-danger"
                        onclick="return confirm('¿Seguro que deseas eliminar este historial?')">Eliminar</a>
                 </td>
