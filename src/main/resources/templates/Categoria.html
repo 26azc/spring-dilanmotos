@@ -36,27 +36,11 @@
 </head>
 <body>
     <!-- Menú lateral-->
-<div class="sidebar">
-    <nav class="nav flex-column">
-        <a class="nav-link" href="/dashboard"><i class="fa-solid fa-table-columns me-2"></i> Dashboard</a>
-        <a class="nav-link active" href="/usuario"><i class="fa-solid fa-user me-2"></i> Usuarios</a>
-        <a class="nav-link" href="/marca"><i class="fa-solid fa-tag me-2"></i> Marca</a>
-        <a class="nav-link" href="/moto"><i class="fa-solid fa-motorcycle me-2"></i> Moto</a>
-        <a class="nav-link" href="/caracteristicas"><i class="fa-solid fa-list me-2"></i> Características</a>
-        <a class="nav-link" href="/productos"><i class="fa-solid fa-box-open me-2"></i> Productos</a>
-        <a class="nav-link" href="/mecanico"><i class="fa-solid fa-user-gear me-2"></i> Mecánico</a>
-        <a class="nav-link" href="/tipoServicio"><i class="fa-solid fa-screwdriver-wrench me-2"></i> Tipo de Servicio</a>
-        <a class="nav-link" href="/servicio"><i class="fa-solid fa-clipboard-check me-2"></i> Servicio</a>
-        <a class="nav-link" href="/historial"><i class="fa-solid fa-clock-rotate-left me-2"></i> Historial</a>
-        <a class="nav-link" href="/pqrs"><i class="fa-solid fa-envelope-open-text me-2"></i> PQRS</a>
-        <a class="nav-link" href="/cotizacion"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Cotización</a>
-        <a class="nav-link" href="/categoria"><i class="fa-solid fa-folder-open me-2"></i> Categoría</a>
-    </nav>
-</div>
+<div th:replace="menu :: sidebar"></div>
 
 <!-- Contenido principal -->
 <div class="main-content">
-    <h3>Editar Categoría</h3>
+    <h3>Módulo Categoría</h3>
     <hr>
 
     <!-- Mensajes -->
@@ -94,16 +78,19 @@
     </form>
 
     <!--Tabla de categoria-->
-        <div th:if="${categoria!= null and #lists.size(categoria) > 0}">
+        <div th:if="${categorias!= null and #lists.size(categorias) > 0}">
         <table class="table table-striped table-hover table-bordered">
             <thead class="table-primary">
                 <tr>
+                    <th>Id categoría</th>
                     <th>Nombre</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="categoria: ${categoria}">
-                    <td th:text="${usuario.nombre}"></td>
+                <tr th:each="categoria: ${categorias}">
+                    <td th:text="${categoria.idCategoria}"></td>
+                    <td th:text="${categoria.nombre}"></td>
                     <td>
                         <a th:href="@{'/categoria/editar/' + ${categoria.idCategoria}}" class="btn btn-success btn-sm">
                             <i class="fa-solid fa-pen-to-square"></i> Editar
