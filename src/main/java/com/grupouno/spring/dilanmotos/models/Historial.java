@@ -17,7 +17,7 @@ public class Historial {
     private Integer idHistorial;
 
     @Column(name = "id_usuario")
-    private String idUsuario;
+    private Integer idUsuario;
 
     @Column(name = "id_servicio")
     private Integer idServicio;
@@ -42,11 +42,11 @@ public class Historial {
         this.idHistorial = idHistorial;
     }
 
-    public String getIdUsuario() {
+    public Integer getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(String idUsuario) {
+    public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
 
@@ -57,7 +57,7 @@ public class Historial {
     public void setIdServicio(Integer idServicio) {
         this.idServicio = idServicio;
     }
-
+    
     public String getAccion() {
         return accion;
     }

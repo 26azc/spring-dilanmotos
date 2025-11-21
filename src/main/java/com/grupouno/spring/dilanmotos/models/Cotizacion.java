@@ -13,26 +13,27 @@ public class Cotizacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idCotizacion;
 
-    @Column(name = "id_usuario")
-    private int idUsuario;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuarios usuario; // Cambiado a la entidad Usuarios
 
-    @Column(name = "producto")
+    @Column(name = "producto") // Cambiado de @JoinColumn a @Column
     @NotBlank(message = "El producto es obligatorio")
     private String producto;
 
-    @Column(name = "cantidad")
-    @NotBlank(message = "La cantidad es obligatoria")
+    @Column(name = "cantidad") // Cambiado de @JoinColumn a @Column
+    @NotNull(message = "La cantidad es obligatoria")
     private int cantidad;
 
-    @Column(name = "precio_unitario")
+    @Column(name = "precio_unitario") // Cambiado de @JoinColumn a @Column
     @NotNull(message = "El precioUnitario es obligatorio")
     private Double precioUnitario;
 
-    @Column(name = "fecha")
+    @Column(name = "fecha") // Cambiado de @JoinColumn a @Column
     @NotNull(message = "La fecha es obligatoria")
     private LocalDate fecha;
 
-    @Column(name = "producto_agregado")
+    @Column(name = "producto_agregado") // Cambiado de @JoinColumn a @Column
     private boolean productoAgregado;
 
     public Cotizacion() {}
@@ -40,8 +41,14 @@ public class Cotizacion {
     public int getIdCotizacion() {return idCotizacion;}
     public void setIdCotizacion(int idCotizacion) {this.idCotizacion = idCotizacion;}
 
-    public int getIdUsuario() {return idUsuario;}
-    public void setIdUsuario(int idUsuario) {this.idUsuario = idUsuario;}
+    // Cambiados los getters y setters para Usuarios
+    public Usuarios getUsuario() {return usuario;}
+    public void setUsuario(Usuarios usuario) {this.usuario = usuario;}
+
+    // Método conveniente para obtener el ID del usuario
+    public Integer getIdUsuario() {
+        return this.usuario != null ? this.usuario.getIdUsuario() : null;
+    }
 
     public String getProducto() {return producto;}
     public void setProducto(String producto) {this.producto = producto;}
