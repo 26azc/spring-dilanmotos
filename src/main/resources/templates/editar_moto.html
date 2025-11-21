@@ -2,25 +2,76 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Moto</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    </head>
 <body>
     <div class="container mt-5">
-        <h3>Editar Moto</h3>
-        <form th:action="@{/moto/actualizar}" th:object="${motoEditado}" method="post">
-            <input type="hidden" th:field="*{idMoto}">
-            <div class="mb-3">
-                <label class="form-label">Modelo</label>
-                <input type="text" class="form-control" th:field="*{modelo}" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Cilindraje</label>
-                <input type="number" step="0.1" class="form-control" th:field="*{cilindraje}" required>
-            </div>
-            <button type="submit" class="btn btn-success">Actualizar</button>
-            <a th:href="@{/motos}" class="btn btn-secondary">Cancelar</a>
-        </form>
+        <div class="card p-4">
+            <h3>Editar Moto</h3>
+            <hr>
+            
+            <form th:action="@{/moto/actualizar}" th:object="${motoEditada}" method="post">
+                <input type="hidden" th:field="*{idMoto}">
+
+                <div class="row g-3">
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Usuario</label>
+                        <select th:field="*{usuario}" id="usuario" class="form-select" required>
+                            <option value="">Seleccione un Usuario</option>
+                            <option th:each="u : ${usuarios}"
+                                    th:value="${u.idUsuario}"
+                                    th:text="${u.nombre}"
+                                    
+                                    th:selected="${u.idUsuario == motoEditada.usuario.idUsuario}">
+                            </option>
+                        </select>
+                        <div class="text-danger" th:if="${#fields.hasErrors('usuario')}" th:errors="*{usuario}"></div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Marca</label>
+                        <select th:field="*{marca}" id="marca" class="form-select" required>
+                            <option value="">Seleccione una Marca</option>
+                            <option th:each="m : ${marcas}"
+                                    th:value="${m.idMarca}"
+                                    th:text="${m.nombre}"
+                                    
+                                    th:selected="${m.idMarca == motoEditada.marca.idMarca}">
+                            </option>
+                        </select>
+                        <div class="text-danger" th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}"></div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Modelo</label>
+                        <input type="text" class="form-control" th:field="*{modelo}" required>
+                        <div class="text-danger" th:if="${#fields.hasErrors('modelo')}" th:errors="*{modelo}"></div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label">Cilindraje</label>
+                        <input type="number" step="0.1" class="form-control" th:field="*{cilindraje}" required>
+                        <div class="text-danger" th:if="${#fields.hasErrors('cilindraje')}" th:errors="*{cilindraje}"></div>
+                    </div> 
+
+                    <div class="col-md-6">
+                        <label class="form-label">Tipo de Reparación</label>
+                        <input type="text" class="form-control" th:field="*{tipoReparacion}" required>
+                        <div class="text-danger" th:if="${#fields.hasErrors('tipoReparacion')}" th:errors="*{tipoReparacion}"></div>
+                    </div>
+                    
+                </div>
+                
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success">Actualizar</button>
+                    <a th:href="@{/moto}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+            
+        </div>
     </div>
 </body>
 </html>
