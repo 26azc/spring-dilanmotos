@@ -2,6 +2,8 @@ package com.grupouno.spring.dilanmotos.controllers;
 
 import com.grupouno.spring.dilanmotos.models.Servicio;
 import com.grupouno.spring.dilanmotos.repositories.ServicioRepository;
+import com.grupouno.spring.dilanmotos.repositories.UsuarioRepository;
+import com.grupouno.spring.dilanmotos.repositories.MecanicoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,12 @@ public class ServicioController {
     @Autowired
     private ServicioRepository servicioRepository;
 
-    // 📋 Listar servicios con búsqueda
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private MecanicoRepository mecanicoRepository;
+
     @GetMapping
     public String listarServicios(@RequestParam(value = "search", required = false) String search, Model model) {
         List<Servicio> servicios = (search != null && !search.isEmpty())
@@ -28,10 +35,11 @@ public class ServicioController {
 
         model.addAttribute("servicios", servicios);
         model.addAttribute("nuevoServicio", new Servicio());
+        model.addAttribute("usuarios", usuarioRepository.findAll());
+        model.addAttribute("mecanicos", mecanicoRepository.findAll());
         return "servicio";
     }
 
-    // ➕ Crear servicio
     @PostMapping
     public String guardarServicio(@Valid @ModelAttribute("nuevoServicio") Servicio servicio,
                                   BindingResult result,
@@ -39,6 +47,8 @@ public class ServicioController {
                                   Model model) {
         if (result.hasErrors()) {
             model.addAttribute("servicios", servicioRepository.findAll());
+            model.addAttribute("usuarios", usuarioRepository.findAll());
+            model.addAttribute("mecanicos", mecanicoRepository.findAll());
             return "servicio";
         }
         servicioRepository.save(servicio);
@@ -46,23 +56,26 @@ public class ServicioController {
         return "redirect:/servicio";
     }
 
-    // ✏️ Editar servicio
     @GetMapping("/editar/{id}")
     public String editarServicio(@PathVariable("id") Integer id, Model model) {
         return servicioRepository.findById(id)
                 .map(s -> {
                     model.addAttribute("servicioEditado", s);
+                    model.addAttribute("usuarios", usuarioRepository.findAll());
+                    model.addAttribute("mecanicos", mecanicoRepository.findAll());
                     return "editar_servicio";
                 })
                 .orElse("redirect:/servicio");
     }
 
-    // 🔄 Actualizar servicio
     @PostMapping("/actualizar")
     public String actualizarServicio(@Valid @ModelAttribute("servicioEditado") Servicio servicio,
                                      BindingResult result,
-                                     RedirectAttributes redirectAttributes) {
+                                     RedirectAttributes redirectAttributes,
+                                     Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("usuarios", usuarioRepository.findAll());
+            model.addAttribute("mecanicos", mecanicoRepository.findAll());
             return "editar_servicio";
         }
         servicioRepository.save(servicio);
@@ -70,7 +83,6 @@ public class ServicioController {
         return "redirect:/servicio";
     }
 
-    // 🗑 Eliminar servicio
     @GetMapping("/eliminar/{id}")
     public String eliminarServicio(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         servicioRepository.deleteById(id);

@@ -10,3 +10,4 @@ import java.util.List;
 public interface UsuarioRepository extends JpaRepository<Usuarios, Integer> {
     List<Usuarios> findByNombreContainingIgnoreCaseOrCorreoContainingIgnoreCase(String nombre, String correo);
 }
+

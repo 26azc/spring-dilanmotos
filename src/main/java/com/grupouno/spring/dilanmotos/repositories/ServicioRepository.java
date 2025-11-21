@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ServicioRepository extends JpaRepository<Servicio, Integer> {
-
     List<Servicio> findByComentarioContainingIgnoreCaseOrEstadoServicioContainingIgnoreCase(String comentario, String estado);
 }
+

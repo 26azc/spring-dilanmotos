@@ -2,7 +2,6 @@ package com.grupouno.spring.dilanmotos.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
 import java.time.LocalDate;
 
 @Entity
@@ -14,111 +13,111 @@ public class Servicio {
     @Column(name = "id_servicio")
     private Integer idServicio;
 
-    @NotNull(message = "El ID del usuario es obligatorio")
-    @Column(name = "id_usuario")
-    private Integer idUsuario;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuarios usuario;
 
-    @NotNull(message = "El ID del mecánico es obligatorio")
-    @Column(name = "id_mecanico")
-    private Integer idMecanico;
+    @ManyToOne
+    @JoinColumn(name = "id_mecanico")
+    private Mecanico mecanico;
 
-    @NotNull(message = "El ID del tipo de servicio es obligatorio")
+    @NotNull
     @Column(name = "id_tipo_servicio")
     private Integer idTipoServicio;
 
-    @NotNull(message = "La fecha del servicio es obligatoria")
+    @NotNull
     @Column(name = "fecha_servicio")
     private LocalDate fechaServicio;
 
-    @NotBlank(message = "El estado del servicio es obligatorio")
+    @NotBlank
     @Column(name = "estado_servicio")
     private String estadoServicio;
 
-    @NotBlank(message = "El comentario es obligatorio")
+    @NotBlank
     @Column(name = "comentario")
     private String comentario;
 
-    @NotNull(message = "La puntuación es obligatoria")
-    @Min(value = 1, message = "La puntuación mínima es 1")
-    @Max(value = 5, message = "La puntuación máxima es 5")
+    @NotNull
+    @Min(1)
+    @Max(5)
     @Column(name = "puntuacion")
     private Integer puntuacion;
 
-    @NotNull(message = "Debe indicar si es visible en el historial")
+    @NotNull
     @Column(name = "visible_en_historial")
     private Boolean visibleEnHistorial;
 
     // Getters y setters
 
     public Integer getIdServicio() {
-        return idServicio;
+    return idServicio;
     }
 
     public void setIdServicio(Integer idServicio) {
-        this.idServicio = idServicio;
+    this.idServicio = idServicio;
+    }   
+
+    public Usuarios getUsuario() {
+    return usuario;
     }
 
-    public Integer getIdUsuario() {
-        return idUsuario;
+    public void setUsuario(Usuarios usuario) {
+    this.usuario = usuario;
     }
 
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
+    public Mecanico getMecanico() {
+    return mecanico;
     }
 
-    public Integer getIdMecanico() {
-        return idMecanico;
-    }
-
-    public void setIdMecanico(Integer idMecanico) {
-        this.idMecanico = idMecanico;
+    public void setMecanico(Mecanico mecanico) {
+    this.mecanico = mecanico;
     }
 
     public Integer getIdTipoServicio() {
-        return idTipoServicio;
+    return idTipoServicio;
     }
 
     public void setIdTipoServicio(Integer idTipoServicio) {
-        this.idTipoServicio = idTipoServicio;
+    this.idTipoServicio = idTipoServicio;
     }
 
     public LocalDate getFechaServicio() {
-        return fechaServicio;
+    return fechaServicio;
     }
 
     public void setFechaServicio(LocalDate fechaServicio) {
-        this.fechaServicio = fechaServicio;
+    this.fechaServicio = fechaServicio;
     }
 
     public String getEstadoServicio() {
-        return estadoServicio;
+    return estadoServicio;
     }
 
     public void setEstadoServicio(String estadoServicio) {
-        this.estadoServicio = estadoServicio;
+    this.estadoServicio = estadoServicio;
     }
 
     public String getComentario() {
-        return comentario;
+    return comentario;
     }
 
     public void setComentario(String comentario) {
-        this.comentario = comentario;
+    this.comentario = comentario;
     }
 
     public Integer getPuntuacion() {
-        return puntuacion;
+    return puntuacion;
     }
 
     public void setPuntuacion(Integer puntuacion) {
-        this.puntuacion = puntuacion;
+    this.puntuacion = puntuacion;
     }
 
     public Boolean getVisibleEnHistorial() {
-        return visibleEnHistorial;
+    return visibleEnHistorial;
     }
 
     public void setVisibleEnHistorial(Boolean visibleEnHistorial) {
-        this.visibleEnHistorial = visibleEnHistorial;
+    this.visibleEnHistorial = visibleEnHistorial;
     }
 }

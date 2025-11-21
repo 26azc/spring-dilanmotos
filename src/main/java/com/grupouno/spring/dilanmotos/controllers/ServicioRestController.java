@@ -2,6 +2,8 @@ package com.grupouno.spring.dilanmotos.controllers;
 
 import com.grupouno.spring.dilanmotos.models.Servicio;
 import com.grupouno.spring.dilanmotos.repositories.ServicioRepository;
+import com.grupouno.spring.dilanmotos.repositories.UsuarioRepository;
+import com.grupouno.spring.dilanmotos.repositories.MecanicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,12 @@ public class ServicioRestController {
 
     @Autowired
     private ServicioRepository servicioRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private MecanicoRepository mecanicoRepository;
 
     // 📋 Listar todos los servicios
     @GetMapping
@@ -36,6 +44,15 @@ public class ServicioRestController {
     // ➕ Crear nuevo servicio
     @PostMapping
     public Servicio crearServicio(@RequestBody Servicio servicio) {
+        // Validar relaciones: usuario y mecánico deben existir
+        if (servicio.getUsuario() != null) {
+            usuarioRepository.findById(servicio.getUsuario().getIdUsuario())
+                    .ifPresent(servicio::setUsuario);
+        }
+        if (servicio.getMecanico() != null) {
+            mecanicoRepository.findById(servicio.getMecanico().getIdMecanico())
+                    .ifPresent(servicio::setMecanico);
+        }
         return servicioRepository.save(servicio);
     }
 
@@ -43,6 +60,16 @@ public class ServicioRestController {
     @PutMapping("/{id}")
     public Servicio actualizarServicio(@PathVariable Integer id, @RequestBody Servicio servicio) {
         servicio.setIdServicio(id);
+
+        if (servicio.getUsuario() != null) {
+            usuarioRepository.findById(servicio.getUsuario().getIdUsuario())
+                    .ifPresent(servicio::setUsuario);
+        }
+        if (servicio.getMecanico() != null) {
+            mecanicoRepository.findById(servicio.getMecanico().getIdMecanico())
+                    .ifPresent(servicio::setMecanico);
+        }
+
         return servicioRepository.save(servicio);
     }
 
