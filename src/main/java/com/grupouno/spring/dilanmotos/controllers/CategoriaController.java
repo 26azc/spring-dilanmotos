@@ -2,9 +2,7 @@ package com.grupouno.spring.dilanmotos.controllers;
 
 import com.grupouno.spring.dilanmotos.models.Categoria;
 import com.grupouno.spring.dilanmotos.repositories.CategoriaRepository;
-
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
@@ -47,15 +45,10 @@ public class CategoriaController {
     }
 
      @GetMapping("/categoria/editar/{id}")
-    public String editarCategoria(@PathVariable int id, Model model) {
+    public String editarMecanico(@PathVariable("id") int id, Model model) {
         Categoria categoria = categoriaRepository.findById(id).orElse(null);
-
-        if (categoria == null) {
-            return "redirect:/categoria";
-        }
-
-        model.addAttribute("categoria", categoria);
-        return "categoria-editar";
+        model.addAttribute("categoriaEditada", categoria);
+        return "editar_categoria";
     }
 
 

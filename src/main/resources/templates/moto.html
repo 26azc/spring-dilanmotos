@@ -150,6 +150,8 @@
                     </table>
                 </div>
                 
+
+                <!-- Mensaje si no hay motos -->
                 <div th:if="${motos == null or #lists.isEmpty(motos)}" class="alert alert-info text-center mt-3">
                     <i class="fas fa-info-circle"></i>
                     <span th:if="${param.search != null}">

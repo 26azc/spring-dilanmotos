@@ -106,14 +106,14 @@
     </div>
 
     <!-- Mensaje si no hay categorias -->
-    <div th:if="${categoria == null or #lists.isEmpty(categoria)}" class="alert alert-info text-center mt-3">
-        <i class="fa-solid fa-info-circle"></i>
-        <span th:if="${param.search != null}">
-            No se encontraron categoria con el dato "<span th:text="${param.search}"></span>"
-        </span>
+    <div th:if="${categorias == null or #lists.isEmpty(categorias)}" class="alert alert-info text-center mt-3">
+         <i class="fas fa-info-circle"></i>
+          <span th:if="${param.search != null}">
+             No se encontraron categorías con el dato "<span th:text="${param.search}"></span>"
+          </span>
         <span th:unless="${param.search != null}">
-            No hay categorias registradas.
-        </span>
+             No hay categorías registradas.
+       </span>
     </div>
 </div>
 
