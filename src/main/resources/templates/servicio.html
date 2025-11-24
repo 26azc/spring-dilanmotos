@@ -92,7 +92,7 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Mecánico</label>
-                <select class="form-select" th:field="*{mecanico}" required>
+                <select class="form-select" th:field="*{mecanico}" placeholder="Selecciona un mecánico" required>
                     <option th:each="m : ${mecanicos}" th:value="${m}" th:text="${m.nombre}"></option>
                 </select>
             </div>
@@ -110,7 +110,10 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label">Estado</label>
-                <input type="text" class="form-control" th:field="*{estadoServicio}" required>
+                <select class="form-select" th:field="*{puntuacion}" required>
+                    <option th:value="1">Pendiente</option>
+                    <option th:value="2">Completado</option>
+                </select>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Puntuación</label>

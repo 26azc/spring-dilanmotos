@@ -50,74 +50,74 @@ public class Servicio {
     // Getters y setters
 
     public Integer getIdServicio() {
-    return idServicio;
+        return idServicio;
     }
 
     public void setIdServicio(Integer idServicio) {
-    this.idServicio = idServicio;
-    }   
+        this.idServicio = idServicio;
+    }
 
     public Usuarios getUsuario() {
-    return usuario;
+        return usuario;
     }
 
     public void setUsuario(Usuarios usuario) {
-    this.usuario = usuario;
+        this.usuario = usuario;
     }
 
     public Mecanico getMecanico() {
-    return mecanico;
+        return mecanico;
     }
 
     public void setMecanico(Mecanico mecanico) {
-    this.mecanico = mecanico;
+        this.mecanico = mecanico;
     }
 
     public Integer getIdTipoServicio() {
-    return idTipoServicio;
+        return idTipoServicio;
     }
 
     public void setIdTipoServicio(Integer idTipoServicio) {
-    this.idTipoServicio = idTipoServicio;
+        this.idTipoServicio = idTipoServicio;
     }
 
     public LocalDate getFechaServicio() {
-    return fechaServicio;
+        return fechaServicio;
     }
 
     public void setFechaServicio(LocalDate fechaServicio) {
-    this.fechaServicio = fechaServicio;
+        this.fechaServicio = fechaServicio;
     }
 
     public String getEstadoServicio() {
-    return estadoServicio;
+        return estadoServicio;
     }
 
     public void setEstadoServicio(String estadoServicio) {
-    this.estadoServicio = estadoServicio;
+        this.estadoServicio = estadoServicio;
     }
 
     public String getComentario() {
-    return comentario;
+        return comentario;
     }
 
     public void setComentario(String comentario) {
-    this.comentario = comentario;
+        this.comentario = comentario;
     }
 
     public Integer getPuntuacion() {
-    return puntuacion;
+        return puntuacion;
     }
 
     public void setPuntuacion(Integer puntuacion) {
-    this.puntuacion = puntuacion;
+        this.puntuacion = puntuacion;
     }
 
     public Boolean getVisibleEnHistorial() {
-    return visibleEnHistorial;
+        return visibleEnHistorial;
     }
 
     public void setVisibleEnHistorial(Boolean visibleEnHistorial) {
-    this.visibleEnHistorial = visibleEnHistorial;
+        this.visibleEnHistorial = visibleEnHistorial;
     }
 }

@@ -42,11 +42,11 @@ public class Cotizacion {
     public void setIdCotizacion(int idCotizacion) {this.idCotizacion = idCotizacion;}
 
     // Cambiados los getters y setters para Usuarios
-    public Usuarios getUsuario() {return usuario;}
-    public void setUsuario(Usuarios usuario) {this.usuario = usuario;}
+    public Usuarios getUsuarios() {return usuario;}
+    public void setUsuarios(Usuarios usuario) {this.usuario = usuario;}
 
     // Método conveniente para obtener el ID del usuario
-    public Integer getIdUsuario() {
+    public Integer getIdUsuarios() {
         return this.usuario != null ? this.usuario.getIdUsuario() : null;
     }
 
