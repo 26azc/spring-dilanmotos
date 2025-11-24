@@ -30,22 +30,73 @@
 
 <!-- Fragmento Thymeleaf -->
 <div class="sidebar" th:fragment="sidebar">
-    <nav class="nav flex-column">
-        <h1>Dilan Motos</h1>
-        <a class="nav-link" href="/usuario"><i class="fa-solid fa-user me-2"></i> Usuarios</a>
-        <a class="nav-link" href="/marca"><i class="fa-solid fa-tag me-2"></i> Marca</a>
-        <a class="nav-link" href="/moto"><i class="fa-solid fa-motorcycle me-2"></i> Moto</a>
-        <a class="nav-link" href="/caracteristicas"><i class="fa-solid fa-list me-2"></i> Características</a>
-        <a class="nav-link" href="/productos"><i class="fa-solid fa-box-open me-2"></i> Productos</a>
-        <a class="nav-link" href="/mecanico"><i class="fa-solid fa-user-gear me-2"></i> Mecánico</a>
-        <a class="nav-link" href="/tipoServicio"><i class="fa-solid fa-screwdriver-wrench me-2"></i> Tipo de Servicio</a>
-        <a class="nav-link" href="/servicio"><i class="fa-solid fa-clipboard-check me-2"></i> Servicio</a>
-        <a class="nav-link" href="/historial"><i class="fa-solid fa-clock-rotate-left me-2"></i> Historial</a>
-        <a class="nav-link" href="/pqrs"><i class="fa-solid fa-envelope-open-text me-2"></i> PQRS</a>
-        <a class="nav-link" href="/cotizacion"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Cotización</a>
-        <a class="nav-link" href="/categoria"><i class="fa-solid fa-folder-open me-2"></i> Categoría</a>
-    </nav>
+    <h1 class="px-3">Dilan Motos</h1>
+    <ul class="nav flex-column">
+
+        <!-- Módulo Usuarios -->
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="#submenuUsuarios" data-bs-toggle="collapse" aria-expanded="false">
+            <i class="fa-solid fa-user me-2"></i> Usuarios
+          </a>
+          <div class="collapse" id="submenuUsuarios">
+            <ul class="nav flex-column ms-3">
+              <li><a class="nav-link" href="/usuario"><i class="fa-solid fa-user me-2"></i> Gestión de Usuarios</a></li>
+              <li><a class="nav-link" href="/cotizacion"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Cotización</a></li>
+              <li><a class="nav-link" href="/productos"><i class="fa-solid fa-box-open me-2"></i> Productos</a></li>
+            </ul>
+          </div>
+        </li>
+
+        <!-- Módulo Motos -->
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="#submenuMotos" data-bs-toggle="collapse" aria-expanded="false">
+            <i class="fa-solid fa-motorcycle me-2"></i> Motos
+          </a>
+          <div class="collapse" id="submenuMotos">
+            <ul class="nav flex-column ms-3">
+              <li><a class="nav-link" href="/marca"><i class="fa-solid fa-tag me-2"></i> Marca</a></li>
+              <li><a class="nav-link" href="/moto"><i class="fa-solid fa-motorcycle me-2"></i> Moto</a></li>
+              <li><a class="nav-link" href="/caracteristicas"><i class="fa-solid fa-list me-2"></i> Características</a></li>
+            </ul>
+          </div>
+        </li>
+
+        <!-- Módulo Mecánico -->
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="#submenuMecanico" data-bs-toggle="collapse" aria-expanded="false">
+            <i class="fa-solid fa-user-gear me-2"></i> Mecánico
+          </a>
+          <div class="collapse" id="submenuMecanico">
+            <ul class="nav flex-column ms-3">
+              <li><a class="nav-link" href="/mecanico"><i class="fa-solid fa-user-gear me-2"></i> Mecánico</a></li>
+              <li><a class="nav-link" href="/tipoServicio"><i class="fa-solid fa-screwdriver-wrench me-2"></i> Tipo de Servicio</a></li>
+              <li><a class="nav-link" href="/servicio"><i class="fa-solid fa-clipboard-check me-2"></i> Servicio</a></li>
+            </ul>
+          </div>
+        </li>
+
+        <!-- Módulo PQRS -->
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="#submenuPQRS" data-bs-toggle="collapse" aria-expanded="false">
+            <i class="fa-solid fa-envelope-open-text me-2"></i> PQRS
+          </a>
+          <div class="collapse" id="submenuPQRS">
+            <ul class="nav flex-column ms-3">
+              <li><a class="nav-link" href="/historial"><i class="fa-solid fa-clock-rotate-left me-2"></i> Historial</a></li>
+              <li><a class="nav-link" href="/pqrs"><i class="fa-solid fa-envelope-open-text me-2"></i> PQRS</a></li>
+            </ul>
+          </div>
+        </li>
+
+        <!-- Categoría -->
+        <li class="nav-item">
+          <a class="nav-link" href="/categoria"><i class="fa-solid fa-folder-open me-2"></i> Categoría</a>
+        </li>
+
+    </ul>
 </div>
 
+<!--  JS necesario para collapse -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
