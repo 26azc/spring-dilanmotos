@@ -85,9 +85,10 @@
             <input type="date" th:field="*{fecha}" class="form-control" required>
             <div class="text-danger" th:errors="*{fecha}"></div>
 
-            <label class="form-label mt-2">Producto Agregado</label>
-            <input th:field="*{productoAgregado}" class="form-control" required>
-            <div class="text-danger" th:errors="*{productoAgregado}"></div>
+            <div class="form-check mt-2">
+            <input type="checkbox" th:field="*{productoAgregado}" class="form-check-input">
+            <label class="form-check-label">Producto Agregado</label>
+            </div>
           </div>
         </div>
 
@@ -96,41 +97,45 @@
         </div>
     </form>
     <!-- Tabla de cotizaciones -->
-    <div th:if="${cotizacion != null and !#lists.isEmpty(cotizacion)}">
-        <table class="table table-striped table-hover table-bordered"> 
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Usuario</th>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Precio Unitario</th>
-                    <th>Fecha</th>
-                    <th>Producto Agregado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="cot : ${cotizacion}">
-                    <td th:text="${cot.id}"></td>
-                    <td th:text="${cot.usuario}"></td>
-                    <td th:text="${cot.producto}"></td>
-                    <td th:text="${cot.cantidad}"></td>
-                    <td th:text="${cot.precioUnitario}"></td>
-                    <td th:text="${#dates.format(cot.fecha, 'dd/MM/yyyy')}"></td>
-                    <td th:text="${cot.productoAgregado}"></td>
-                    <td>
-                        <a th:href="@{|/cotizacion/editar/${cot.id}|}" class="btn btn-sm btn-warning">
-                            <i class="fas fa-edit"></i> Editar
-                        </a>
-                        <a th:href="@{|/cotizacion/eliminar/${cot.id}|}" class="btn btn-sm btn-danger" 
-                           onclick="return confirm('¿Estás seguro de eliminar esta cotización?');">
-                            <i class="fas fa-trash"></i> Eliminar
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div th:if="${cotizaciones != null and !#lists.isEmpty(cotizaciones)}">
+      <table class="table table-striped table-hover table-bordered"> 
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Fecha</th>
+            <th>Producto Agregado</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="cot : ${cotizaciones}">
+            <td th:text="${cot.idCotizacion}"></td>
+            <td th:text="${cot.idUsuarios}"></td>
+            <td th:text="${cot.producto}"></td>
+            <td th:text="${cot.cantidad}"></td>
+            <td th:text="${cot.precioUnitario}"></td>
+            <td th:text="${#temporals.format(cot.fecha, 'dd/MM/yyyy')}"></td>
+            <td th:text="${cot.productoAgregado}"></td>
+
+            <td>
+                <a th:href="@{|/cotizacion/editar/${cot.idCotizacion}|}" class="btn btn-sm btn-warning">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+
+                <a th:href="@{|/cotizacion/eliminar/${cot.idCotizacion}|}" 
+                   class="btn btn-sm btn-danger"
+                   onclick="return confirm('¿Eliminar esta cotización?')">
+                    <i class="fas fa-trash"></i> Eliminar
+                </a>
+            </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Mensaje si no hay resultados -->
@@ -145,6 +150,6 @@
     </div>
 </div>
 
-    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>   
 </body>
 </html>

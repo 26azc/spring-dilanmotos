@@ -74,6 +74,8 @@ public class CotizacionController {
                 existingCotizacion.setProducto(cotizacion.getProducto());
                 existingCotizacion.setFecha(cotizacion.getFecha());
                 existingCotizacion.setCantidad(cotizacion.getCantidad());
+                existingCotizacion.setPrecioUnitario(cotizacion.getPrecioUnitario());
+                existingCotizacion.setProductoAgregado(cotizacion.isProductoAgregado());    
                 cotizacionRepository.save(existingCotizacion);
                 return "redirect:/cotizacion?actualizado";
             })
@@ -81,7 +83,7 @@ public class CotizacionController {
     }
 
     // Eliminar cotización
-    @GetMapping("/cotizacion/eliminar/{id}")
+    @PostMapping("/cotizacion/eliminar/{id}")
     public String eliminarCotizacion(@PathVariable("id") int id) {
         if (cotizacionRepository.existsById(id)) {
             cotizacionRepository.deleteById(id);

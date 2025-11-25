@@ -13,27 +13,28 @@ public class Cotizacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idCotizacion;
 
+    @NotNull(message = "El usuario es obligatorio")
     @ManyToOne
     @JoinColumn(name = "id_usuario")
-    private Usuarios usuario; // Cambiado a la entidad Usuarios
+    private Usuarios usuario;
 
-    @Column(name = "producto") // Cambiado de @JoinColumn a @Column
+    @Column(name = "producto")
     @NotBlank(message = "El producto es obligatorio")
     private String producto;
 
-    @Column(name = "cantidad") // Cambiado de @JoinColumn a @Column
+    @Column(name = "cantidad")
     @NotNull(message = "La cantidad es obligatoria")
     private int cantidad;
 
-    @Column(name = "precio_unitario") // Cambiado de @JoinColumn a @Column
+    @Column(name = "precio_unitario")
     @NotNull(message = "El precioUnitario es obligatorio")
     private Double precioUnitario;
 
-    @Column(name = "fecha") // Cambiado de @JoinColumn a @Column
+    @Column(name = "fecha")
     @NotNull(message = "La fecha es obligatoria")
     private LocalDate fecha;
 
-    @Column(name = "producto_agregado") // Cambiado de @JoinColumn a @Column
+    @Column(name = "producto_agregado")
     private boolean productoAgregado;
 
     public Cotizacion() {}
@@ -41,13 +42,13 @@ public class Cotizacion {
     public int getIdCotizacion() {return idCotizacion;}
     public void setIdCotizacion(int idCotizacion) {this.idCotizacion = idCotizacion;}
 
-    // Cambiados los getters y setters para Usuarios
-    public Usuarios getUsuarios() {return usuario;}
+   
+    public Usuarios getUsuario() {return usuario;}
     public void setUsuarios(Usuarios usuario) {this.usuario = usuario;}
 
-    // Método conveniente para obtener el ID del usuario
+    
     public Integer getIdUsuarios() {
-        return this.usuario != null ? this.usuario.getIdUsuario() : null;
+        return usuario != null ? usuario.getIdUsuario() : null;
     }
 
     public String getProducto() {return producto;}
