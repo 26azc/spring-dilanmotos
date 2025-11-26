@@ -34,7 +34,11 @@
             <!-- Tipo de Servicio -->
             <div class="col-md-4">
                 <label class="form-label">Tipo de Servicio</label>
-                <input type="text" class="form-control" th:field="*{idTipoServicio}" />
+                <select class="form-select" th:field="*{idTipoServicio}" required>
+                    <option th:value="1">Mantenimiento</option>
+                    <option th:value="2">Reparación</option>
+                    <option th:value="3">Diagnóstico</option>
+                </select>
             </div>
 
             <!-- Fecha -->
@@ -44,9 +48,12 @@
             </div>
 
             <!-- Estado -->
-            <div class="col-md-4">
+           <div class="col-md-4">
                 <label class="form-label">Estado</label>
-                <input type="text" class="form-control" th:field="*{estadoServicio}" />
+                <select class="form-select" th:field="*{puntuacion}" required>
+                    <option th:value="1">Pendiente</option>
+                    <option th:value="2">Completado</option>
+                </select>
             </div>
 
             <!-- Comentario -->
@@ -58,7 +65,13 @@
             <!-- Puntuación -->
             <div class="col-md-4">
                 <label class="form-label">Puntuación</label>
-                <input type="number" min="1" max="5" class="form-control" th:field="*{puntuacion}" />
+                <select class="form-select" th:field="*{puntuacion}" required>
+                    <option th:value="1">1</option>
+                    <option th:value="2">2</option>
+                    <option th:value="3">3</option>
+                    <option th:value="4">4</option>
+                    <option th:value="5">5</option>
+                </select>
             </div>
 
             <!-- Visible en historial -->
