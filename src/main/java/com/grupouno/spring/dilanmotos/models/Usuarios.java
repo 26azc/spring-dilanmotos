@@ -52,7 +52,6 @@ public class Usuarios {
     public boolean isHabilitado() { return habilitado; }
     public void setHabilitado(boolean habilitado) { this.habilitado = habilitado; }
 
-    // Utilidad para verificar si es admin
     public boolean isAdmin() {
         return "ADMIN".equalsIgnoreCase(this.rol);
     }

@@ -67,7 +67,7 @@ public class PqrsController {
         pqrsRepository.save(pqrs);
         return "redirect:/pqrs?actualizado";
     }
-
+  
     @GetMapping("/pqrs/eliminar/{id}")
     public String eliminarPqrs(@PathVariable("id") int id) {
         if (pqrsRepository.existsById(id)) {
