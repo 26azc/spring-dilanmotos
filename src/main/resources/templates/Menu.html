@@ -93,6 +93,15 @@
           <a class="nav-link" href="/categoria"><i class="fa-solid fa-folder-open me-2"></i> Categoría</a>
         </li>
 
+        <!-- Logout -->
+        <li class="nav-item px-3 mt-4">
+          <form th:action="@{/logout}" method="post">
+              <button type="submit" class="btn btn-danger w-100">
+                  <i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar Sesión 
+              </button>
+          </form>
+        </li>
+
     </ul>
 </div>
 

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sesión Cerrada</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5 text-center">
+    <h3>Sesión cerrada correctamente</h3>
+    <p>Gracias por visitar el sistema. Puedes volver a iniciar sesión cuando lo desees.</p>
+
+    <div class="mt-4">
+        <a th:href="@{/login}" class="btn btn-primary">Iniciar Sesión</a>
+        <a th:href="@{/}" class="btn btn-secondary">Ir al Inicio</a>
+    </div>
+</div>
+</body>
+</html>

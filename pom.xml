@@ -74,6 +74,15 @@
     <artifactId>spring-boot-starter-validation</artifactId>
 </dependency>
 
+<!-- Agregación Spring Security, dependencia --> 
+
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+<!-- Agregación Spring Security, dependencia -->
+
 
 <!-- Agregación base de datos. Dependencia --> 
 
