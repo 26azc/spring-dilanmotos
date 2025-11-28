@@ -3,24 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Iniciar Sesión</title>
+    <link rel="stylesheet" th:href="@{/css/estilo_iniciodesesion.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+
+    <div class="main-container">
+    <div class="header">
+      <div class="logo-container">
+        <img src="assets/LogoDylanMotosI.png" alt="Logo Black-Motos" height="120" />
+      </div>
+    </div>
+</header>
+
+<section class="form-wrapper-container">
+<h2 class="form-titulo">Bienvenido — Inicia sesión</h2>
+<div class="form-wrapper">
+
 <div class="container mt-5">
-    <h3>Iniciar Sesión</h3>
     <form th:action="@{/login}" method="post">
         <div class="mb-3">
             <label class="form-label">Correo</label>
-            <input type="text" class="form-control" name="username" required>
+            <input type="text" class="form-control" name="username" placeholder="tucorreo@gmail.com" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Contraseña</label>
-            <input type="password" class="form-control" name="password" required>
+            <input type="password" class="form-control" name="password" placeholder="********">
         </div>
 
         <button type="submit" class="btn btn-primary">Entrar</button>
         <a th:href="@{/register}" class="btn btn-link">Registrarse</a>
+
+        <div class="signin-aux">
+            <a class="forgot-link" th:href="@{/forgot-password}">Olvidé mi contraseña</a>
     </form>
 
     <div th:if="${param.error}" class="alert alert-danger mt-3">

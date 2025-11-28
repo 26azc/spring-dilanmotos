@@ -1,0 +1,198 @@
+/* --- General --- */
+body, html {
+  margin: 1;
+  padding: 1;
+  background-image: linear-gradient(180deg, #1f0a52, #7903ff);
+  font-family: 'Lucida Sans', Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Header --- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.logo {
+  height: 80px;
+}
+
+.search-bar {
+  flex: 1;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  margin: 0 1rem;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: none;
+}
+
+.user-icon {
+  font-size: 1.6rem;
+  cursor: pointer; 
+}
+
+/* --- Navegación principal --- */
+.main-nav {
+  display: flex;              
+  align-items: center;        
+  gap: 30px;                 
+}
+
+.user-icon img {
+  height: 70px;              
+  width: auto;
+  display: block;
+}
+
+.money-icon img {
+  height: 40px;              
+  width: auto;
+  display: block;
+}
+
+.nav-central {
+  display: flex;
+  justify-content: center; 
+  margin: 2rem 0;          
+}
+
+.main-nav a {
+  background-color: #36015a;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  transition: background 0.3s;
+  align-items: center;
+}
+
+.main-nav a:hover {
+  background-color: rgb(69, 12, 161);
+}
+
+/*apartado de funcionalidad del icono de perfil */
+.user-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 120%;
+  background-color: #36015a;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  min-width: 180px;
+  z-index: 10;
+}
+
+.dropdown li {
+  text-align: left;
+}
+
+.dropdown li a {
+  display: block;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.dropdown li a:hover {
+  background-color: rgb(69, 12, 161);
+  border-radius: 4px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* --- Categorías --- */
+.categories {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin: 2rem auto;
+  max-width: 1100px;
+}
+
+.category-card {
+  position: relative;
+  background-color: #7a78fa69;
+  border-radius: 10px;
+  padding: 2rem;
+  width: 220px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* Imagen de cada categoría */
+.category-card img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 0.8rem;
+  border-radius: 8px;
+}
+
+/* Botón dentro de cada tarjeta */
+.btn-category {
+  background-color: #36015a;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.btn-category:hover {
+  background-color: rgb(69, 12, 161);
+}
+
+/* Botón de acción en el footer */
+.btn-accion {
+  background-color: #36015a;
+  color: #fff;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  width: auto; 
+  min-width: 120px; 
+  margin-top: 0.3rem;
+  transition: background 0.3s;
+}
+
+.footer {
+  margin-top: auto;         
+  padding: 15px;
+}
+
