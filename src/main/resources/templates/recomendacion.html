@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recomendación</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilo_recomendacion.css}">
+    <html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <img src="assets/LogoDylanMotosI.png" alt="Dilan Motos" class="logo">
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar">
+    </div>
+
+   <div class="icons">
+  <nav class="main-nav">
+    <span class="money-icon">
+      <img src="assets/simboloPesos.png" alt="Pesos">
+    </span>
+    <div class="user-menu">
+      <span id="userIcon" class="user-icon">
+        <img src="assets/iconoPerfil.png" alt="Perfil">
+      </span>
+      <ul id="dropdown" class="dropdown hidden">  
+        <li><a th:href="CuentaUsuario.html">Mi cuenta</a></li>
+        <li><form th:action="@{/logout}" method="post" style="display:inline; width:100%;">
+            <button type="submit" class="btn btn-link dropdown-logout" style="width:100%; text-align:left; padding: 0.6rem 1rem; color: #fff; text-decoration: none;">Cerrar Sesión</button>
+        </form>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/usuario}" class="dropdown-admin">Panel de Administración</a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
+  </header>
+
+  <!-- Título -->
+  <div class="title-container">
+    <h1>Recomendación de productos</h1>
+  </div>
+
+  <!-- Recomendaciones -->
+  <div class="recommendations">
+    <!-- Producto 1 -->
+    <div class="product-card">
+      <img src="assets/AceiteMotul.png" alt="Motul 7100 20W50">
+      <p><strong>Marca:</strong> xxxxxxxxx</p>
+      <p><strong>Precio:</strong> $-------</p>
+      <p><strong>Calidad:</strong> Alta / Media / Baja</p>
+      <p><strong>Durabilidad:</strong> Buena / Regular / Mala</p>
+      <p><strong>Calificación:</strong> <span class="stars">★★★★★</span></p>
+      <p><strong>Descripción:</strong> Información detallada del producto</p>
+        <a href="Ficha_tenica_Aceites.html" class="btn-accion">Ficha técnica</a>
+    </div>
+
+    <!-- Producto 2 -->
+    <div class="product-card">
+      <img src="assets/Llanta.png" alt="Llanta Moto">
+      <p><strong>Marca:</strong> xxxxxxxxx</p>
+      <p><strong>Precio:</strong> $-------</p>
+      <p><strong>Calidad:</strong> Alta / Media / Baja</p>
+      <p><strong>Durabilidad:</strong> Buena / Regular / Mala</p>
+      <p><strong>Calificación:</strong> <span class="stars">★★☆☆☆</span></p>
+      <p><strong>Descripción:</strong> Información detallada del producto</p>
+        <a href="Ficha_tecnica_Llantas.html" class="btn-accion">Ficha técnica</a>
+    </div>
+ 
+
+
+  <!-- Producto 3 -->
+    <div class="product-card">
+      <img src="assets/KitDeArrastre.png" alt="Kit de Arrastre Moto">
+      <p><strong>Marca:</strong> xxxxxxxxx</p>
+      <p><strong>Precio:</strong> $-------</p>
+      <p><strong>Calidad:</strong> Alta / Media / Baja</p>
+      <p><strong>Durabilidad:</strong> Buena / Regular / Mala</p>
+      <p><strong>Calificación:</strong> <span class="stars">★★☆☆☆</span></p>
+      <p><strong>Descripción:</strong> Información detallada del producto</p>
+        <a href="Ficha_tecnica_Kit_arrastre.html" class="btn-accion">Ficha técnica</a>
+     </div>
+   </div>
+
+    <div class="footer">
+        <a href="ComunicacionTec.html" class="btn-accion">Inicio</a>
+    </div>
+
+
+     <script>
+    // Script para alternar el menú
+    document.getElementById("userIcon").addEventListener("click", function() {
+      document.getElementById("dropdown").classList.toggle("hidden");
+    });
+
+    // Cierra el menú si se hace clic fuera
+    window.addEventListener("click", function(e) {
+      if (!document.querySelector(".user-menu").contains(e.target)) {
+        document.getElementById("dropdown").classList.add("hidden");
+      }
+    });
+  </script>
+</body>
+</html>

@@ -45,12 +45,16 @@ public class AuthController {
 
     @GetMapping("/dashboard")
     public String dashboard() {
-        return "dashboard"; // dashboard.html
+        return "dashboard"; 
     }
 
     @GetMapping("/logout-page")
-public String logoutPage() {
-    return "logout"; // logout.html
-}
+    public String logoutPage() {
+        return "logout"; 
+    }
 
+    @GetMapping("/recomendacion")
+    public String recomendacion() {
+        return "recomendacion"; 
+    }
 }
