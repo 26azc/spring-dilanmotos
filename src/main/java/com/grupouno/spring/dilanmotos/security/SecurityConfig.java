@@ -19,7 +19,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/login") // tu vista personalizada
+                .loginPage("/login") 
                 .defaultSuccessUrl("/dashboard", true)
                 .permitAll()
             )
@@ -31,7 +31,7 @@ public class SecurityConfig {
 
         return http.build();
     }
-
+ 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
