@@ -11,6 +11,7 @@ public class TipoServicio {
 
     @Id    
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @Column(name = "id_tipo_servicio")
     private int idTipoServicio;
 
     @NotBlank(message = "El nombre es obligatorio")
