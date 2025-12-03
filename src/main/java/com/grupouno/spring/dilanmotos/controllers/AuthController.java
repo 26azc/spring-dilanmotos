@@ -53,4 +53,9 @@ public String logoutPage() {
     return "logout"; // logout.html
 }
 
+@GetMapping("/ComunicacionTec")
+    public String comunicacionTec() {
+        return "ComunicacionTec"; // ComunicacionTec.html
+    }
+
 }
