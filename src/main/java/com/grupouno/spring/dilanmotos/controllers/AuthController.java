@@ -8,6 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class AuthController {
@@ -140,15 +143,16 @@ public class AuthController {
     public String CuentaUsuario() {
         return "CuentaUsuario"; 
     }
-
-<<<<<<< HEAD
+     
     @GetMapping("/crearPQRS")
     public String crearPQRS() {
         return "crearPQRS"; 
-=======
+    }   
+    
     @GetMapping("/EditarInfoMoto")
     public String EditarInfoMoto() {
-        return "EditarInfoMoto"; 
->>>>>>> ac095192d4b32c21cfab5d4f53c5b19e8792a892
+        return "EditarInfoMoto" ;
     }
+    
+    
 }
