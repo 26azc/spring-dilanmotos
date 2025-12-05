@@ -67,4 +67,9 @@ public class AuthController {
     public String CuentaUsuario() {
         return "CuentaUsuario"; 
     }
+
+    @GetMapping("/crearPQRS")
+    public String crearPQRS() {
+        return "crearPQRS"; 
+    }
 }

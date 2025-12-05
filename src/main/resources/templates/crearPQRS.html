@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>CrearPQRS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilo_crearPQRS.css}">
+    <html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+</head>
+<body>
+
+<header class="header">
+    <img src="assets/LogoDylanMotosI.png" alt="Dilan Motos" class="logo">
+   <div class="icons">
+  <nav class="main-nav">
+    <span class="money-icon">
+      <img src="assets/simboloPesos.png" alt="Pesos">
+    </span>
+    <div class="user-menu">
+      <span id="userIcon" class="user-icon">
+        <img src="assets/iconoPerfil.png" alt="Perfil">
+      </span>
+      <ul id="dropdown" class="dropdown hidden">  
+        <li><a th:href="@{/CuentaUsuario}">Mi cuenta</a></li>
+        <li><a th:href="@{/login}" method="post">Cerrar sesión</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/usuario}" class="dropdown-admin">Panel de Administración</a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
+  </header>
+
+  <div class="pqrs-container">
+    <h2>Formulario PQRS</h2>
+    <form>
+      <label for="nombre">Nombre completo</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="correo">Correo electrónico</label>
+      <input type="email" id="correo" name="correo" required>
+
+      <label for="tipo">Tipo de solicitud</label>
+      <div class="Opciones PQRS">
+        <select id="tipo" name="tipo" required>
+        <option value="">Seleccione una opción</option>
+        <option value="peticion">Petición</option>
+        <option value="queja">Queja</option>
+        <option value="reclamo">Reclamo</option>
+        <option value="sugerencia">Sugerencia</option>
+      </select>
+      </div>
+      
+
+      <label for="mensaje">Mensaje</label>
+      <textarea id="mensaje" name="mensaje" required></textarea>
+
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+
+  <div class="footer">
+        <a th:href="@{/dashboard}" class="btn-accion">Inicio</a>
+    </div>
+
+</body>
+
+<script>
+    // Script para alternar el menú
+    document.getElementById("userIcon").addEventListener("click", function() {
+      document.getElementById("dropdown").classList.toggle("hidden");
+    });
+
+    // Cierra el menú si se hace clic fuera
+    window.addEventListener("click", function(e) {
+      if (!document.querySelector(".user-menu").contains(e.target)) {
+        document.getElementById("dropdown").classList.add("hidden");
+      }
+    });
+  </script>
+
+</html>
