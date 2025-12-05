@@ -92,7 +92,7 @@ body, html {
   position: absolute;
   right: 0;
   top: 120%;
-  background-color: #36015a;
+  background-color: #122681;
   list-style: none;
   margin: 0;
   padding: 0.5rem 0;
@@ -123,7 +123,7 @@ body, html {
 
 .dropdown li a:hover,
 .dropdown-logout:hover {
-  background-color: rgb(69, 12, 161);
+  background-color: #163f97;
   border-radius: 4px;
 }
 
@@ -182,7 +182,7 @@ body, html {
 
 /* Botón dentro de cada tarjeta */
 .btn-category {
-  background-color: #06053b;
+  background-color: #3b46d8;
   color: #fff;
   border: none;
   padding: 0.6rem 1rem;
@@ -207,7 +207,12 @@ body, html {
 }
 
 .btn-category:hover {
-  background-color: #212bb8;
+  background-color:  #1f29b1;
+}
+
+a{
+  text-decoration: none;
+  color: white;
 }
 
 /* Botón de acción en el footer */
