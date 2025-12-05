@@ -1,0 +1,136 @@
+/* --- Estilos generales --- */
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #65e7a7, #3bd8a4);
+  font-family: 'Lucida Sans', Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* --- Contenedor principal --- */
+.container {
+  width: 100%;
+  max-width: 600px;
+}
+
+/* --- Caja del formulario --- */
+.container form {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* --- Título --- */
+.container h3 {
+  color: #3bd8a4;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* --- Formularios --- */
+form .mb-3 {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+  color: #333;
+}
+
+input[type="password"] {
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  width: 100%;
+  height: 48px;
+  box-sizing: border-box;
+  transition: border 0.3s, background-color 0.3s;
+}
+
+input:focus {
+  border-color: #3bd8a4;
+  background-color: #f0fff7;
+  outline: none;
+  color: #000;
+}
+
+/* --- Botones --- */
+button.btn-success {
+  background-color: #3bd8a4;
+  border: none;
+  color: #fff;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+button.btn-success:hover {
+  background-color: #2aa87c;
+}
+
+a.btn-secondary {
+  background-color: #000000;
+  border: none;
+  color: #fff;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  width: 100%;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+a.btn-secondary:hover {
+  background-color: #383838;
+}
+
+/* --- Mensajes de error --- */
+.alert-danger {
+  margin-top: 1rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+/* --- Animación --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Responsividad --- */
+@media (max-width: 720px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .container form {
+    padding: 1.5rem;
+  }
+
+  .container h3 {
+    font-size: 1.6rem;
+  }
+}
