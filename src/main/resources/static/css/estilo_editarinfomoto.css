@@ -14,7 +14,7 @@ body {
 /* Contenedor principal */
 .edit-container {
     width: 850px;
-    background: rgba(255, 255, 255, 0.12);
+    background: rgb(255, 255, 255);
     padding: 40px;
     border-radius: 25px;
     backdrop-filter: blur(14px);
@@ -26,7 +26,7 @@ body {
 
 /* Icono superior */
 .edit-icon {
-    width: 95px;
+    width: 200px;
     height: auto;
     margin-bottom: 10px;
 }
@@ -37,15 +37,8 @@ body {
     font-size: 34px;
     margin: 10px 0;
     font-weight: bold;
+    color: black;
 }
-
-/* Subtítulo */
-.edit-sub {
-    font-size: 18px;
-    margin-bottom: 25px;
-    opacity: .9;
-}
-
 
 /* Formulario */
 .edit-form {
@@ -65,24 +58,31 @@ body {
 .form-label {
     margin-bottom: 6px;
     font-weight: bold;
-    color: #ffffff;
+    color: #000000;
     font-size: 17px;
 }
 
 /* Inputs */
 .form-control {
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    border: none;    
+    background: rgba(255, 255, 255, 0.95);
+    color: #000;                    
     font-size: 16px;
     outline: none;
-    transition: 0.2s;
+    transition: border-color 0.15s, box-shadow 0.15s;
 }
 
+.form-control::placeholder {
+  color: #666;
+  box-shadow: grey;
+}
+
+
 .form-control:focus {
-    background: #fff;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+ background: #fff;
+ border-color: #000;
+ box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.712);
 }
 
 
@@ -102,7 +102,7 @@ body {
     border: none;
     font-size: 17px;
     font-weight: bold;
-    border-radius: 25px;
+    border-radius: 6px;
     cursor: pointer;
     transition: 0.25s;
 }
@@ -121,7 +121,7 @@ body {
     border: none;
     font-size: 17px;
     font-weight: bold;
-    border-radius: 25px;
+    border-radius: 6px;
     cursor: pointer;
     transition: 0.25s;
 }
@@ -130,3 +130,27 @@ body {
     transform: scale(1.05);
     background-color:  #1f29b1;
 }
+
+/* Botón de acción en el footer */
+.footer {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 100;
+  display: inline-block;
+}
+
+.footer .btn {
+  background-color: #3b46d8;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: background 0.2s, transform 0.12s;
+}
+
+.footer .btn:hover {
+  background-color: #1f29b1;
+  transform: translateY(-2px);
+ }
