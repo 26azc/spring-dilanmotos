@@ -27,10 +27,11 @@
         <img src="assets/iconoPerfil.png" alt="Perfil">
       </span>
       <ul id="dropdown" class="dropdown hidden">  
-        <li><a th:href="CuentaUsuario.html">Mi cuenta</a></li>
-        <li><form th:action="@{/logout}" method="post" style="display:inline; width:100%;">
+        <li><a th:href="@{/CuentaUsuario}">Mi cuenta</a></li>
+        <li>
+          <form th:action="@{/logout}" method="post" style="display:inline; width:100%;">
             <button type="submit" class="btn btn-link dropdown-logout" style="width:100%; text-align:left; padding: 0.6rem 1rem; color: #fff; text-decoration: none;">Cerrar Sesión</button>
-        </form>
+          </form>
         </li>
         <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/usuario}" class="dropdown-admin">Panel de Administración</a></li>
       </ul>

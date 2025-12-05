@@ -53,7 +53,7 @@ public class AuthController {
         return "logout"; 
     }
 
-@GetMapping("/ComunicacionTec")
+    @GetMapping("/ComunicacionTec")
     public String comunicacionTec() {
         return "ComunicacionTec"; // ComunicacionTec.html
     }
@@ -61,5 +61,10 @@ public class AuthController {
     @GetMapping("/recomendacion")
     public String recomendacion() {
         return "recomendacion"; 
+    }
+
+    @GetMapping("/CuentaUsuario")
+    public String CuentaUsuario() {
+        return "CuentaUsuario"; 
     }
 }

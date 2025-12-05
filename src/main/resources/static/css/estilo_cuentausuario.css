@@ -1,0 +1,139 @@
+body, html {
+  margin: 2;
+  padding: 2px;
+  background: linear-gradient(135deg, #8865e7, #3b46d8);
+  font-family: 'Lucida Sans', Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Header --- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.logo {
+  height: 80px;
+  color: black;
+}
+
+.title{
+    color: #000000;
+    align-items: center;
+}
+
+/* Cuadro de cuenta */
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+   transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.container:hover{
+    transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+h1 {
+  color: #000000;
+  margin: 0 0 20px 0;
+  text-align: center; /* centra el título dentro del contenedor */
+  width: 100%;
+  font-size: 3rem;
+  line-height: 1.2;
+}
+
+h2 {
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.personal-info p {
+  margin: 5px 0;
+  color:#000000;
+}
+
+.motorcycle-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.motorcycle-pic {
+  flex: 0 0 300px;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  display: block;
+  margin-bottom: 0;
+  border-radius: 8px;
+}
+
+
+.motorcycle-info {
+  margin: 5px 0;
+  text-align: left;
+  color: #000000;
+}
+
+.buttons {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.btn {
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  background: #3b46d8;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-family: 'Lucida Sans', Geneva, Verdana, sans-serif;
+}
+
+.btn:hover {
+  background: #1f29b1;
+}
+
+footer {
+  text-align: center;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.social-icons img {
+  width: 30px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+/* --- Responsividad --- */
+@media (max-width: 600px) {
+  .logo-container img { height: 80px; }
+  .form-titulo { font-size: 1.5rem; }
+  .login-card { padding: 1.5rem; }
+}
+
+.acciones a{
+  text-decoration: none;
+  color: white;
+}
