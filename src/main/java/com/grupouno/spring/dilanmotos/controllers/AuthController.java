@@ -67,4 +67,9 @@ public class AuthController {
     public String CuentaUsuario() {
         return "CuentaUsuario"; 
     }
+
+    @GetMapping("/EditarInfoMoto")
+    public String EditarInfoMoto() {
+        return "EditarInfoMoto"; 
+    }
 }
