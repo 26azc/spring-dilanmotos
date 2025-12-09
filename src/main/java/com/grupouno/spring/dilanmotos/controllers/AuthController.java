@@ -159,5 +159,24 @@ public class AuthController {
         return "HistorialActividad" ;
     }
     
+    @GetMapping("/FichaTecKitArrastre")
+    public String FichaTecKitArrastre() {
+        return "FichaTecKitArrastre" ;
+    }
+
+    @GetMapping("/FichaTecAceite")
+    public String FichaTecAceite() {
+        return "FichaTecAceite" ;
+    }
+
+    @GetMapping("/FichaTecLlanta")
+    public String FichaTecLlanta() {
+        return "FichaTecLlanta" ;
+    }
+
+    @GetMapping("/Cotizacion")
+    public String Cotizacion() {
+        return "Cotizacion" ;
+    }
     
 }
