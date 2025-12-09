@@ -153,6 +153,11 @@ public class AuthController {
     public String EditarInfoMoto() {
         return "EditarInfoMoto" ;
     }
+
+    @GetMapping("/HistorialActividad")
+    public String HistorialActividad() {
+        return "HistorialActividad" ;
+    }
     
     
 }
