@@ -1,95 +1,97 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/estilo_dashboard.css}">
-    <html lang="es" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 </head>
 <body>
 
     <!-- Header -->
- <header class="header">
-    <img src="assets/LogoDylanMotosI.png" alt="Dilan Motos" class="logo">
-    <div class="search-bar">
-      <input type="text" placeholder="Buscar">
-    </div>
+    <header class="header">
+        <img src="/assets/LogoDylanMotosI.png" alt="Dilan Motos" class="logo">
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar">
+        </div>
 
-   <div class="icons">
-  <nav class="main-nav">
-    <span class="money-icon">
-      <img src="assets/simboloPesos.png" alt="Pesos">
-    </span>
-    <div class="user-menu">
-      <span id="userIcon" class="user-icon">
-        <img src="assets/iconoPerfil.png" alt="Perfil">
-      </span>
-      <ul id="dropdown" class="dropdown hidden">  
-        <li><a th:href="@{/CuentaUsuario}">Mi cuenta</a></li>
-        <li>
-          <form th:action="@{/logout}" method="post" style="display:inline; width:100%;">
-            <button type="submit" class="btn btn-link dropdown-logout" style="width:100%; text-align:left; padding: 0.6rem 1rem; color: #fff; text-decoration: none;">Cerrar Sesión</button>
-          </form>
-        </li>
-        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/usuario}" class="dropdown-admin">Panel de Administración</a></li>
-      </ul>
-    </div>
-  </nav>
-</div>
-  </header>
+        <div class="icons">
+            <nav class="main-nav">
+                <span class="money-icon">
+                    <img src="/assets/simboloPesos.png" alt="Pesos">
+                </span>
+                <div class="user-menu">
+                    <span id="userIcon" class="user-icon">
+                        <img src="/assets/iconoPerfil.png" alt="Perfil">
+                    </span>
+                    <ul id="dropdown" class="dropdown hidden">  
+                        <li><a th:href="@{/CuentaUsuario}">Mi cuenta</a></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post" style="display:inline; width:100%;">
+                                <button type="submit" class="btn btn-link dropdown-logout"
+                                        style="width:100%; text-align:left; padding:0.6rem 1rem; color:#fff; text-decoration:none;">
+                                    Cerrar Sesión
+                                </button>
+                            </form>
+                        </li>
+                        <!-- Solo visible para ADMIN -->
+                        <li sec:authorize="hasRole('ADMIN')">
+                            <a th:href="@{/usuario}" class="dropdown-admin">Panel de Administración</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-  <main class="main-content">
-    <nav class="nav-central">
-      <a th:href="@{/recomendacion}" class="btn-category">Recomendaciones</a>
-    </nav>
+    <main class="main-content">
+        <nav class="nav-central">
+            <a th:href="@{/recomendacion}" class="btn-category">Recomendaciones</a>
+        </nav>
 
-<div class="container mt-5 d-flex flex-column align-items-center text-center">
-</div>
-
-    <!-- Bloques de contenido -->
-    <div class="row text-center categories">
-        <div class="col-md-4 mb-4">
-            <div class="category-card">
-                <img src="assets/KitDeArrastre.png" alt="kit de arrastre" class="img-fluid mb-3" >
-                <button type="button" class="btn btn-category">Kits de arrastre</button>
+        <!-- Bloques de contenido -->
+        <div class="row text-center categories mt-4">
+            <div class="col-md-4 mb-4">
+                <div class="category-card">
+                    <img src="/assets/KitDeArrastre.png" alt="kit de arrastre" class="img-fluid mb-3">
+                    <button type="button" class="btn btn-category">Kits de arrastre</button>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="category-card">
+                    <img src="/assets/Llanta.png" alt="Llanta" class="img-fluid mb-3">
+                    <button type="button" class="btn btn-category">Llantas</button>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="category-card">
+                    <img src="/assets/AceiteMotul.png" alt="Aceite" class="img-fluid mb-3">
+                    <button type="button" class="btn btn-category">Aceites</button>
+                </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="category-card">
-                <img src="assets/llanta.png" alt="Llanta" class="img-fluid mb-3" >
-                <button type="button" class="btn btn-category">Llantas</button>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="category-card">
-                <img src="assets/AceiteMotul.png" alt="Aceite" class="img-fluid mb-3" >
-                <button type="button" class="btn btn-category">Aceites</button>
-            </div>
-        </div>
+    </main>
+
+    <div class="footer">
+        <a th:href="@{/ComunicacionTec}" class="btn-category">Comunicate con un técnico</a>
     </div>
-</div>
 
-<div class="footer">
-  <a th:href="@{/ComunicacionTec}" class="btn-category">Comunicate con un técnico</a>
-</div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const userIcon = document.getElementById('userIcon');
+        const dropdown = document.getElementById('dropdown');
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  const userIcon = document.getElementById('userIcon');
-  const dropdown = document.getElementById('dropdown');
+        userIcon.addEventListener('click', function() {
+            dropdown.classList.toggle('hidden');
+        });
 
-  userIcon.addEventListener('click', function() {
-    dropdown.classList.toggle('hidden');
-  });
-
-  document.addEventListener('click', function(event) {
-    if (!event.target.closest('.user-menu')) {
-      dropdown.classList.add('hidden');
-    }
-  });
-</script>
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.user-menu')) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
