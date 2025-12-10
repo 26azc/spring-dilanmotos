@@ -1,0 +1,397 @@
+/* --- General --- */
+body, html {
+  margin: 1;
+  padding: 1;
+  background: linear-gradient(135deg, #8865e7, #3b46d8);
+  font-family: 'Lucida Sans', Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+/* --- Header --- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.logo {
+  height: 80px;
+}
+
+.search-bar {
+  flex: 1;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  margin: 0 1rem;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: none;
+}
+
+.user-icon {
+  font-size: 1.6rem;
+  cursor: pointer; 
+}
+
+/* --- Navegación principal --- */
+.main-nav {
+  display: flex;              
+  align-items: center;        
+  gap: 30px;                 
+}
+
+.user-icon img {
+  height: 70px;              
+  width: auto;
+  display: block;
+}
+
+.money-icon img {
+  height: 40px;              
+  width: auto;
+  display: block;
+}
+
+.nav-central {
+  display: flex;
+  justify-content: center; 
+  margin: 2rem 0;          
+}
+
+.main-nav a {
+  background-color: #36015a;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  transition: background 0.3s;
+  align-items: center;
+}
+
+.main-nav a:hover {
+  background-color: rgb(69, 12, 161);
+}
+
+/*apartado de funcionalidad del icono de perfil */
+.user-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 120%;
+  background-color: #122681;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  min-width: 180px;
+  z-index: 10;
+}
+
+.dropdown li {
+  text-align: left;
+}
+
+.dropdown li a,
+.dropdown-logout {
+  display: block;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  transition: background 0.3s;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: 'Lucida Sans', Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+}
+
+.dropdown li a:hover,
+.dropdown-logout:hover {
+  background-color: #163f97;
+  border-radius: 4px;
+}
+
+.dropdown-admin {
+  display: block;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}
+
+/* --- Títulos principales --- */
+.main-titles {
+  display: flex;
+  justify-content: space-around;
+  margin: 1.5rem auto;
+  max-width: 1100px;
+  border-bottom: 2px solid #fff;
+  padding-bottom: 0.5rem;
+}
+
+.main-titles h2 {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* --- Filtros --- */
+.filters {
+  margin: 1.5rem auto;
+  max-width: 1100px;
+}
+
+.filters nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-right: 1rem;
+  font-weight: bold;
+}
+
+.filter-buttons button {
+  background-color: #3b46d8;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0.3rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.filter-buttons button:hover {
+  background-color: rgb(69, 12, 161);
+}
+
+/* --- Productos --- */
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem auto;
+  max-width: 1100px;
+}
+
+.product-card {
+  position: relative;
+  background-color: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* --- Imagenes del mismo tamaño --- */
+.product-card img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+/* --- Círculo de selección --- */
+.select-circle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  color: transparent;
+  background-color: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+  transition: all 0.3s;
+}
+
+.select-circle.selected {
+  background-color: #3b46d8;
+  color: #fff;
+  border-color: #36015a;
+}
+
+.actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem;
+      background-color: inherit;
+      max-width:100%;
+      margin: 0 auto;
+      margin-top: auto; 
+    }
+
+    .actions .left,
+    .actions .center,
+    .actions .right {
+      flex: 1;
+      display: flex;
+    }
+
+    .actions .left {
+      justify-content: flex-start;
+      padding-left: 3rem;
+    }
+
+    .actions .center {
+      justify-content: center;
+      margin-left: 1rem; 
+    }
+
+    .actions .right {
+      justify-content: flex-end;
+      padding-right: 3rem;
+    }
+
+
+/* --- Botones --- */
+.btn-accion {
+  background-color: #3b46d8;
+  color: #fff;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  width: auto; 
+  min-width: 120px; 
+  margin-top: 0.3rem;
+  transition: background 0.3s;
+  text-align: center;
+}
+
+.btn-accion:hover {
+  background-color: #212bb8;
+}
+
+a{
+    text-decoration: none;
+}
+.hidden {
+  display: none;
+}
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem auto;
+  flex-wrap: wrap;
+}
+.btn-separado{
+  margin-left:75rem;
+}
+.footer-actions {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem 0;
+  background-color: inherit; 
+}
+.card {
+  height: auto !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Estilo menú desplegable de "Marca" */
+.filter-buttons .topmenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+}
+
+.filter-buttons .topmenu li {
+  position: relative;
+}
+
+.filter-buttons .topmenu li a {
+  background-color: #3b46d8;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+.filter-buttons .topmenu li a:hover {
+  background-color: #212bb8;
+}
+
+/* Submenú */
+.filter-buttons .topmenu ul {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 180px;
+  background-color: #495057;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.filter-buttons .topmenu li:hover > ul {
+  display: block;
+}
+
+.filter-buttons .topmenu ul li a {
+  padding: 0.6rem 1rem;
+  color: #fff;
+  border-radius: 0;
+}
+
+.filter-buttons .topmenu ul li a:hover {
+  background-color: #163f97;
+}
+
+/* --- Responsividad --- */
+@media (max-width: 600px) {
+  .logo-container img { height: 80px; }
+  .form-titulo { font-size: 1.5rem; }
+  .login-card { padding: 1.5rem; }
+}
+

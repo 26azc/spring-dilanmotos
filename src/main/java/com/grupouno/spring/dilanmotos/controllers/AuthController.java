@@ -8,8 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -178,5 +176,16 @@ public class AuthController {
     public String Cotizacion() {
         return "Cotizacion" ;
     }
+
+    @GetMapping("/CatalogoKitArrastreAutenticado")
+    public String CatalogoKitArrastreAutenticado() {
+        return "CatalogoKitArrastreAutenticado" ;
+    }
+    
+
+
+
+
+
     
 }
