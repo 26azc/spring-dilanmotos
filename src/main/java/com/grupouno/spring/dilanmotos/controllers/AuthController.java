@@ -152,6 +152,11 @@ public class AuthController {
         return "EditarInfoMoto" ;
     }
 
+    @GetMapping("/EditarInfoUsuario")
+    public String EditarInfoUsuario() {
+        return "EditarInfoUsuario" ;
+    }
+
     @GetMapping("/HistorialActividad")
     public String HistorialActividad() {
         return "HistorialActividad" ;
@@ -190,6 +195,11 @@ public class AuthController {
     @GetMapping("/CatalogoLlantaAutenticado")
     public String CatalogoLlantaAutenticado() {
         return "CatalogoLlantaAutenticado" ;
+    }
+
+    @GetMapping("/ComparacionProductos")
+    public String ComparacionProductos() {
+        return "ComparacionProductos" ;
     }
 
 
