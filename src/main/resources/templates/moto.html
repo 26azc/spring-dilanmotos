@@ -114,7 +114,6 @@
                     <table class="table table-striped table-hover table-bordered">
                         <thead class="table-primary">
                             <tr>
-                                <th>Id moto</th>
                                 <th>Usuario</th> 
                                 <th>Marca</th>
                                 <th>Modelo</th>
@@ -125,7 +124,6 @@
                         </thead>
                         <tbody>
                             <tr th:each="moto : ${motos}">
-                                <td th:text="${moto.idMoto}"></td>
                                 
                                 <td th:text="${moto.usuario.nombre}"></td>
                                 
