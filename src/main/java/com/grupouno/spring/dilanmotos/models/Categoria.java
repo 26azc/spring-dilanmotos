@@ -3,24 +3,21 @@ package com.grupouno.spring.dilanmotos.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
-
-
 @Entity
 @Table(name = "categoria")
 public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idCategoria;
+    private Integer idCategoria;
 
     @NotBlank(message = "El nombre de la categoría es obligatorio")
     private String nombre;
 
-    public Categoria() {}
+    // Getters y setters
+    public Integer getIdCategoria() { return idCategoria; }
+    public void setIdCategoria(Integer idCategoria) { this.idCategoria = idCategoria; }
 
-    public int getIdCategoria() {return idCategoria;}
-    public void setIdCategoria(int idCategoria) {this.idCategoria = idCategoria;}
-
-    public String getNombre() {return nombre;}
-    public void setNombre(String nombre) {this.nombre = nombre;}
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 }

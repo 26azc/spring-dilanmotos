@@ -1,88 +1,52 @@
 package com.grupouno.spring.dilanmotos.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
-@Table(name = "productos") // Opcional - si la tabla en BD se llama diferente
+@Table(name = "productos")
 public class Productos {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_producto")
-    public int idProducto;
-    
-    @Column(name = "id_categoria")
-    public int idCategoria;
-    
-    @Column(name = "id_marca")
-    public int idMarca;
-    
-    @Column(name = "nombre")
-    public String nombre;
-    
-    @Column(name = "descripcion")
-    public String descripcion;
-    
-    @Column(name = "precio")
-    public double precio;
+    private Integer idProducto;
 
-    public Productos() {
-    }
+    @NotBlank(message = "El nombre es obligatorio")
+    private String nombre;
 
-    public Productos(int idProducto, int idCategoria, int idMarca, String nombre, String descripcion, double precio) {
-        this.idProducto = idProducto;
-        this.idCategoria = idCategoria;
-        this.idMarca = idMarca;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio;
-    }
+    @NotBlank(message = "La descripción es obligatoria")
+    private String descripcion;
 
-    public int getIdProducto() {
-        return idProducto;
-    }
+    @NotNull(message = "El precio es obligatorio")
+    @Positive(message = "El precio debe ser mayor que 0")
+    private Double precio;
 
-    public void setIdProducto(int idProducto) {
-        this.idProducto = idProducto;
-    }
+    @ManyToOne
+    @JoinColumn(name = "id_categoria")
+    private Categoria categoria;
 
-    public int getIdCategoria() {
-        return idCategoria;
-    }
+    @ManyToOne
+    @JoinColumn(name = "id_marca")
+    private Marca marca;
 
-    public void setIdCategoria(int idCategoria) {
-        this.idCategoria = idCategoria;
-    }
+    // Getters y setters
+    public Integer getIdProducto() { return idProducto; }
+    public void setIdProducto(Integer idProducto) { this.idProducto = idProducto; }
 
-    public int getIdMarca() {
-        return idMarca;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public void setIdMarca(int idMarca) {
-        this.idMarca = idMarca;
-    }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public Double getPrecio() { return precio; }
+    public void setPrecio(Double precio) { this.precio = precio; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public Categoria getCategoria() { return categoria; }
+    public void setCategoria(Categoria categoria) { this.categoria = categoria; }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
+    public Marca getMarca() { return marca; }
+    public void setMarca(Marca marca) { this.marca = marca; }
 }
