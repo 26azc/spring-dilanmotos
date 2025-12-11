@@ -3,8 +3,8 @@ package com.grupouno.spring.dilanmotos.controllers;
 import com.grupouno.spring.dilanmotos.models.Servicio;
 import com.grupouno.spring.dilanmotos.repositories.ServicioRepository;
 import com.grupouno.spring.dilanmotos.repositories.UsuarioRepository;
-
 import com.grupouno.spring.dilanmotos.repositories.MecanicoRepository;
+import com.grupouno.spring.dilanmotos.repositories.TipoServicioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +28,9 @@ public class ServicioController {
     @Autowired
     private MecanicoRepository mecanicoRepository;
 
+    @Autowired
+    private TipoServicioRepository tipoServicioRepository;
+
     @GetMapping
     public String listarServicios(@RequestParam(value = "search", required = false) String search, Model model) {
         List<Servicio> servicios = (search != null && !search.isEmpty())
@@ -38,6 +41,7 @@ public class ServicioController {
         model.addAttribute("nuevoServicio", new Servicio());
         model.addAttribute("usuarios", usuarioRepository.findAll());
         model.addAttribute("mecanicos", mecanicoRepository.findAll());
+        model.addAttribute("tiposServicio", tipoServicioRepository.findAll());
         return "servicio";
     }
 
@@ -50,6 +54,7 @@ public class ServicioController {
             model.addAttribute("servicios", servicioRepository.findAll());
             model.addAttribute("usuarios", usuarioRepository.findAll());
             model.addAttribute("mecanicos", mecanicoRepository.findAll());
+            model.addAttribute("tiposServicio", tipoServicioRepository.findAll());
             return "servicio";
         }
         servicioRepository.save(servicio);
@@ -64,6 +69,7 @@ public class ServicioController {
                     model.addAttribute("servicioEditado", s);
                     model.addAttribute("usuarios", usuarioRepository.findAll());
                     model.addAttribute("mecanicos", mecanicoRepository.findAll());
+                    model.addAttribute("tiposServicio", tipoServicioRepository.findAll());
                     return "editar_servicio";
                 })
                 .orElse("redirect:/servicio");
@@ -77,6 +83,7 @@ public class ServicioController {
         if (result.hasErrors()) {
             model.addAttribute("usuarios", usuarioRepository.findAll());
             model.addAttribute("mecanicos", mecanicoRepository.findAll());
+            model.addAttribute("tiposServicio", tipoServicioRepository.findAll());
             return "editar_servicio";
         }
         servicioRepository.save(servicio);

@@ -11,7 +11,7 @@ public class TipoServicio {
 
     @Id    
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    @Column(name = "id_tipo_servicio")
+    @Column(name = "id_tipoServicio")
     private int idTipoServicio;
 
     @NotBlank(message = "El nombre es obligatorio")

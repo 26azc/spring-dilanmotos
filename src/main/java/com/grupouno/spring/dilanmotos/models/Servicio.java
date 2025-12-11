@@ -21,9 +21,9 @@ public class Servicio {
     @JoinColumn(name = "id_mecanico")
     private Mecanico mecanico;
 
-    @NotNull
-    @Column(name = "id_tipo_servicio")
-    private Integer idTipoServicio;
+    @ManyToOne
+    @JoinColumn(name = "id_tipoServicio")
+    private TipoServicio tipoServicio;
 
     @NotNull
     @Column(name = "fecha_servicio")
@@ -73,12 +73,12 @@ public class Servicio {
         this.mecanico = mecanico;
     }
 
-    public Integer getIdTipoServicio() {
-        return idTipoServicio;
+    public TipoServicio getTipoServicio() {
+        return tipoServicio;
     }
 
-    public void setIdTipoServicio(Integer idTipoServicio) {
-        this.idTipoServicio = idTipoServicio;
+    public void setTipoServicio(TipoServicio tipoServicio) {
+        this.tipoServicio = tipoServicio;
     }
 
     public LocalDate getFechaServicio() {

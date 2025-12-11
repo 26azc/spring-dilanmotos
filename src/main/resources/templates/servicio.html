@@ -59,16 +59,14 @@
         </thead>
         <tbody>
             <tr th:each="servicio : ${servicios}">
-                <td th:text="${servicio.usuario.nombre}"></td>
-                <td th:text="${servicio.mecanico.nombre}"></td>
-                <td th:text="${servicio.idTipoServicio}"></td>
+                <td th:text="${servicio.usuario != null ? servicio.usuario.nombre : 'Sin asignar'}"></td>
+                <td th:text="${servicio.mecanico != null ? servicio.mecanico.nombre : 'Sin asignar'}"></td>
+                <td th:text="${servicio.tipoServicio != null ? servicio.tipoServicio.nombre : 'Sin asignar'}"></td>
                 <td th:text="${servicio.fechaServicio}"></td>
                 <td th:text="${servicio.estadoServicio}"></td>
                 <td th:text="${servicio.puntuacion}"></td>
                 <td th:text="${servicio.comentario}"></td>
-                <td>
-                    <span th:text="${servicio.visibleEnHistorial ? 'Sí' : 'No'}"></span>
-                </td>
+                <td><span th:text="${servicio.visibleEnHistorial ? 'Sí' : 'No'}"></span></td>
                 <td>
                     <a th:href="@{/servicio/editar/{id}(id=${servicio.idServicio})}" class="btn btn-sm btn-warning">
                         <i class="fa-solid fa-pen-to-square"></i> Editar
@@ -86,35 +84,47 @@
     <h4 class="mt-5">Agregar nuevo servicio</h4>
     <form th:action="@{/servicio}" th:object="${nuevoServicio}" method="post" class="mt-3">
         <div class="row g-3">
+            <!-- Usuario -->
             <div class="col-md-6">
-                <label class="form-label">Nombre del Usuario</label>
-                <input type="text" class="form-control" th:field="*{usuario.nombre}" placeholder="Escribe el nombre del usuario" required>
+                <label class="form-label">Usuario</label>
+                <select class="form-select" th:field="*{usuario}" required>
+                    <option th:each="u : ${usuarios}" th:value="${u.idUsuario}" th:text="${u.nombre}"></option>
+                </select>
             </div>
+
+            <!-- Mecánico -->
             <div class="col-md-6">
                 <label class="form-label">Mecánico</label>
-                <select class="form-select" th:field="*{mecanico}" placeholder="Selecciona un mecánico" required>
-                    <option th:each="m : ${mecanicos}" th:value="${m}" th:text="${m.nombre}"></option>
+                <select class="form-select" th:field="*{mecanico}" required>
+                    <option th:each="m : ${mecanicos}" th:value="${m.idMecanico}" th:text="${m.nombre}"></option>
                 </select>
             </div>
+
+            <!-- Tipo de Servicio -->
             <div class="col-md-4">
                 <label class="form-label">Tipo de Servicio</label>
-                <select class="form-select" th:field="*{idTipoServicio}" required>
-                    <option th:value="1">Mantenimiento</option>
-                    <option th:value="2">Reparación</option>
-                    <option th:value="3">Diagnóstico</option>
+                <select class="form-select" th:field="*{tipoServicio}" required>
+                    <option value="">Seleccione un tipo</option>
+                    <option th:each="t : ${tiposServicio}" th:value="${t.idTipoServicio}" th:text="${t.nombre}"></option>
                 </select>
             </div>
+
+            <!-- Fecha -->
             <div class="col-md-4">
                 <label class="form-label">Fecha</label>
                 <input type="date" class="form-control" th:field="*{fechaServicio}" required>
             </div>
+
+            <!-- Estado -->
             <div class="col-md-4">
                 <label class="form-label">Estado</label>
-                <select class="form-select" th:field="*{puntuacion}" required>
-                    <option th:value="1">Pendiente</option>
-                    <option th:value="2">Completado</option>
+                <select class="form-select" th:field="*{estadoServicio}" required>
+                    <option th:value="Pendiente">Pendiente</option>
+                    <option th:value="Completado">Completado</option>
                 </select>
             </div>
+
+            <!-- Puntuación -->
             <div class="col-md-4">
                 <label class="form-label">Puntuación</label>
                 <select class="form-select" th:field="*{puntuacion}" required>
@@ -125,6 +135,8 @@
                     <option th:value="5">5</option>
                 </select>
             </div>
+
+            <!-- Visible en historial -->
             <div class="col-md-4">
                 <label class="form-label">¿Visible en historial?</label>
                 <select class="form-select" th:field="*{visibleEnHistorial}">
@@ -132,6 +144,8 @@
                     <option th:value="false">No</option>
                 </select>
             </div>
+
+            <!-- Comentario -->
             <div class="col-12">
                 <label class="form-label">Comentario</label>
                 <textarea class="form-control" th:field="*{comentario}" rows="3" required></textarea>
