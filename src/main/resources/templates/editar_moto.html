@@ -57,11 +57,16 @@
                         <div class="text-danger" th:if="${#fields.hasErrors('cilindraje')}" th:errors="*{cilindraje}"></div>
                     </div> 
 
-                    <div class="col-md-6">
-                        <label class="form-label">Tipo de Reparación</label>
-                        <input type="text" class="form-control" th:field="*{tipoReparacion}" required>
-                        <div class="text-danger" th:if="${#fields.hasErrors('tipoReparacion')}" th:errors="*{tipoReparacion}"></div>
-                    </div>
+                    <div class="col-md-4">
+                            <label class="form-label">Tipo de Servicio</label>
+                            <select th:field="*{tipoReparacion}" id="tipoReparacion" class="form-select" required>
+                                <option value="">Seleccione un servicio</option>
+                                <option value="Reparación">Reparación</option>
+                                <option value="Mantenimiento">Mantenimiento</option>
+                                <option value="Diagnóstico">Diagnóstico</option>
+                            </select>
+                            <div class="text-danger" th:if="${#fields.hasErrors('tipoReparacion')}" th:errors="*{tipoReparacion}"></div>
+                        </div>
                     
                 </div>
                 

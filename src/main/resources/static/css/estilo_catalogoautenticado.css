@@ -184,7 +184,7 @@ body, html {
 }
 
 .filter-buttons button:hover {
-  background-color: rgb(69, 12, 161);
+  background-color: #212bb8;
 }
 
 /* --- Productos --- */
@@ -244,7 +244,7 @@ body, html {
 .select-circle.selected {
   background-color: #3b46d8;
   color: #fff;
-  border-color: #36015a;
+  background-color: #212bb8;
 }
 
 .actions {

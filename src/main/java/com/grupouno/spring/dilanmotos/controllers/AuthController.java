@@ -181,7 +181,16 @@ public class AuthController {
     public String CatalogoKitArrastreAutenticado() {
         return "CatalogoKitArrastreAutenticado" ;
     }
-    
+
+    @GetMapping("/CatalogoAceiteAutenticado")
+    public String CatalogoAceiteAutenticado() {
+        return "CatalogoAceiteAutenticado" ;
+    }
+
+    @GetMapping("/CatalogoLlantaAutenticado")
+    public String CatalogoLlantaAutenticado() {
+        return "CatalogoLlantaAutenticado" ;
+    }
 
 
 
