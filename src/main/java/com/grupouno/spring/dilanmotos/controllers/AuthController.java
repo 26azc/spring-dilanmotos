@@ -202,6 +202,11 @@ public class AuthController {
         return "ComparacionProductos" ;
     }
 
+    @GetMapping("/Reseñas")
+    public String Reseñas() {
+        return "Reseñas" ;
+    }
+
     @GetMapping("/RealizarReseña")
     public String RealizarReseña() {
         return "RealizarReseña" ;

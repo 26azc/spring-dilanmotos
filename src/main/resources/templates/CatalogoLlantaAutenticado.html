@@ -49,7 +49,7 @@
     <!-- Filtros -->
      <div class="filters">
       <nav>
-        <a href="PantallaInicioUA.html">Inicio</a>
+        <a th:href="@{/dashboard}">Inicio</a>
         <a th:href="@{/recomendacion}">Recomendaciones</a>
       </nav>
       <div class="filter-buttons">
@@ -63,8 +63,8 @@
               </ul>
             </li>
           </ul>
-         <a href="Comparacion_productos.html" class="btn-accion">Comparar</a>
-         <a href="pantallaReseñas.html" class="btn-accion">Reseñas</a>
+         <a th:href="@{/ComparacionProductos}" class="btn-accion">Comparar</a>
+         <a th:href="@{/Reseñas}" class="btn-accion">Reseñas</a>
         </div>
     </div>
 

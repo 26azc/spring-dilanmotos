@@ -46,7 +46,7 @@
       </p>
 
       <!-- Formulario -->
-      <form class="contact-form">
+      <form class="contact-form" id="contactForm">
         <label for="nombre">Nombre</label>
         <input type="text" class="form-control" id="nombre" name="nombre" placeholder="nombre" required>
         
@@ -62,7 +62,7 @@
        
     <div class="acciones">
       <button>Enviar</button>  
-      <button>Borrar</button>
+      <button type="button" onclick="borrarFormulario()">Borrar</button>
     </div>
     </main>
   </div>
@@ -82,6 +82,11 @@
         document.getElementById("dropdown").classList.add("hidden");
       }
     });
+
+    // Borra el formulario
+    function borrarFormulario() {
+    document.getElementById("contactForm").reset();
+  }
   </script>
 </body>
 </html>
