@@ -48,76 +48,30 @@ public class Servicio {
     private Boolean visibleEnHistorial;
 
     // Getters y setters
+    public Integer getIdServicio() { return idServicio; }
+    public void setIdServicio(Integer idServicio) { this.idServicio = idServicio; }
 
-    public Integer getIdServicio() {
-        return idServicio;
-    }
+    public Usuarios getUsuario() { return usuario; }
+    public void setUsuario(Usuarios usuario) { this.usuario = usuario; }
 
-    public void setIdServicio(Integer idServicio) {
-        this.idServicio = idServicio;
-    }
+    public Mecanico getMecanico() { return mecanico; }
+    public void setMecanico(Mecanico mecanico) { this.mecanico = mecanico; }
 
-    public Usuarios getUsuario() {
-        return usuario;
-    }
+    public TipoServicio getTipoServicio() { return tipoServicio; }
+    public void setTipoServicio(TipoServicio tipoServicio) { this.tipoServicio = tipoServicio; }
 
-    public void setUsuario(Usuarios usuario) {
-        this.usuario = usuario;
-    }
+    public LocalDate getFechaServicio() { return fechaServicio; }
+    public void setFechaServicio(LocalDate fechaServicio) { this.fechaServicio = fechaServicio; }
 
-    public Mecanico getMecanico() {
-        return mecanico;
-    }
+    public String getEstadoServicio() { return estadoServicio; }
+    public void setEstadoServicio(String estadoServicio) { this.estadoServicio = estadoServicio; }
 
-    public void setMecanico(Mecanico mecanico) {
-        this.mecanico = mecanico;
-    }
+    public String getComentario() { return comentario; }
+    public void setComentario(String comentario) { this.comentario = comentario; }
 
-    public TipoServicio getTipoServicio() {
-        return tipoServicio;
-    }
+    public Integer getPuntuacion() { return puntuacion; }
+    public void setPuntuacion(Integer puntuacion) { this.puntuacion = puntuacion; }
 
-    public void setTipoServicio(TipoServicio tipoServicio) {
-        this.tipoServicio = tipoServicio;
-    }
-
-    public LocalDate getFechaServicio() {
-        return fechaServicio;
-    }
-
-    public void setFechaServicio(LocalDate fechaServicio) {
-        this.fechaServicio = fechaServicio;
-    }
-
-    public String getEstadoServicio() {
-        return estadoServicio;
-    }
-
-    public void setEstadoServicio(String estadoServicio) {
-        this.estadoServicio = estadoServicio;
-    }
-
-    public String getComentario() {
-        return comentario;
-    }
-
-    public void setComentario(String comentario) {
-        this.comentario = comentario;
-    }
-
-    public Integer getPuntuacion() {
-        return puntuacion;
-    }
-
-    public void setPuntuacion(Integer puntuacion) {
-        this.puntuacion = puntuacion;
-    }
-
-    public Boolean getVisibleEnHistorial() {
-        return visibleEnHistorial;
-    }
-
-    public void setVisibleEnHistorial(Boolean visibleEnHistorial) {
-        this.visibleEnHistorial = visibleEnHistorial;
-    }
+    public Boolean getVisibleEnHistorial() { return visibleEnHistorial; }
+    public void setVisibleEnHistorial(Boolean visibleEnHistorial) { this.visibleEnHistorial = visibleEnHistorial; }
 }

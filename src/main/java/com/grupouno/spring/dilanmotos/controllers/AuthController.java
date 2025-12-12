@@ -206,6 +206,16 @@ public class AuthController {
     public String pantallaCotizacion() {
         return "pantallaCotizacion" ;
     }
+    @GetMapping("/Reseñas")
+    public String Reseñas() {
+        return "Reseñas" ;
+    }
+
+    @GetMapping("/RealizarReseña")
+    public String RealizarReseña() {
+        return "RealizarReseña" ;
+    }
+
 
 
 }

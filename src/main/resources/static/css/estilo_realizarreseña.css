@@ -1,0 +1,248 @@
+/* --- General --- */
+body, html {
+  margin: 1;
+  padding: 1;
+  background: linear-gradient(135deg, #8865e7, #3b46d8);
+  font-family: 'Lucida Sans', Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Header --- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.logo {
+  height: 80px;
+}
+
+.search-bar {
+  flex: 1;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  margin: 0 1rem;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: none;
+}
+
+.user-icon {
+  font-size: 1.6rem;
+  cursor: pointer; 
+}
+
+/* --- Navegación principal --- */
+.main-nav {
+  display: flex;             
+  align-items: center;       
+  gap: 30px;                 
+}
+
+.user-icon img {
+  height: 70px;              
+  width: auto;
+  display: block;
+}
+
+.money-icon img {
+  height: 40px;              
+  width: auto;
+  display: block;
+}
+
+.nav-central {
+  display: flex;
+  justify-content: center; 
+  margin: 2rem 0;           
+}
+
+.main-nav a {
+  background-color: #36015a;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  transition: background 0.3s;
+  align-items: center;
+}
+
+.main-nav a:hover {
+  background-color: rgb(69, 12, 161);
+}
+
+/*apartado de funcionalidad del icono de perfil */
+.user-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 120%;
+  background-color: #122681;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  min-width: 180px;
+  z-index: 10;
+}
+
+.dropdown li {
+  text-align: left;
+}
+
+.dropdown li a,
+.dropdown-logout {
+  display: block;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  transition: background 0.3s;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: 'Lucida Sans', Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+}
+
+.dropdown li a:hover,
+.dropdown-logout:hover {
+  background-color: #163f97;
+  border-radius: 4px;
+}
+
+.dropdown-admin {
+  display: block;
+  padding: 0.6rem 1rem;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Contenedor principal */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+}
+
+
+.seccion {
+    display: flex;
+    justify-content: space-between;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 900px;
+    margin-top: 20px;
+    gap: 30px;
+    color: black !important;
+}
+
+
+.review-container {
+    flex: 2; 
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.detalles-reseña input,
+.detalles-reseña textarea {
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    border: none;
+    background-color: rgb(119, 119, 119);
+    font-size: 16px;
+}
+
+.detalles-reseña input::placeholder,
+.detalles-reseña textarea::placeholder {
+    color: #000;
+    opacity: 1;
+}
+
+.detalles-reseña textarea {
+    min-height: 300px;
+    resize: none;
+    color:black;
+}
+
+
+.imagen-producto {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding-left: 20px;
+}
+
+.imagen-producto img {
+    border-radius: 10px;
+    width: 150px;
+    height: 150PX;
+}
+
+.nombre-producto {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.stars-container {
+    color: #3b46d8;
+    cursor: pointer; 
+    font-size: 1.2rem; 
+    transition: color 0.2s; 
+}
+
+.stars-container span {
+    margin: 0 5px;
+}
+
+/* Botones */
+.button-group {
+    margin-top: 10px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #3b46d8;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn:hover {
+    background-color:  #1f29b1;
+}
+
+.footer {
+  margin-top: auto;        
+  padding: 15px;
+}

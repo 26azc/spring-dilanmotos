@@ -79,21 +79,19 @@
         <table class="table table-striped table-hover table-bordered">
             <thead class="table-primary">
                 <tr>
-                    <th>ID</th>
                     <th>Nombre</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="marca : ${marcas}">
-                    <td th:text="${marca.idMarca}"></td>
                     <td th:text="${marca.nombre}"></td>
                     <td>
                         <a th:href="@{'/marca/editar/' + ${marca.idMarca}}" class="btn btn-success btn-sm">
                             <i class="fa-solid fa-pen-to-square"></i> Editar
                         </a>
                         <a th:href="@{'/marca/eliminar/' + ${marca.idMarca}}" class="btn btn-danger btn-sm"
-                           onclick="return confirm('¿Estás seguro de que deseas eliminar esta marca?');">
+                        onclick="return confirm('¿Estás seguro de que deseas eliminar esta marca?');">
                             <i class="fa-solid fa-trash"></i> Eliminar
                         </a>
                     </td>
