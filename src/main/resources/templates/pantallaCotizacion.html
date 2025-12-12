@@ -1,0 +1,118 @@
+<head>
+  <meta charset="UTF-8">
+  <title>Dilan Motos - Cotizaciones</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estiloCotizacion.css}">
+</head>
+<body>
+  <!-- Header -->
+    <header class="header">
+        <img src="/assets/LogoDylanMotosI.png" alt="Dilan Motos" class="logo">
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar">
+        </div>
+
+        <div class="icons">
+            <nav class="main-nav">
+                <div class="user-menu">
+                    <span id="userIcon" class="user-icon">
+                        <img src="/assets/iconoPerfil.png" alt="Perfil">
+                    </span>
+                    <ul id="dropdown" class="dropdown hidden">  
+                        <li><a th:href="@{/CuentaUsuario}">Mi cuenta</a></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post" style="display:inline; width:100%;">
+                                <button type="submit" class="btn btn-link dropdown-logout"
+                                        style="width:100%; text-align:left; padding:0.6rem 1rem; color:#fff; text-decoration:none;">
+                                    Cerrar Sesión
+                                </button>
+                            </form>
+                        </li>
+                        <!-- Solo visible para ADMIN -->
+                        <li sec:authorize="hasRole('ADMIN')">
+                            <a th:href="@{/usuario}" class="dropdown-admin">Panel de Administración</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+        <main class="seccion">
+            <div class="cotizacion-container">
+                <!-- Resumen de la cotización -->
+                <div class="resumen-cotizacion">
+                    <div class="resumen-item">
+                        <span class="resumen-texto">Lista de productos</span>
+                    </div>
+                    <div class="resumen-item">
+                        <span class="resumen-texto">TOTAL:</span>
+                        <span class="total-valor">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Línea divisoria -->
+                <div class="divisor"></div>
+
+                <!-- Mensaje de espacio vacío -->
+                <div class="lista-vacia">
+                    <p>Este espacio se encuentra vacío</p>
+                </div>
+
+                <!-- Línea divisoria -->
+                <div class="divisor"></div>
+
+                <!-- Sección para agregar productos -->
+                <div class="agregar-producto">
+                    <h2>Agregar producto</h2>
+                    <div class="formulario-producto">
+                        <input type="text" placeholder="Nombre del producto" class="input-producto">
+                        <input type="number" placeholder="Cantidad" class="input-cantidad">
+                        <input type="number" placeholder="Precio unitario" class="input-precio">
+                        <button class="btn agregar-btn">+</button>
+                    </div>
+                </div>
+
+                <!-- Tabla de productos -->
+                <div class="tabla-productos">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th>Subtotal</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Los productos agregados aparecerán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    
+    </div>
+    <div class="footer">
+            <button class="btn btn-accion" onclick="history.back()">Atrás</button>
+            <button class="btn btn-accion">Guardar Cotización</button>
+        </div>
+    </div>
+    <script>
+        const userIcon = document.getElementById('userIcon');
+        const dropdown = document.getElementById('dropdown');
+
+        userIcon.addEventListener('click', function() {
+            dropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.user-menu')) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -18,7 +18,9 @@
         <div class="icons">
             <nav class="main-nav">
                 <span class="money-icon">
+                  <a th:href="@{/pantallaCotizacion}">
                     <img src="/assets/simboloPesos.png" alt="Pesos">
+                  </a>
                 </span>
                 <div class="user-menu">
                     <span id="userIcon" class="user-icon">
@@ -49,7 +51,7 @@
     <!-- Filtros -->
      <div class="filters">
       <nav>
-        <a href="PantallaInicioUA.html">Inicio</a>
+        <a th:href="@{/dashboard}">Inicio</a>
         <a th:href="@{/recomendacion}">Recomendaciones</a>
       </nav>
       <div class="filter-buttons">

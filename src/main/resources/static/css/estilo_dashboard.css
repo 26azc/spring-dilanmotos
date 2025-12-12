@@ -68,7 +68,6 @@ body, html {
 }
 
 .main-nav a {
-  background-color: #36015a;
   color: #fff;
   text-decoration: none;
   font-weight: bold;
@@ -78,9 +77,6 @@ body, html {
   align-items: center;
 }
 
-.main-nav a:hover {
-  background-color: rgb(69, 12, 161);
-}
 
 /*apartado de funcionalidad del icono de perfil */
 .user-menu {

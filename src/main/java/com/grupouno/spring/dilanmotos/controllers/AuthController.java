@@ -202,9 +202,10 @@ public class AuthController {
         return "ComparacionProductos" ;
     }
 
+    @GetMapping("/pantallaCotizacion")
+    public String pantallaCotizacion() {
+        return "pantallaCotizacion" ;
+    }
 
 
-
-
-    
 }
