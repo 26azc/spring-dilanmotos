@@ -14,7 +14,9 @@
    <div class="icons">
   <nav class="main-nav">
     <span class="money-icon">
-      <img src="assets/simboloPesos.png" alt="Pesos">
+      <a th:href="@{/pantallaCotizacion}">
+        <img src="/assets/simboloPesos.png" alt="Pesos">
+      </a>
     </span>
     <div class="user-menu">
       <span id="userIcon" class="user-icon">
@@ -66,7 +68,7 @@
     <!-- Botones -->
     <div class="acciones">
       <button onclick="history.back()">Atrás</button>
-      <button><a th:href="@{/Cotizacion}" class="btn-category">Agregar a cotización</a></button>
+      <button><a th:href="@{/pantallaCotizacion}" class="btn-category">Agregar a cotización</a></button>
       <button><a th:href="@{/ComunicacionTec}" class="btn-category">Comunicate con un técnico</a></button>
     </div>
   </section>
