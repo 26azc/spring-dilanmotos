@@ -39,16 +39,26 @@ public class SecurityConfig {
      * @return instancia de {@link SecurityFilterChain} con las configuraciones aplicadas
      * @throws Exception en caso de error en la configuración
      */
-    @Bean
+   @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/register", "/forgot-password", "/verify-code", "/reset-password", "/css/**", "/js/**").permitAll()
+                .requestMatchers(
+                    "/login",
+                    "/register",
+                    "/forgot-password",
+                    "/verify-code",
+                    "/reset-password",
+                    "/css/**",
+                    "/js/**"
+                ).permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
+                // 🔹 Nuevo: proteger la ruta de perfil/cuenta
+                .requestMatchers("/CuentaUsuario").authenticated()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/login") 
+                .loginPage("/login")
                 .defaultSuccessUrl("/dashboard", true)
                 .permitAll()
             )
@@ -60,6 +70,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     /**
      * Define el codificador de contraseñas para la aplicación.

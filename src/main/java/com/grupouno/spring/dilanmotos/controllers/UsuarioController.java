@@ -2,6 +2,8 @@ package com.grupouno.spring.dilanmotos.controllers;
 
 import com.grupouno.spring.dilanmotos.models.Usuarios;
 import com.grupouno.spring.dilanmotos.repositories.UsuarioRepository;
+import com.grupouno.spring.dilanmotos.services.UsuarioService;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
 
@@ -79,5 +83,25 @@ public class UsuarioController {
             return "redirect:/usuario?eliminado";
         }
         return "redirect:/usuario?error=not_found";
+    }
+    private final UsuarioService usuarioService;
+
+    // Constructor correcto: parámetro con nombre y asignación
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
+
+    // Perfil/Cuenta del usuario autenticado
+    @GetMapping("/CuentaUsuario")
+    public String miCuenta(@AuthenticationPrincipal User principal, Model model) {
+        // principal.getUsername() devuelve el "username" con el que autenticó (idealmente tu correo)
+        String correo = principal.getUsername();
+
+        // Llama al servicio correctamente
+        Usuarios usuarioActual = usuarioService.getByCorreo(correo);
+
+        // Pasa el objeto a la vista
+        model.addAttribute("usuario", usuarioActual);
+        return "CuentaUsuario";
     }
 }

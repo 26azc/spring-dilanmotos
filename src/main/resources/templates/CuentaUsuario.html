@@ -1,52 +1,51 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mi cuenta</title>
+  <title th:text="'Cuenta de ' + ${usuario.nombre}">Mi cuenta</title>
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
   <link rel="stylesheet" th:href="@{/css/estilo_cuentausuario.css}">
 </head>
 <body>
+ <div class="container py-4">
+    <h1 class="mb-4">Mi cuenta</h1>
 
-    
- <div class="container">
-    <h1>Mi cuenta</h1>
+    <!-- Datos personales -->
     <h2>Datos personales</h2>
-    <div class="profile-section">
-      <img src="assets/iconoPerfil.png" alt="icono perfil">
+    <div class="profile-section d-flex align-items-center mb-4">
+      <!-- Imagen de perfil -->
+      <img th:src="@{/assets/iconoPerfil.png}" alt="icono perfil" class="me-3 rounded-circle" width="100">
       <div class="personal-info">    
-        <p><strong>Nombre:</strong> Juan Dilan Torres</p>
-        <p><strong>Correo:</strong> tucorreo@gmail.com</p>
-        <p><strong>Número telefónico:</strong> XXXXXXXX</p>
-        <p><strong>Número de documento:</strong> XXXX-XXXX</p>
+        <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}">Nombre</span></p>
+        <p><strong>Correo:</strong> <span th:text="${usuario.correo}">Correo</span></p>
+        <p><strong>Rol:</strong> <span th:text="${usuario.rol}">Rol</span></p>
+        <p><strong>Estado:</strong>
+          <span th:if="${usuario.habilitado}">Habilitado</span>
+          <span th:unless="${usuario.habilitado}">Deshabilitado</span>
+        </p>
       </div>
     </div>
     
-    <h2>Datos de la motocicleta</h2>
-     <div class="motorcycle-section">  
-      <img src="assets/moto.webp" alt="Motocicleta" class="motorcycle-pic" />
-      <div class="motorcycle-info">
-        <p><strong>Marca:</strong> XXXXXXXX</p>
-        <p><strong>Modelo:</strong> XXXX</p>
-        <p><strong>Cilindraje:</strong> XXXXXXXX</p>
-        <p><strong>Año:</strong> XXXX</p>
-        <p><strong>Color:</strong> XXXXXXXX</p>
-      </div>
-     </div>
+    <!-- Sección de acciones -->
+    <h2>Acciones</h2>
+    <div class="buttons mt-3 d-flex flex-wrap gap-2">
+      <a th:href="@{/EditarInfoUsuario}" class="btn btn-secondary">Editar información usuario</a>
+      <a th:href="@{/CambiarContraseña}" class="btn btn-warning">Cambiar contraseña</a>
+      <a th:href="@{/HistorialActividad}" class="btn btn-info">Historial de actividad</a>
+      <a th:href="@{/crearPQRS}" class="btn btn-success">Crear PQRS</a>
+      <a th:href="@{/detalle-pqrs}" class="btn btn-dark">Historial PQRS</a>
+    </div>
 
-     <div class="buttons">
-      <a th:href="@{/EditarInfoMoto}" class="btn"> Editar informacion moto</a>
-      <a th:href="@{/EditarInfoUsuario}" class="btn">Editar informacion usuario</a>
-      <a th:href="@{/HistorialActividad}" class="btn">Historial de actividad</a>
-      <a href="CambiarContraseña" class="btn">Cambiar contraseña</a>
-      <a th:href="@{/crearPQRS}" class="btn">Crear PQRS</a>
-      <a href="detalle-pqrs" class="btn">Historial PQRS</a>
-     </div>
+    <!-- Footer -->
+    <div class="footer mt-4">
+      <a th:href="@{/dashboard}" class="btn btn-outline-secondary">Atrás</a>
+    </div>
  </div>
 
-  <div class="footer">
-      <a th:href="@{/dashboard}" class="btn">Atrás</a>
-  </div>
+ <!-- Bootstrap JS -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

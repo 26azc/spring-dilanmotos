@@ -137,11 +137,14 @@ public class AuthController {
         return "recomendacion"; 
     }
 
-    @GetMapping("/CuentaUsuario")
+    /*
+     @GetMapping("/CuentaUsuario")
     public String CuentaUsuario() {
         return "CuentaUsuario"; 
     }
      
+     */
+   
     @GetMapping("/crearPQRS")
     public String crearPQRS() {
         return "crearPQRS"; 
