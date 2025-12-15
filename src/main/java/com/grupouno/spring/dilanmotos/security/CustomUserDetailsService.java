@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return new User(
             usuario.getCorreo(),
-            usuario.getContrasena(),
+            usuario.getContrasena(), // contraseña ya encriptada con BCrypt
             usuario.isHabilitado(),
             true, true, true,
             List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRol()))

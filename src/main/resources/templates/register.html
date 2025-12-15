@@ -11,20 +11,48 @@
     <form th:action="@{/register}" th:object="${usuario}" method="post">
         <h3>Registro de Usuario</h3>
 
+        <!-- Datos del usuario -->
         <div class="mb-3">
             <label class="form-label">Nombre</label>
-            <input type="text" class="form-control" th:field="*{nombre}" placeholder="Tu nombre" required>
+            <input type="text" class="form-control" th:field="*{nombre}" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Correo</label>
-            <input type="email" class="form-control" th:field="*{correo}" placeholder="tucorreo@example.com" required>
+            <input type="email" class="form-control" th:field="*{correo}" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Contraseña</label>
-            <input type="password" class="form-control" th:field="*{contrasena}" placeholder="********" required>
+            <input type="password" class="form-control" th:field="*{contrasena}" required>
         </div>
+
+        <!-- Datos de la moto -->
+        <h4>Datos de tu moto</h4>
+        <div class="mb-3">
+            <label class="form-label">Marca</label>
+            <input type="text" class="form-control" th:field="*{motos[0].marca}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Modelo</label>
+            <input type="text" class="form-control" th:field="*{motos[0].modelo}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Cilindraje</label>
+            <input type="number" step="0.1" class="form-control" th:field="*{motos[0].cilindraje}" required>
+        </div>
+
+       <div class="mb-3">
+    <label class="form-label">Tipo de reparación</label>
+    <select class="form-select" th:field="*{motos[0].tipoReparacion}" required>
+        <option value="">Seleccione un servicio</option>
+        <option value="Reparación">Reparación</option>
+        <option value="Mantenimiento">Mantenimiento</option>
+        <option value="Diagnóstico">Diagnóstico</option>
+    </select>
+</div>
 
         <button type="submit" class="btn btn-success">Registrarse</button>
         <a th:href="@{/login}" class="btn btn-secondary">Cancelar</a>
@@ -34,6 +62,5 @@
         <p th:text="${error}"></p>
     </div>
 </div>
-
 </body>
 </html>

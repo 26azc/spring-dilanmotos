@@ -86,7 +86,6 @@ h2 {
   border-radius: 8px;
 }
 
-
 .motorcycle-info {
   margin: 5px 0;
   text-align: left;
@@ -136,4 +135,9 @@ footer {
 .acciones a{
   text-decoration: none;
   color: white;
+}
+
+.container p,
+.container span {
+  color: #000000; /* negro para asegurar legibilidad sobre fondo blanco */
 }

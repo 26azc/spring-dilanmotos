@@ -21,6 +21,8 @@ public class ProductosController {
     @Autowired private CategoriaRepository categoriaRepository;
     @Autowired private MarcaRepository marcaRepository;
 
+    // ---------------- CRUD GENERAL ----------------
+
     // Listar productos
     @GetMapping("/productos")
     public String mostrarProducto(@RequestParam(value = "search", required = false) String search, Model model) {
@@ -82,4 +84,56 @@ public class ProductosController {
         }
         return "redirect:/productos?error=not_found";
     }
+
+    // ---------------- NUEVAS RUTAS DE CATÁLOGO ----------------
+
+    // Catálogo Kit de Arrastre
+    @GetMapping("/CatalogoKitArrastreAutenticado")
+    public String catalogoKitArrastre(@RequestParam(required = false) String marca, Model model) {
+        String categoria = "Kit de arrastre";
+
+        List<Productos> productos = (marca == null || marca.equals("Todas"))
+            ? productosRepository.findByCategoriaNombre(categoria)
+            : productosRepository.findByCategoriaNombreAndMarcaNombre(categoria, marca);
+
+        model.addAttribute("productos", productos);
+        model.addAttribute("marcaSeleccionada", marca != null ? marca : "Todas");
+
+        return "CatalogoKitArrastreAutenticado";
+    }
+
+    // Catálogo Aceites
+    @GetMapping("/CatalogoAceiteAutenticado")
+    public String catalogoAceite(@RequestParam(required = false) String marca, Model model) {
+        String categoria = "Aceites";
+
+        List<Productos> productos = (marca == null || marca.equals("Todas"))
+            ? productosRepository.findByCategoriaNombre(categoria)
+            : productosRepository.findByCategoriaNombreAndMarcaNombre(categoria, marca);
+
+        model.addAttribute("productos", productos);
+        model.addAttribute("marcaSeleccionada", marca != null ? marca : "Todas");
+
+        return "CatalogoAceiteAutenticado";
+    }
+
+    // Catálogo Llantas
+  @GetMapping("/CatalogoLlantaAutenticado")
+public String catalogoLlanta(@RequestParam(required = false) String marca, Model model) {
+    String categoria = "Llantas";
+    List<Productos> productos;
+
+    if (marca == null || marca.equalsIgnoreCase("Todas")) {
+        // Mostrar todos los productos de la categoría "Llantas"
+        productos = productosRepository.findByCategoriaNombre(categoria);
+    } else {
+        // Buscar productos cuyo nombre contenga la marca (aunque no esté en tabla Marca)
+        productos = productosRepository.findByCategoriaNombreAndNombreContainingIgnoreCase(categoria, marca);
+    }
+
+    model.addAttribute("productos", productos);
+    model.addAttribute("marcaSeleccionada", marca != null ? marca : "Todas");
+
+    return "CatalogoLlantaAutenticado";
 }
+    }
