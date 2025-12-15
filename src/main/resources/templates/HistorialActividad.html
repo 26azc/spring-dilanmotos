@@ -34,22 +34,18 @@
   </nav>
 </div>
   </header>
- <div class="main-container"></div>
-  
-
-    <!-- Selección de fecha -->
-    <div class="fecha-container">
-      <label for="fecha">Seleccione fecha</label>
-      <select id="fecha">
-        <option>14/08/2025</option>
-        <option>13/08/2025</option>
-        <option>12/08/2025</option>
-      </select>
-    </div>
 
     <!-- Historial -->
     <div class="historial-container">
-      <h3>Jueves, 14 de Agosto de 2025</h3>
+
+      <div class="historial-header">
+        <div class="fecha-container">
+          <label for="fecha">Seleccione fecha</label>
+          <input type="date" id="fecha" class="form-control">
+        </div>
+        <h3 id="fechaHeader">Jueves, 14 de Agosto de 2025</h3>
+      </div>
+
       <div class="tabla-historial">
         <div class="fila">
           <span>00/00/0000</span>
@@ -73,14 +69,13 @@
         </div>
       </div>
     </div>
-
+    
     <!-- Botones -->
- 
-  </div>
-       <div class="footer">
-      <button class="btn borrar">Borrar historial</button>
-        <a th:href="@{/dashboard}" class="btn">Inicio</a>
-    </div>
+     <div class="footer">
+        <button class="btn borrar">Borrar historial</button>
+        <button onclick="history.back()" class="btn">Atrás</button>
+     </div>
+
   <script>
     // Script para alternar el menú
     document.getElementById("userIcon").addEventListener("click", function() {
@@ -93,6 +88,44 @@
         document.getElementById("dropdown").classList.add("hidden");
       }
     });
+
+    // Mostrar calendario y actualizar encabezado
+    (function() {
+      var fechaInput = document.getElementById('fecha');
+      var header = document.getElementById('fechaHeader');
+
+      function formatSpanish(dateStr) {
+        if (!dateStr) return '';
+        // Parse as local date components to avoid UTC timezone shift
+        var parts = dateStr.split('-'); // [yyyy, mm, dd]
+        if (parts.length !== 3) return '';
+        var y = parseInt(parts[0], 10);
+        var m = parseInt(parts[1], 10) - 1;
+        var d = parseInt(parts[2], 10);
+        var dateObj = new Date(y, m, d);
+        if (isNaN(dateObj)) return '';
+        var fmt = new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        var s = fmt.format(dateObj);
+        return s.charAt(0).toUpperCase() + s.slice(1);
+      }
+
+      // Use local today as default value (YYYY-MM-DD)
+      function localTodayISO() {
+        var t = new Date();
+        var pad = function(n){ return n < 10 ? '0' + n : n; };
+        return t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate());
+      }
+
+      if (fechaInput) {
+        var defaultDate = localTodayISO();
+        fechaInput.value = defaultDate;
+        if (header) header.textContent = formatSpanish(fechaInput.value);
+
+        fechaInput.addEventListener('change', function() {
+          if (header) header.textContent = formatSpanish(this.value);
+        });
+      }
+    })();
   </script>
 </body>
 </html>
