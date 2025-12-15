@@ -3,165 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modulo Motos</title>
+    <title>Módulo Motos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            display: flex;
-            min-height: 100vh;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #f8f9fa;
-            padding-top: 1rem;
-            border-right: 1px solid #dee2e6;
-        }
-        .sidebar .nav-link {
-            color: #333;
-            padding: 10px 20px;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #e9ecef;
-        }
+        /* Sidebar fijo como en menu.html */
+        .sidebar { position: fixed; top: 0; left: 0; width: 250px; height: 100vh; overflow-y: auto; z-index: 1000; }
+
+        /* El contenido se desplaza a la derecha del sidebar */
         .main-content {
-            flex-grow: 1;
+            margin-left: 250px;   /* Evita que el contenido tape el menú */
             padding: 2rem;
+            min-height: 100vh;
+            background-color: #fff;
         }
     </style>
 </head>
-
 <body>
-    
-    <!--menu lateral-->
-    <div th:replace="menu :: sidebar"></div>
 
-    <div class="container-sm d-flex justify-content-center mt-5">
-        <div class="card">
-            <div class="card-body">
-                <h3>Modulo Motos</h3>
-                <hr>
+<!-- Menú lateral -->
+<div th:replace="menu :: sidebar"></div>
 
-                <!-- Buscador -->
-                <form th:action="@{/moto}" method="get">
-                    <div class="row g-2 align-items-center mb-3">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                <input type="text" class="form-control"
-                                       placeholder="Buscar por modelo"
-                                       name="search"
-                                       th:value="${param.search}">
-                            </div>
-                        </div>
-                        <div class="col-md-6 text-end">
-                            <button type="submit" class="btn btn-info"><i class="fas fa-search"></i> Buscar</button>
-                            <a th:href="@{/moto}" class="btn btn-warning"><i class="fas fa-list"></i> Reset</a>
-                        </div>
-                    </div>
-                </form>
+<!-- Contenido principal -->
+<div class="main-content">
+    <h3>Módulo Motos</h3>
+    <hr>
 
-                <!-- Formulario para agregar moto -->
-                <form th:action="@{/moto}" th:object="${nuevaMoto}" method="post" class="mb-4">
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label">Usuario</label>
-                            <select th:field="*{usuario}" id="usuario" class="form-select" required>
-                                <option value="">Seleccione un Usuario</option>
-                                <option th:each="u : ${usuarios}"
-                                        th:value="${u.idUsuario}"
-                                        th:text="${u.nombre}">
-                                </option>
-                            </select>
-                            <div class="text-danger" th:if="${#fields.hasErrors('usuario')}" th:errors="*{usuario}"></div>
-                        </div>
-                        
-                        <div class="col-md-4">
-                            <label class="form-label">Marca</label>
-                            <select th:field="*{marca}" id="marca" class="form-select" required>
-                                <option value="">Seleccione una Marca</option>
-                                <option th:each="m : ${marcas}"
-                                        th:value="${m.idMarca}"
-                                        th:text="${m.nombre}">
-                                </option>
-                            </select>
-                            <div class="text-danger" th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}"></div>
-                        </div>
-                        
-                        <div class="col-md-4">
-                            <label class="form-label">Modelo</label>
-                            <input type="text" class="form-control" th:field="*{modelo}" required>
-                            <div class="text-danger" th:if="${#fields.hasErrors('modelo')}" th:errors="*{modelo}"></div>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Cilindraje</label>
-                            <input type="number" step="0.1" class="form-control" th:field="*{cilindraje}" required>
-                            <div class="text-danger" th:if="${#fields.hasErrors('cilindraje')}" th:errors="*{cilindraje}"></div>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Tipo de Servicio</label>
-                            <select th:field="*{tipoReparacion}" id="tipoReparacion" class="form-select" required>
-                                <option value="">Seleccione un servicio</option>
-                                <option value="Reparación">Reparación</option>
-                                <option value="Mantenimiento">Mantenimiento</option>
-                                <option value="Diagnóstico">Diagnóstico</option>
-                            </select>
-                            <div class="text-danger" th:if="${#fields.hasErrors('tipoReparacion')}" th:errors="*{tipoReparacion}"></div>
-                        </div>
-                    </div>
-                    <div class="text-end mt-3">
-                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Guardar</button>
-                    </div>
-                </form>
-                
-                <!-- Tabla de motos -->
-                <div th:if="${motos != null and #lists.size(motos) > 0}">
-                    <table class="table table-striped table-hover table-bordered">
-                        <thead class="table-primary">
-                            <tr>
-                                <th>Usuario</th> 
-                                <th>Marca</th>
-                                <th>Modelo</th>
-                                <th>Cilindraje</th>
-                                <th>Tipo Servicio</th> 
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="moto : ${motos}">
-                                <td th:text="${moto.usuario.nombre}"></td>
-                                <td th:text="${moto.marca.nombre}"></td>
-                                <td th:text="${moto.modelo}"></td>
-                                <td th:text="${moto.cilindraje}"></td>
-                                <td th:text="${moto.tipoReparacion}"></td>
-                                <td>
-                                   <a th:href="@{/moto/editar/{id}(id=${moto.idMoto})}" class="btn btn-success btn-sm">
-                                        <i class="fa-solid fa-pen-to-square"></i> Editar
-                                    </a>
-                                   <a th:href="@{/moto/eliminar/{id}(id=${moto.idMoto})}" class="btn btn-danger btn-sm"
-                                       onclick="return confirm('¿Estás seguro de que deseas eliminar esta moto?');">
-                                        <i class="fa-solid fa-trash"></i> Eliminar
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Mensaje si no hay motos -->
-                <div th:if="${motos == null or #lists.isEmpty(motos)}" class="alert alert-info text-center mt-3">
-                    <i class="fas fa-info-circle"></i>
-                    <span th:if="${param.search != null}">
-                        No se encontraron motos con el dato "<span th:text="${param.search}"></span>"
-                    </span>
-                    <span th:unless="${param.search != null}">
-                        No hay motos registradas.
-                    </span>
+    <!-- Mensajes -->
+    <div th:if="${param.creado}" class="alert alert-success">¡Moto registrada exitosamente!</div>
+    <div th:if="${param.actualizado}" class="alert alert-success">¡Moto actualizada!</div>
+    <div th:if="${param.eliminado}" class="alert alert-warning">Moto eliminada.</div>
+
+    <!-- Formulario de búsqueda -->
+    <form th:action="@{/moto/buscar}" method="get" class="mb-3">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fa-solid fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Buscar por modelo" name="modelo" th:value="${param.modelo}">
                 </div>
             </div>
+            <div class="col-md-6 text-end">
+                <button type="submit" class="btn btn-info"><i class="fa-solid fa-search"></i> Buscar</button>
+                <a th:href="@{/moto}" class="btn btn-warning"><i class="fa-solid fa-list"></i> Reset</a>
+            </div>
         </div>
+    </form>
+
+    <!-- Formulario para agregar moto -->
+    <form th:action="@{/moto}" th:object="${nuevaMoto}" method="post" class="mb-4">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Marca</label>
+                <select class="form-select" name="idMarca" required>
+                    <option th:each="marca : ${marcas}" th:value="${marca.idMarca}" th:text="${marca.nombre}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Modelo</label>
+                <input type="text" class="form-control" th:field="*{modelo}" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Cilindraje</label>
+                <input type="number" step="0.1" class="form-control" th:field="*{cilindraje}" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Tipo de reparación</label>
+                <input type="text" class="form-control" th:field="*{tipoReparacion}">
+            </div>
+        </div>
+        <div class="text-end mt-3">
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Guardar</button>
+        </div>
+    </form>
+
+    <!-- Tabla de motos -->
+    <div th:if="${motos != null and #lists.size(motos) > 0}">
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Cilindraje</th>
+                    <th>Tipo de reparación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="moto : ${motos}">
+                    <td th:text="${moto.marca != null ? moto.marca.nombre : 'Sin marca'}"></td>
+                    <td th:text="${moto.modelo}"></td>
+                    <td th:text="${moto.cilindraje}"></td>
+                    <td th:text="${moto.tipoReparacion}"></td>
+                    <td>
+                        <a th:href="@{'/moto/editar/' + ${moto.idMoto}}" class="btn btn-success btn-sm">
+                            <i class="fa-solid fa-pen-to-square"></i> Editar
+                        </a>
+                        <a th:href="@{'/moto/eliminar/' + ${moto.idMoto}}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Estás seguro de que deseas eliminar esta moto?');">
+                            <i class="fa-solid fa-trash"></i> Eliminar
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
+    <!-- Mensaje si no hay resultados -->
+    <div th:if="${motos == null or #lists.isEmpty(motos)}" class="alert alert-info text-center mt-3">
+        <i class="fa-solid fa-info-circle"></i>
+        <span th:if="${param.modelo != null}">
+            No se encontraron motos con el modelo "<span th:text="${param.modelo}"></span>"
+        </span>
+        <span th:unless="${param.modelo != null}">
+            No hay motos registradas.
+        </span>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

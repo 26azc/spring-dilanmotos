@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "tiposervicio")
+@Table(name = "tiposervicio") // nombre exacto de la tabla
 public class TipoServicio {
 
     @Id    
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tipoServicio") // coincide con tu BD
+    @Column(name = "id_tipo_servicio", nullable = false, updatable = false) // snake_case
     private int idTipoServicio;
 
     @NotBlank(message = "El nombre es obligatorio")
@@ -22,6 +22,7 @@ public class TipoServicio {
 
     public TipoServicio() {}
 
+    // Getters y Setters
     public int getIdTipoServicio() { return idTipoServicio; }
     public void setIdTipoServicio(int idTipoServicio) { this.idTipoServicio = idTipoServicio; }
 

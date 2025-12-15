@@ -8,47 +8,48 @@
 </head>
 <body>
 
-    <div class="main-container">
-    <div class="header">
-      
-    </div>
+<div class="main-container">
+    <section class="form-wrapper-container">
+        <h2 class="form-titulo">Bienvenido</h2>
+        <div class="form-wrapper">
 
-<section class="form-wrapper-container">
-<h2 class="form-titulo">Bienvenido</h2>
-<div class="form-wrapper">
+            <!-- Caja de inicio de sesión -->
+            <div class="container login-card">
+                <h2 id="login-title" class="form-titulo">Iniciar sesión</h2>
 
-<!-- Caja de inicio de sesión -->
-<div class="container login-card">
-    <h2 id="login-title" class="form-titulo">Iniciar sesión</h2>
-    <form th:action="@{/login}" method="post">
-        <div class="mb-3">
-            <label class="form-label">Correo</label>
-            <input type="email" class="form-control" name="username" placeholder="tucorreo@example.com" required>
+                <!-- Formulario de login -->
+                <form th:action="@{/login}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Correo</label>
+                        <!-- name="correo" para que coincida con SecurityConfig -->
+                        <input type="email" class="form-control" name="correo" placeholder="tucorreo@example.com" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <!-- name="contrasena" para que coincida con SecurityConfig -->
+                        <input type="password" class="form-control" name="contrasena" placeholder="********" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                    <a th:href="@{/register}" class="btn btn-link">Registrarse</a>
+
+                    <div class="signin-aux">
+                        <a th:href="@{/forgot-password}" class="btn btn-link">Olvidé mi contraseña</a>
+                    </div>
+                </form>
+
+                <!-- Mensajes de error y logout -->
+                <div th:if="${param.error}" class="alert alert-danger mt-3">
+                    Credenciales inválidas, intenta nuevamente.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success mt-3">
+                    Sesión cerrada correctamente.
+                </div>
+            </div>
         </div>
+    </section>
+</div>
 
-        <div class="mb-3">
-            <label class="form-label">Contraseña</label>
-            <input type="password" class="form-control" name="password" placeholder="********">
-        </div>
-
-        <button type="submit" class="btn btn-primary">Entrar</button>
-        <a th:href="@{/register}" class="btn btn-link">Registrarse</a>
-
-        <div class="signin-aux">
-            <a th:href="@{/forgot-password}" class="btn btn-link">Olvidé mi contraseña</a>
-        </div>
-    </form>
-
-    <div th:if="${param.error}" class="alert alert-danger mt-3">
-        Credenciales inválidas, intenta nuevamente.
-    </div>
-    <div th:if="${param.logout}" class="alert alert-success mt-3">
-        Sesión cerrada correctamente.
-    </div>
- </div>
- </div>
-
- </section>
- </div>
- </body>
+</body>
 </html>

@@ -11,10 +11,10 @@ import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * Configuración de seguridad para la aplicación.
- * 
+ *
  * <p>Define las reglas de autorización, login, logout y el mecanismo de
  * encriptación de contraseñas usando Spring Security.</p>
- * 
+ *
  * <p>Características principales:</p>
  * <ul>
  *   <li>Permite acceso público a rutas de autenticación y recursos estáticos
@@ -29,9 +29,9 @@ import org.springframework.security.web.SecurityFilterChain;
  *   <li>Registra el {@link AuthenticationManager} usando {@link AuthenticationConfiguration}
  *       para validar credenciales contra la base de datos.</li>
  * </ul>
- * 
+ *
  * @author Neyder Estiben Manrique Alvarez
- * @version 1.2
+ * @version 1.0
  */
 @Configuration
 public class SecurityConfig {
@@ -45,7 +45,7 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        return http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/login",
@@ -62,21 +62,24 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
+                .loginProcessingUrl("/login")       // POST del formulario
+                .usernameParameter("correo")        // 👈 coincide con tu campo
+                .passwordParameter("contrasena")    // 👈 coincide con tu campo
                 .defaultSuccessUrl("/dashboard", true)
+                .failureUrl("/login?error=true")
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
-            );
-
-        return http.build();
+            )
+            .build();
     }
 
     /**
      * Define el codificador de contraseñas para la aplicación.
-     * 
+     *
      * <p>Utiliza {@link BCryptPasswordEncoder}, un algoritmo seguro de hashing
      * que incluye salt y múltiples rondas de encriptación.</p>
      *
