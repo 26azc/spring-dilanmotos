@@ -2,26 +2,43 @@ package com.grupouno.spring.dilanmotos.controllers;
 
 import com.grupouno.spring.dilanmotos.models.Usuarios;
 import com.grupouno.spring.dilanmotos.models.Moto;
+import com.grupouno.spring.dilanmotos.models.Marca;
 import com.grupouno.spring.dilanmotos.repositories.UsuarioRepository;
+import com.grupouno.spring.dilanmotos.repositories.MarcaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
+
+/**
+ * Controlador de autenticación y registro.
+ *
+ * <p>Gestiona el login, registro de usuarios y recuperación de contraseña.</p>
+ *
+ * <p>En el registro, además de los datos del usuario, se permite registrar
+ * la primera moto asociada al usuario.</p>
+ *
+ * @author Juan
+ * @version 1.1
+ */
 @Controller
 public class AuthController {
 
     private final UsuarioRepository usuarioRepository;
+    private final MarcaRepository marcaRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // Variables temporales para flujo de recuperación
-    private String correoRecuperacion;
-    private String codigoGenerado;
+    // Variables temporales para recuperación de contraseña
+    
 
-    public AuthController(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(UsuarioRepository usuarioRepository,
+                          MarcaRepository marcaRepository,
+                          PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.marcaRepository = marcaRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -35,9 +52,14 @@ public class AuthController {
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         Usuarios usuario = new Usuarios();
-        // inicializamos una moto vacía para el binding en el formulario
-        usuario.getMotos().add(new Moto());
+        usuario.getMotos().add(new Moto()); // inicializamos una moto vacía
+
         model.addAttribute("usuario", usuario);
+
+        // cargar marcas desde la BD
+        List<Marca> marcas = marcaRepository.findAll();
+        model.addAttribute("marcas", marcas);
+
         return "register";
     }
 
@@ -54,12 +76,12 @@ public class AuthController {
             usuario.setRol("USER");
             usuario.setHabilitado(true);
 
-            // Relacionar la(s) moto(s) con el usuario
+            // Relacionar la moto con el usuario
             if (usuario.getMotos() != null) {
                 usuario.getMotos().forEach(moto -> moto.setUsuario(usuario));
             }
 
-            // Guardar usuario + moto en la DB
+            // Guardar usuario + moto
             usuarioRepository.save(usuario);
 
         } catch (Exception e) {
@@ -69,115 +91,11 @@ public class AuthController {
 
         return "redirect:/login";
     }
-
-    // --- RECUPERAR CONTRASEÑA (PASO 1: INGRESAR CORREO) ---
-    @GetMapping("/forgot-password")
-    public String forgotPasswordForm() {
-        return "Recuperar_Correo";
-    }
-
-    @PostMapping("/forgot-password")
-    public String sendCode(@RequestParam String correo, Model model) {
-        Optional<Usuarios> usuarioOpt = usuarioRepository.findByCorreo(correo);
-        if (usuarioOpt.isEmpty()) {
-            model.addAttribute("error", "Correo no encontrado");
-            return "Recuperar_Correo";
-        }
-
-        // Generar código simple (ejemplo)
-        codigoGenerado = String.valueOf((int)(Math.random() * 900000) + 100000);
-        correoRecuperacion = correo;
-
-        // Aquí deberías enviar el código por correo electrónico al usuario
-        System.out.println("Código enviado al correo: " + codigoGenerado);
-
-        return "Ingresar_Codigo";
-    }
-
-    // --- VERIFICAR CÓDIGO (PASO 2) ---
-    @PostMapping("/verify-code")
-    public String verifyCode(@RequestParam String codigo, Model model) {
-        if (!codigo.equals(codigoGenerado)) {
-            model.addAttribute("error", "Código inválido");
-            return "IngresarCodigo";
-        }
-        return "Crear_Contraseña";
-    }
-
-    // --- CREAR NUEVA CONTRASEÑA (PASO 3) ---
-    @GetMapping("/reset-password")
-    public String resetPasswordForm() {
-        return "Crear_Contraseña";
-    }
-
-    @PostMapping("/reset-password")
-    public String resetPassword(@RequestParam String nuevaContrasena,
-                                @RequestParam String confirmarContrasena,
-                                Model model) {
-        if (!nuevaContrasena.equals(confirmarContrasena)) {
-            model.addAttribute("error", "Las contraseñas no coinciden");
-            return "Crear_Contraseña";
-        }
-
-        Optional<Usuarios> usuarioOpt = usuarioRepository.findByCorreo(correoRecuperacion);
-        if (usuarioOpt.isPresent()) {
-            Usuarios usuario = usuarioOpt.get();
-            usuario.setContrasena(passwordEncoder.encode(nuevaContrasena));
-            usuarioRepository.save(usuario);
-        }
-
-        correoRecuperacion = null;
-        codigoGenerado = null;
-
-        return "redirect:/login";
-    }
-
-    // --- OTRAS VISTAS ---
     @GetMapping("/dashboard")
-    public String dashboard() { return "dashboard"; }
+    public String dashboard() {
+    return "dashboard"; 
+}
 
-    @GetMapping("/logout-page")
-    public String logoutPage() { return "logout"; }
 
-    @GetMapping("/ComunicacionTec")
-    public String comunicacionTec() { return "ComunicacionTec"; }
 
-    @GetMapping("/recomendacion")
-    public String recomendacion() { return "recomendacion"; }
-
-    @GetMapping("/crearPQRS")
-    public String crearPQRS() { return "crearPQRS"; }
-
-    @GetMapping("/EditarInfoMoto")
-    public String EditarInfoMoto() { return "EditarInfoMoto"; }
-
-    @GetMapping("/EditarInfoUsuario")
-    public String EditarInfoUsuario() { return "EditarInfoUsuario"; }
-
-    @GetMapping("/HistorialActividad")
-    public String HistorialActividad() { return "HistorialActividad"; }
-
-    @GetMapping("/FichaTecKitArrastre")
-    public String FichaTecKitArrastre() { return "FichaTecKitArrastre"; }
-
-    @GetMapping("/FichaTecAceite")
-    public String FichaTecAceite() { return "FichaTecAceite"; }
-
-    @GetMapping("/FichaTecLlanta")
-    public String FichaTecLlanta() { return "FichaTecLlanta"; }
-
-    @GetMapping("/Cotizacion")
-    public String Cotizacion() { return "Cotizacion"; }
-
-    @GetMapping("/ComparacionProductos")
-    public String ComparacionProductos() { return "ComparacionProductos"; }
-
-    @GetMapping("/pantallaCotizacion")
-    public String pantallaCotizacion() { return "pantallaCotizacion"; }
-
-    @GetMapping("/Reseñas")
-    public String Reseñas() { return "Reseñas"; }
-
-    @GetMapping("/RealizarReseña")
-    public String RealizarReseña() { return "RealizarReseña"; }
 }

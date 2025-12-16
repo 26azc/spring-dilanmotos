@@ -22,7 +22,7 @@ public class Servicio {
     private Mecanico mecanico;
 
     @ManyToOne
-    @JoinColumn(name = "id_tipoServicio")
+    @JoinColumn(name = "id_tipo_servicio") 
     private TipoServicio tipoServicio;
 
     @NotNull
@@ -47,7 +47,6 @@ public class Servicio {
     @Column(name = "visible_en_historial")
     private Boolean visibleEnHistorial;
 
-    // Getters y setters
     public Integer getIdServicio() { return idServicio; }
     public void setIdServicio(Integer idServicio) { this.idServicio = idServicio; }
 

@@ -7,11 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Usuario")
+@Table(name = "usuario") // nombre exacto de la tabla en BD
 public class Usuarios {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario") // PK en snake_case
     private int idUsuario;
 
     @NotBlank(message = "El nombre es obligatorio")
@@ -31,7 +32,7 @@ public class Usuarios {
     private String rol = "USER"; // por defecto
 
     @Column(name = "habilitado")
-    private boolean habilitado = true;
+    private boolean habilitado;
 
     // Relación con motos
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)

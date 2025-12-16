@@ -30,7 +30,7 @@
     <!-- Datos de la moto -->
     <h2>Mi Moto</h2>
     <div th:each="moto : ${usuario.motos}">
-        <p><strong>Marca:</strong> <span th:text="${moto.marca}">Marca</span></p>
+        <p><strong>Marca:</strong> <span th:text="${moto.marca.nombre}">Marca</span></p>
         <p><strong>Modelo:</strong> <span th:text="${moto.modelo}">Modelo</span></p>
         <p><strong>Cilindraje:</strong> <span th:text="${moto.cilindraje}">Cilindraje</span></p>
         <p><strong>Tipo de reparación:</strong> <span th:text="${moto.tipoReparacion}">Tipo</span></p>
