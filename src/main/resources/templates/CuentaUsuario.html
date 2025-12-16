@@ -6,7 +6,6 @@
   <title th:text="'Cuenta de ' + ${usuario.nombre}">Mi cuenta</title>
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
- 
   <link rel="stylesheet" th:href="@{/css/estilo_cuentausuario.css}">
 </head>
 <body>
@@ -16,7 +15,6 @@
     <!-- Datos personales -->
     <h2>Datos personales</h2>
     <div class="profile-section d-flex align-items-center mb-4">
-      <!-- Imagen de perfil -->
       <img th:src="@{/assets/iconoPerfil.png}" alt="icono perfil" class="me-3 rounded-circle" width="100">
       <div class="personal-info">    
         <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}">Nombre</span></p>
@@ -28,24 +26,15 @@
         </p>
       </div>
     </div>
-    
-    <!-- Sección de acciones -->
-    <h2>Acciones</h2>
-    <div class="buttons mt-3 d-flex flex-wrap gap-2">
-      <a th:href="@{/EditarInfoUsuario}" class="btn btn-secondary">Editar información usuario</a>
-      <a th:href="@{/CambiarContraseña}" class="btn btn-warning">Cambiar contraseña</a>
-      <a th:href="@{/HistorialActividad}" class="btn btn-info">Historial de actividad</a>
-      <a th:href="@{/crearPQRS}" class="btn btn-success">Crear PQRS</a>
-      <a th:href="@{/detalle-pqrs}" class="btn btn-dark">Historial PQRS</a>
-    </div>
 
-    <!-- Footer -->
-    <div class="footer mt-4">
-      <a th:href="@{/dashboard}" class="btn btn-outline-secondary">Atrás</a>
+    <!-- Datos de la moto -->
+    <h2>Mi Moto</h2>
+    <div th:each="moto : ${usuario.motos}">
+        <p><strong>Marca:</strong> <span th:text="${moto.marca}">Marca</span></p>
+        <p><strong>Modelo:</strong> <span th:text="${moto.modelo}">Modelo</span></p>
+        <p><strong>Cilindraje:</strong> <span th:text="${moto.cilindraje}">Cilindraje</span></p>
+        <p><strong>Tipo de reparación:</strong> <span th:text="${moto.tipoReparacion}">Tipo</span></p>
     </div>
  </div>
-
- <!-- Bootstrap JS -->
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

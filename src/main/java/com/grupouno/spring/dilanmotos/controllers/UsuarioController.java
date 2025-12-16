@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -21,6 +22,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Mostrar listado y formulario
     @GetMapping("/usuario")
@@ -34,7 +38,7 @@ public class UsuarioController {
         return "usuario";
     }
 
-    // Guardar nuevo usuario
+    // Guardar nuevo usuario desde panel admin
     @PostMapping("/usuario")
     public String guardarUsuario(
         @Valid @NonNull @ModelAttribute("nuevoUsuario") Usuarios usuario,
@@ -46,6 +50,8 @@ public class UsuarioController {
             return "usuario";
         }
 
+        // Encriptar contraseña antes de guardar
+        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
         usuarioRepository.save(usuario);
         return "redirect:/usuario?creado";
     }
@@ -71,6 +77,8 @@ public class UsuarioController {
             return "editar_usuario";
         }
 
+        // Encriptar contraseña al actualizar
+        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
         usuarioRepository.save(usuario);
         return "redirect:/usuario?actualizado";
     }
@@ -84,9 +92,10 @@ public class UsuarioController {
         }
         return "redirect:/usuario?error=not_found";
     }
+
     private final UsuarioService usuarioService;
 
-    // Constructor correcto: parámetro con nombre y asignación
+    // Constructor correcto
     public UsuarioController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
@@ -94,14 +103,11 @@ public class UsuarioController {
     // Perfil/Cuenta del usuario autenticado
     @GetMapping("/CuentaUsuario")
     public String miCuenta(@AuthenticationPrincipal User principal, Model model) {
-        // principal.getUsername() devuelve el "username" con el que autenticó (idealmente tu correo)
         String correo = principal.getUsername();
-
-        // Llama al servicio correctamente
-        Usuarios usuarioActual = usuarioService.getByCorreo(correo);
-
-        // Pasa el objeto a la vista
+        Usuarios usuarioActual = usuarioRepository.findByCorreoConMotos(correo)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         model.addAttribute("usuario", usuarioActual);
         return "CuentaUsuario";
     }
+
 }

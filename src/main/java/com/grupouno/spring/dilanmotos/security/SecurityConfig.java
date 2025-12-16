@@ -2,6 +2,8 @@ package com.grupouno.spring.dilanmotos.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,10 +26,12 @@ import org.springframework.security.web.SecurityFilterChain;
  *   <li>Configura el logout en <b>/logout</b> y redirige al login con parámetro <b>?logout</b>.</li>
  *   <li>Define un {@link PasswordEncoder} basado en {@link BCryptPasswordEncoder}
  *       para almacenar contraseñas de forma segura.</li>
+ *   <li>Registra el {@link AuthenticationManager} usando {@link AuthenticationConfiguration}
+ *       para validar credenciales contra la base de datos.</li>
  * </ul>
  * 
  * @author Neyder Estiben Manrique Alvarez
- * @version 1.0
+ * @version 1.2
  */
 @Configuration
 public class SecurityConfig {
@@ -39,7 +43,7 @@ public class SecurityConfig {
      * @return instancia de {@link SecurityFilterChain} con las configuraciones aplicadas
      * @throws Exception en caso de error en la configuración
      */
-   @Bean
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
@@ -53,7 +57,6 @@ public class SecurityConfig {
                     "/js/**"
                 ).permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                // 🔹 Nuevo: proteger la ruta de perfil/cuenta
                 .requestMatchers("/CuentaUsuario").authenticated()
                 .anyRequest().authenticated()
             )
@@ -71,7 +74,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-
     /**
      * Define el codificador de contraseñas para la aplicación.
      * 
@@ -83,5 +85,21 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * Registra el {@link AuthenticationManager} con el servicio de usuarios
+     * y el codificador de contraseñas.
+     *
+     * <p>Este método asegura que Spring Security valide las credenciales
+     * contra la base de datos usando {@link CustomUserDetailsService}.</p>
+     *
+     * @param authenticationConfiguration configuración de autenticación de Spring Security
+     * @return instancia de {@link AuthenticationManager} configurada
+     * @throws Exception en caso de error en la configuración
+     */
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }

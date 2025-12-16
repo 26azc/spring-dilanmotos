@@ -1,6 +1,7 @@
 package com.grupouno.spring.dilanmotos.controllers;
 
 import com.grupouno.spring.dilanmotos.models.Usuarios;
+import com.grupouno.spring.dilanmotos.models.Moto;
 import com.grupouno.spring.dilanmotos.repositories.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -8,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-
 
 @Controller
 public class AuthController {
@@ -28,34 +28,52 @@ public class AuthController {
     // --- LOGIN ---
     @GetMapping("/login")
     public String login() {
-        return "login"; 
+        return "login";
     }
 
     // --- REGISTRO ---
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
-        model.addAttribute("usuario", new Usuarios());
-        return "register"; 
+        Usuarios usuario = new Usuarios();
+        // inicializamos una moto vacía para el binding en el formulario
+        usuario.getMotos().add(new Moto());
+        model.addAttribute("usuario", usuario);
+        return "register";
     }
 
     @PostMapping("/register")
-    public String processRegister(@ModelAttribute Usuarios usuario, Model model) {
+    public String processRegister(@ModelAttribute("usuario") Usuarios usuario, Model model) {
         if (usuarioRepository.findByCorreo(usuario.getCorreo()).isPresent()) {
             model.addAttribute("error", "El correo ya está registrado.");
             return "register";
         }
 
-        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
-        usuario.setRol("USER");
-        usuario.setHabilitado(true);
-        usuarioRepository.save(usuario);
+        try {
+            // Encriptar contraseña
+            usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
+            usuario.setRol("USER");
+            usuario.setHabilitado(true);
+
+            // Relacionar la(s) moto(s) con el usuario
+            if (usuario.getMotos() != null) {
+                usuario.getMotos().forEach(moto -> moto.setUsuario(usuario));
+            }
+
+            // Guardar usuario + moto en la DB
+            usuarioRepository.save(usuario);
+
+        } catch (Exception e) {
+            model.addAttribute("error", "Error al guardar: " + e.getMessage());
+            return "register";
+        }
+
         return "redirect:/login";
     }
 
     // --- RECUPERAR CONTRASEÑA (PASO 1: INGRESAR CORREO) ---
     @GetMapping("/forgot-password")
     public String forgotPasswordForm() {
-        return "Recuperar_Correo"; // vista donde el usuario ingresa su correo
+        return "Recuperar_Correo";
     }
 
     @PostMapping("/forgot-password")
@@ -73,7 +91,7 @@ public class AuthController {
         // Aquí deberías enviar el código por correo electrónico al usuario
         System.out.println("Código enviado al correo: " + codigoGenerado);
 
-        return "Ingresar_Codigo"; // vista para ingresar el código
+        return "Ingresar_Codigo";
     }
 
     // --- VERIFICAR CÓDIGO (PASO 2) ---
@@ -83,7 +101,7 @@ public class AuthController {
             model.addAttribute("error", "Código inválido");
             return "IngresarCodigo";
         }
-        return "Crear_Contraseña"; // pasa a la vista de nueva contraseña
+        return "Crear_Contraseña";
     }
 
     // --- CREAR NUEVA CONTRASEÑA (PASO 3) ---
@@ -101,7 +119,6 @@ public class AuthController {
             return "Crear_Contraseña";
         }
 
-        // Actualizar contraseña en BD
         Optional<Usuarios> usuarioOpt = usuarioRepository.findByCorreo(correoRecuperacion);
         if (usuarioOpt.isPresent()) {
             Usuarios usuario = usuarioOpt.get();
@@ -109,116 +126,58 @@ public class AuthController {
             usuarioRepository.save(usuario);
         }
 
-        // Limpiar variables temporales
         correoRecuperacion = null;
         codigoGenerado = null;
 
-        return "redirect:/login"; 
+        return "redirect:/login";
     }
 
     // --- OTRAS VISTAS ---
     @GetMapping("/dashboard")
-    public String dashboard() {
-        return "dashboard"; 
-    }
+    public String dashboard() { return "dashboard"; }
 
     @GetMapping("/logout-page")
-    public String logoutPage() {
-        return "logout"; 
-    }
+    public String logoutPage() { return "logout"; }
 
     @GetMapping("/ComunicacionTec")
-    public String comunicacionTec() {
-        return "ComunicacionTec"; 
-    }
+    public String comunicacionTec() { return "ComunicacionTec"; }
 
     @GetMapping("/recomendacion")
-    public String recomendacion() {
-        return "recomendacion"; 
-    }
+    public String recomendacion() { return "recomendacion"; }
 
-    /*
-     @GetMapping("/CuentaUsuario")
-    public String CuentaUsuario() {
-        return "CuentaUsuario"; 
-    }
-     
-     */
-   
     @GetMapping("/crearPQRS")
-    public String crearPQRS() {
-        return "crearPQRS"; 
-    }   
-    
+    public String crearPQRS() { return "crearPQRS"; }
+
     @GetMapping("/EditarInfoMoto")
-    public String EditarInfoMoto() {
-        return "EditarInfoMoto" ;
-    }
+    public String EditarInfoMoto() { return "EditarInfoMoto"; }
 
     @GetMapping("/EditarInfoUsuario")
-    public String EditarInfoUsuario() {
-        return "EditarInfoUsuario" ;
-    }
+    public String EditarInfoUsuario() { return "EditarInfoUsuario"; }
 
     @GetMapping("/HistorialActividad")
-    public String HistorialActividad() {
-        return "HistorialActividad" ;
-    }
-    
+    public String HistorialActividad() { return "HistorialActividad"; }
+
     @GetMapping("/FichaTecKitArrastre")
-    public String FichaTecKitArrastre() {
-        return "FichaTecKitArrastre" ;
-    }
+    public String FichaTecKitArrastre() { return "FichaTecKitArrastre"; }
 
     @GetMapping("/FichaTecAceite")
-    public String FichaTecAceite() {
-        return "FichaTecAceite" ;
-    }
+    public String FichaTecAceite() { return "FichaTecAceite"; }
 
     @GetMapping("/FichaTecLlanta")
-    public String FichaTecLlanta() {
-        return "FichaTecLlanta" ;
-    }
+    public String FichaTecLlanta() { return "FichaTecLlanta"; }
 
     @GetMapping("/Cotizacion")
-    public String Cotizacion() {
-        return "Cotizacion" ;
-    }
-
-    @GetMapping("/CatalogoKitArrastreAutenticado")
-    public String CatalogoKitArrastreAutenticado() {
-        return "CatalogoKitArrastreAutenticado" ;
-    }
-
-    @GetMapping("/CatalogoAceiteAutenticado")
-    public String CatalogoAceiteAutenticado() {
-        return "CatalogoAceiteAutenticado" ;
-    }
-
-    @GetMapping("/CatalogoLlantaAutenticado")
-    public String CatalogoLlantaAutenticado() {
-        return "CatalogoLlantaAutenticado" ;
-    }
+    public String Cotizacion() { return "Cotizacion"; }
 
     @GetMapping("/ComparacionProductos")
-    public String ComparacionProductos() {
-        return "ComparacionProductos" ;
-    }
+    public String ComparacionProductos() { return "ComparacionProductos"; }
 
     @GetMapping("/pantallaCotizacion")
-    public String pantallaCotizacion() {
-        return "pantallaCotizacion" ;
-    }
+    public String pantallaCotizacion() { return "pantallaCotizacion"; }
+
     @GetMapping("/Reseñas")
-    public String Reseñas() {
-        return "Reseñas" ;
-    }
+    public String Reseñas() { return "Reseñas"; }
 
     @GetMapping("/RealizarReseña")
-    public String RealizarReseña() {
-        return "RealizarReseña" ;
-    }
-
-
-
+    public String RealizarReseña() { return "RealizarReseña"; }
 }

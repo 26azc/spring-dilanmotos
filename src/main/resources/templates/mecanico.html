@@ -72,7 +72,11 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label">Especialidad</label>
-                <input type="text" class="form-control" th:field="*{especialidad}" required>
+                <select class="form-select" th:field="*{especialidad}" required>
+                    <option value="">Seleccione una especialidad</option>
+                    <option value="Mantenimiento General">Mantenimiento General</option>
+                    <option value="Diagnóstico Eléctrico">Diagnóstico Eléctrico</option>
+                </select>
                 <div class="text-danger" th:if="${#fields.hasErrors('especialidad')}" th:errors="*{especialidad}"></div>
             </div>
             <div class="col-md-4">

@@ -3,9 +3,11 @@ package com.grupouno.spring.dilanmotos.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Email;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "Usuario")
 public class Usuarios {
 
     @Id
@@ -31,6 +33,10 @@ public class Usuarios {
     @Column(name = "habilitado")
     private boolean habilitado = true;
 
+    // Relación con motos
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Moto> motos = new ArrayList<>();
+
     public Usuarios() {}
 
     // Getters y Setters
@@ -52,7 +58,8 @@ public class Usuarios {
     public boolean isHabilitado() { return habilitado; }
     public void setHabilitado(boolean habilitado) { this.habilitado = habilitado; }
 
-    public boolean isAdmin() {
-        return "ADMIN".equalsIgnoreCase(this.rol);
-    }
+    public boolean isAdmin() { return "ADMIN".equalsIgnoreCase(this.rol); }
+
+    public List<Moto> getMotos() { return motos; }
+    public void setMotos(List<Moto> motos) { this.motos = motos; }
 }
