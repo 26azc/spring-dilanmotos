@@ -1,14 +1,16 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* --- General --- */
+body, html {
+  margin: 1;
+  padding: 1;
+  background: linear-gradient(135deg, #8865e7, #3b46d8);
+  font-family: 'Lucida Sans', Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
-body {
-  font-family: 'Lucida Sans', Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #8865e7, #3b46d8);
-  height: 100vh;
-}
+/* --- Header --- */
 .header {
   display: flex;
   align-items: center;
@@ -66,7 +68,6 @@ body {
 }
 
 .main-nav a {
-  background-color: #ffffff;
   color: #fff;
   text-decoration: none;
   font-weight: bold;
@@ -76,9 +77,6 @@ body {
   align-items: center;
 }
 
-.main-nav a:hover {
-  background-color: rgb(69, 12, 161);
-}
 
 /*apartado de funcionalidad del icono de perfil */
 .user-menu {
@@ -137,37 +135,6 @@ body {
   display: none;
 }
 
-/* Barra superior */
-.top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 30px; 
-}
-
-.logo {
-  height: 110px;
-}
-
-/* Barra de búsqueda */
-.search-bar {
-  display: flex;
-  align-items: center;
-  background: transparent;
-  border: 2px solid white;
-  border-radius: 20px;
-  padding: 5px 150px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.search-bar input {
-  border: none;
-  background: transparent;
-  color: white;
-  outline: none;
-  padding: 5px;
-}
 
 /* Navegación */
 .menu .btn {

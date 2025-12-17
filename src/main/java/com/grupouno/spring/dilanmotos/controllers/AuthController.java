@@ -94,8 +94,52 @@ public class AuthController {
     @GetMapping("/dashboard")
     public String dashboard() {
     return "dashboard"; 
-}
+    }
 
+    @GetMapping("/recomendacion")
+    public String recomenddacion() {
+    return "recomendacion"; 
+    }
+
+    @GetMapping("/pantallaCotizacion")
+    public String pantallaCotizacion() {
+    return "pantallaCotizacion"; 
+    }
+
+    @GetMapping("/FichaTecAceite")
+    public String FichaTecAceite() {
+    return "FichaTecAceite"; 
+    }
+
+    @GetMapping("/FichaTecLlanta")
+    public String FichaTecLlanta() {
+    return "FichaTecLlanta"; 
+    }
+
+    @GetMapping("/FichaTecKitArrastre")
+    public String FichaTecKitArrastre() {
+    return "FichaTecKitArrastre"; 
+    }
+
+     @GetMapping("/ComunicacionTec")
+    public String ComunicacionTec() {
+    return "ComunicacionTec"; 
+    }
+
+     @GetMapping("/Reseñas")
+    public String Reseñas() {
+    return "Reseñas"; 
+    }
+
+    @GetMapping("/RealizarReseña")
+    public String RealizarReseña() {
+    return "RealizarReseña"; 
+    }
+
+     @GetMapping("/ComparacionProductos")
+    public String ComparacionProductos() {
+    return "ComparacionProductos"; 
+    }
 
 
 }
