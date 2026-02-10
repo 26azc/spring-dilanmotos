@@ -72,3 +72,28 @@ GET /servicios/{id} → Obtiene un servicio por ID
 PUT /servicios/{id} → Actualiza un servicio existente
 
 DELETE /servicios/{id} → Elimina un servicio
+
+Seguridad
+La aplicación utiliza Spring Security con las siguientes reglas:
+
+Acceso público a:
+
+/login, /register, /forgot-password, /verify-code, /reset-password
+
+Recursos estáticos (/css/**, /js/**)
+
+Acceso restringido:
+
+/admin/** → solo usuarios con rol ADMIN
+
+/CuentaUsuario → requiere autenticación
+
+Autenticación mediante formulario en /login con campos personalizados:
+
+Usuario: correo
+
+Contraseña: contrasena
+
+Contraseñas almacenadas con BCryptPasswordEncoder.
+
+Logout configurado en /logout.
