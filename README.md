@@ -1,11 +1,11 @@
-# 🚀 Spring DilanMotos
+# Spring DilanMotos
 
 Sistema de gestión de motos desarrollado con **Spring Boot**.  
 Este proyecto permite administrar información relacionada con motos, clientes y servicios, integrando backend en Java y vistas en HTML.
 
 ---
 
-## 📋 Características
+## Características
 - CRUD de motos (crear, leer, actualizar, eliminar).
 - Gestión de clientes y servicios.
 - Arquitectura basada en capas: `controller`, `service`, `repository`, `model`.
@@ -14,7 +14,7 @@ Este proyecto permite administrar información relacionada con motos, clientes y
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## Tecnologías utilizadas
 - **Java 17+**
 - **Spring Boot**
 - **Maven**
@@ -23,7 +23,7 @@ Este proyecto permite administrar información relacionada con motos, clientes y
 
 ---
 
-## ⚙️ Instalación y ejecución
+## Instalación y ejecución
 1. Clona el repositorio:
    ```bash
    git clone https://github.com/26azc/spring-dilanmotos.git
@@ -39,7 +39,7 @@ Accede en tu navegador:
 
 Código
 http://localhost:8080
-📌 Endpoints principales
+Endpoints principales
 Motos
 GET /motos → Lista todas las motos
 
