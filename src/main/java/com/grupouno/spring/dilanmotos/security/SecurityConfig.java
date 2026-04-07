@@ -8,6 +8,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.Arrays;
 
 /**
  * Configuración de seguridad para la aplicación.
@@ -33,20 +37,24 @@ import org.springframework.security.web.SecurityFilterChain;
  * @author Neyder Estiben Manrique Alvarez
  * @version 1.0
  */
+
 @Configuration
 public class SecurityConfig {
 
-    /**
-     * Configura el filtro principal de seguridad de la aplicación.
-     *
-     * @param http objeto {@link HttpSecurity} para definir reglas de seguridad
-     * @return instancia de {@link SecurityFilterChain} con las configuraciones aplicadas
-     * @throws Exception en caso de error en la configuración
-     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+            // 👉 1. HABILITAMOS CORS (Para que React pueda entrar)
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            
+            // 👉 2. DESHABILITAMOS CSRF (Esencial para que React pueda hacer peticiones POST/PUT/DELETE)
+            .csrf(csrf -> csrf.disable())
+
             .authorizeHttpRequests(auth -> auth
+                // 👉 3. PERMITIMOS ACCESO A LA API (Temporalmente, para conectar React)
+                .requestMatchers("/api/**").permitAll() 
+                
+                // 👇 TUS REGLAS ORIGINALES SE MANTIENEN INTACTAS
                 .requestMatchers(
                     "/login",
                     "/register",
@@ -62,9 +70,9 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .loginProcessingUrl("/login")       // POST del formulario
-                .usernameParameter("correo")        // 👈 coincide con tu campo
-                .passwordParameter("contrasena")    // 👈 coincide con tu campo
+                .loginProcessingUrl("/login")       
+                .usernameParameter("correo")        
+                .passwordParameter("contrasena")    
                 .defaultSuccessUrl("/dashboard", true)
                 .failureUrl("/login?error=true")
                 .permitAll()
@@ -77,32 +85,29 @@ public class SecurityConfig {
             .build();
     }
 
-    /**
-     * Define el codificador de contraseñas para la aplicación.
-     *
-     * <p>Utiliza {@link BCryptPasswordEncoder}, un algoritmo seguro de hashing
-     * que incluye salt y múltiples rondas de encriptación.</p>
-     *
-     * @return instancia de {@link PasswordEncoder} basada en BCrypt
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * Registra el {@link AuthenticationManager} con el servicio de usuarios
-     * y el codificador de contraseñas.
-     *
-     * <p>Este método asegura que Spring Security valide las credenciales
-     * contra la base de datos usando {@link CustomUserDetailsService}.</p>
-     *
-     * @param authenticationConfiguration configuración de autenticación de Spring Security
-     * @return instancia de {@link AuthenticationManager} configurada
-     * @throws Exception en caso de error en la configuración
-     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    // 👉 4. BEAN DE CONFIGURACIÓN DE CORS
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        // Permite el puerto donde corre Vite (React)
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); 
+        // Permite todos los métodos HTTP
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true); // Importante si luego usamos tokens o cookies
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
