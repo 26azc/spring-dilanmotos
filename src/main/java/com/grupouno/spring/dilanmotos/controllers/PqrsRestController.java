@@ -2,50 +2,76 @@ package com.grupouno.spring.dilanmotos.controllers;
 
 import com.grupouno.spring.dilanmotos.models.PQRS;
 import com.grupouno.spring.dilanmotos.repositories.PqrsRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Controlador REST para la entidad {@link PQRS}.
- *
- * <p>Expone endpoints bajo la ruta base <b>/api</b> para interactuar con
- * los registros de PQRS en formato JSON. A diferencia del controlador
- * MVC tradicional, este controlador devuelve directamente objetos o listas
- * que son serializados automáticamente por Spring Boot.</p>
- *
- * <p>Endpoints principales:</p>
- * <ul>
- *   <li><b>GET /api/PQRS</b>: devuelve la lista completa de registros PQRS.</li>
- * </ul>
- *
- * <p>Ejemplo de uso:</p>
- * <pre>
- * GET http://localhost:8080/api/PQRS
- * Response: [
- *   { "idPqrs": 1, "tipo": "Queja", "asunto": "Servicio", ... },
- *   { "idPqrs": 2, "tipo": "Petición", "asunto": "Garantía", ... }
- * ]
- * </pre>
- *
- * @author Neyder Estiben Manrique Alvarez
- * @version 1.0
- */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/pqrs")
 public class PqrsRestController {
 
     @Autowired
     private PqrsRepository pqrsRepository;
 
-    /**
-     * Devuelve todos los registros de PQRS en formato JSON.
-     *
-     * @return lista de objetos {@link PQRS}
-     */
-    @GetMapping("/PQRS")
-    public List<PQRS> listarPQRS() {
-        return pqrsRepository.findAll();
+    // Listar y Buscar
+    @GetMapping
+    public ResponseEntity<List<PQRS>> listarPqrs(@RequestParam(value = "search", required = false) String search) {
+        List<PQRS> pqrs = (search != null && !search.isEmpty())
+                ? pqrsRepository.findByTipoContainingIgnoreCaseOrAsuntoContainingIgnoreCase(search, search)
+                : pqrsRepository.findAll();
+        return ResponseEntity.ok(pqrs);
+    }
+
+    // Crear
+    @PostMapping
+    public ResponseEntity<PQRS> guardarPqrs(@Valid @RequestBody PQRS pqrs) {
+        // Lógica de valores iniciales (Igual que en tu Controller original)
+        pqrs.setIdUsuario(1); // TODO: Reemplazar con ID real tras implementar JWT
+        pqrs.setFecha(LocalDateTime.now());
+        pqrs.setEstado("PENDIENTE");
+        pqrs.setRespuesta_admin("Sin respuesta.");
+        pqrs.setCalificacion_servicio("-");
+        pqrs.setComentario_servicio("-");
+        pqrs.setFecha_respuesta(null);
+
+        PQRS nuevoPqrs = pqrsRepository.save(pqrs);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPqrs);
+    }
+
+    // Obtener uno solo (Para cargar en el formulario de edición en React)
+    @GetMapping("/{id}")
+    public ResponseEntity<PQRS> obtenerPqrs(@PathVariable("id") int id) {
+        return pqrsRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Actualizar
+    @PutMapping("/{id}")
+    public ResponseEntity<PQRS> actualizarPqrs(@PathVariable("id") int id, @Valid @RequestBody PQRS pqrsDetalles) {
+        return pqrsRepository.findById(id)
+                .map(pqrs -> {
+                    pqrs.setAsunto(pqrsDetalles.getAsunto());
+                    pqrs.setTipo(pqrsDetalles.getTipo());
+                    pqrs.setDescripcion(pqrsDetalles.getDescripcion());
+                    // Mantener o actualizar otros campos según necesites
+                    return ResponseEntity.ok(pqrsRepository.save(pqrs));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Eliminar
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarPqrs(@PathVariable("id") int id) {
+        if (pqrsRepository.existsById(id)) {
+            pqrsRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

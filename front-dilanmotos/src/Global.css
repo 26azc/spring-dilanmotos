@@ -1,0 +1,188 @@
+/* --- 1. RESET Y CONFIGURACIÓN BASE --- */
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --sidebar-width: 260px;
+    --sidebar-bg: #1e1e2d;      /* Negro azulado profesional */
+    --main-bg: #f4f5f7;         /* Gris claro para fondo */
+    --primary: #0d6efd;         /* Azul Bootstrap */
+    --success: #198754;         /* Verde Bootstrap */
+    --danger: #dc3545;          /* Rojo Bootstrap */
+    --white: #ffffff;
+    --text-dark: #3f4254;
+    --header-table: #343a40;    /* Gris oscuro para encabezados */
+}
+
+html, body, #root {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--main-bg);
+    overflow: hidden; /* Evita scroll doble en la página */
+}
+
+/* --- 2. ESTRUCTURA DASHBOARD (Layout) --- */
+.app-container {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Sidebar Fija */
+.sidebar {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    background-color: var(--sidebar-bg);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+    padding: 2rem 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-nav {
+    flex-grow: 1;
+    padding: 1rem 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: #a2a3b7;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: #2b2b40;
+    color: white;
+}
+
+.nav-link i {
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Contenido Principal */
+.main-content {
+    flex-grow: 1;
+    height: 100vh;
+    overflow-y: auto; /* Solo el contenido tiene scroll */
+    padding: 2.5rem;
+    background-color: var(--main-bg);
+}
+
+/* --- 3. COMPONENTES (Card Panels) --- */
+.card-panel {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    border: 1px solid #eff2f5;
+}
+
+.text-primary { color: var(--primary); }
+.text-muted { color: #7e8299; }
+.fw-bold { font-weight: bold; }
+
+/* --- 4. DISEÑO DE TABLA UNIFICADO (GRID SYSTEM) --- */
+.custom-table-container {
+    width: 100%;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    overflow: hidden;
+    background: white;
+    margin-top: 1rem;
+}
+
+.custom-table-header {
+    display: grid !important;
+    /* 5 Columnas: ID/Fecha, Nombre/Tipo, Correo/Asunto, Estado, Acciones */
+    grid-template-columns: 0.8fr 1.5fr 2.5fr 1fr 1.2fr !important;
+    background-color: var(--header-table);
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+}
+
+.custom-table-row {
+    display: grid !important;
+    grid-template-columns: 0.8fr 1.5fr 2.5fr 1fr 1.2fr !important;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+    transition: 0.2s;
+}
+
+.custom-table-row:hover {
+    background-color: #f8f9fa;
+}
+
+.custom-table-row div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 10px;
+}
+
+/* --- 5. BOTONES E INPUTS --- */
+.input-bs {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.btn-bs {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: white;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-primary { background-color: var(--primary); }
+.btn-primary:hover { background-color: #0b5ed7; }
+
+.btn-success { background-color: var(--success); }
+.btn-success:hover { background-color: #157347; }
+
+.btn-danger { background-color: var(--danger); }
+.btn-danger:hover { background-color: #bb2d3b; }
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 13px;
+}
+
+/* --- 6. UTILIDADES --- */
+.text-center { text-align: center; }
+.mt-4 { margin-top: 1.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.w-100 { width: 100%; }

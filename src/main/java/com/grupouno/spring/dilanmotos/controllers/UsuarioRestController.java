@@ -12,10 +12,10 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-// 1. Cambiamos @Controller por @RestController
 @RestController 
-// 2. Definimos una ruta base clara para la API
-@RequestMapping("/api/usuarios") 
+@RequestMapping("/api/usuarios")
+// 1. AGREGAMOS CORS (Sin esto, el navegador bloquea PUT y DELETE)
+@CrossOrigin(origins = "http://localhost:5173") 
 public class UsuarioRestController {
 
     @Autowired
@@ -29,55 +29,43 @@ public class UsuarioRestController {
         List<Usuarios> usuarios = (search != null && !search.isEmpty())
             ? usuarioRepository.findByNombreContainingIgnoreCaseOrCorreoContainingIgnoreCase(search, search)
             : usuarioRepository.findAll();
-
-        return ResponseEntity.ok(usuarios); // Devuelve HTTP 200 con la lista en JSON
+        return ResponseEntity.ok(usuarios);
     }
 
-    // Petición POST para crear
     @PostMapping
     public ResponseEntity<?> guardarUsuario(@Valid @RequestBody Usuarios usuario) {
-        // Verificamos si el correo ya existe (buena práctica en APIs)
         if(usuarioRepository.findByCorreoConMotos(usuario.getCorreo()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("El correo ya está registrado");
         }
-
         usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
         Usuarios nuevoUsuario = usuarioRepository.save(usuario);
-        
-        // Devuelve HTTP 201 (Creado) y el usuario guardado
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario); 
     }
 
-    // Petición PUT para actualizar
-    @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarUsuario(@PathVariable("id") int id, @Valid @RequestBody Usuarios usuarioDetalles) {
-        Optional<Usuarios> usuarioExistente = usuarioRepository.findById(id);
-
-        if (usuarioExistente.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
-        }
-
-        Usuarios usuarioActualizar = usuarioExistente.get();
+    // 2. CORRECCIÓN EN EL PUT: Aseguramos que el ID se capture bien
+@PutMapping("/{id}") // El nombre aquí debe ser igual...
+public ResponseEntity<?> actualizarUsuario(@PathVariable int id, @Valid @RequestBody Usuarios usuarioDetalles) { 
+    // ...al nombre de esta variable ^
+    return usuarioRepository.findById(id).map(usuarioActualizar -> {
         usuarioActualizar.setNombre(usuarioDetalles.getNombre());
         usuarioActualizar.setCorreo(usuarioDetalles.getCorreo());
         
-        // Solo actualizamos la contraseña si enviaron una nueva
         if (usuarioDetalles.getContrasena() != null && !usuarioDetalles.getContrasena().isEmpty()) {
             usuarioActualizar.setContrasena(passwordEncoder.encode(usuarioDetalles.getContrasena()));
         }
 
         usuarioRepository.save(usuarioActualizar);
         return ResponseEntity.ok(usuarioActualizar);
-    }
+    }).orElse(ResponseEntity.notFound().build());
+}
 
-    // Petición DELETE para borrar
+    // 3. CORRECCIÓN EN EL DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminarUsuario(@PathVariable("id") int id) {
+    public ResponseEntity<?> eliminarUsuario(@PathVariable int id) {
         if (!usuarioRepository.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        
         usuarioRepository.deleteById(id);
-        return ResponseEntity.noContent().build(); // HTTP 204 (Sin contenido, operación exitosa)
+        return ResponseEntity.noContent().build();
     }
 }
