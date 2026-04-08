@@ -125,7 +125,7 @@ const PqrsManager = () => {
                             value={formData.tipo} 
                             onChange={e => setFormData({...formData, tipo: e.target.value})}
                         >
-                            <option value="Peticion">Petición</option>
+                            <option value="Peticion">Peticion</option>
                             <option value="Queja">Queja</option>
                             <option value="Reclamo">Reclamo</option>
                             <option value="Sugerencia">Sugerencia</option>

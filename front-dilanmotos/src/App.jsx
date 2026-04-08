@@ -6,6 +6,8 @@ import Login from './components/login';
 import Register from './components/register'; 
 import Usuarios from './components/usuarios';
 import PqrsManager from './components/pqrs';
+import Caracteristicas from './components/caracteristicas';
+import Productos from './components/productos';
 
 // Estilos
 import './global.css';
@@ -31,6 +33,12 @@ const Sidebar = () => {
                 </Link>
                 <Link to="/pqrs" className={`nav-link ${location.pathname === '/pqrs' ? 'active' : ''}`}>
                     <i className="fa-solid fa-comments me-2"></i> PQRS
+                </Link>
+                <Link to = "/caracteristicas" className ={`nav-link ${location.pathname === '/caracteristicas' ? 'active' : ''}`}>
+                    <i className="fa-solid fa-cogs me-2"></i> Características
+                </Link>
+                <Link to = "/productos" className ={`nav-link ${location.pathname === '/productos' ? 'active' : ''}`}>
+                    <i className="fa-solid fa-boxes-stacked me-2"></i> Productos
                 </Link>
             </nav>
             <div className="sidebar-footer">
@@ -62,6 +70,8 @@ function App() {
                                 <Routes>
                                     <Route path="/usuarios" element={<Usuarios />} />
                                     <Route path="/pqrs" element={<PqrsManager />} />
+                                    <Route path="/caracteristicas" element={<Caracteristicas />} />
+                                    <Route path="/productos" element={<Productos />} />
                                     {/* Si alguien pone una ruta mal dentro del panel, vuelve a usuarios */}
                                     <Route path="*" element={<Navigate to="/usuarios" />} />
                                 </Routes>
