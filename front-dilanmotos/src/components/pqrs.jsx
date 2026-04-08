@@ -2,132 +2,225 @@ import React, { useState, useEffect } from 'react';
 
 const PqrsManager = () => {
     const [listaPqrs, setListaPqrs] = useState([]);
-    const [busqueda, setBusqueda] = useState('');
-    const [formData, setFormData] = useState({ tipo: 'PETICION', asunto: '', descripcion: '' });
+    const [formData, setFormData] = useState({ tipo: 'Peticion', asunto: '', descripcion: '' });
     const [editMode, setEditMode] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
+
+    // 1. CARGAR DATOS DESDE EL BACKEND
+    const cargarPqrs = async () => {
+        try {
+            const res = await fetch('http://localhost:8080/api/pqrs');
+            if (!res.ok) throw new Error("Error al obtener datos");
+            const data = await res.json();
+            setListaPqrs(data);
+        } catch (error) {
+            console.error("Error en fetch cargarPqrs:", error);
+        }
+    };
 
     useEffect(() => {
         cargarPqrs();
     }, []);
 
-    const cargarPqrs = async (termino = '') => {
-        const url = termino ? `http://localhost:8080/api/pqrs?search=${termino}` : 'http://localhost:8080/api/pqrs';
-        const res = await fetch(url);
-        const data = await res.json();
-        setListaPqrs(data);
-    };
-
+    // 2. GUARDAR O ACTUALIZAR
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const url = editMode ? `http://localhost:8080/api/pqrs/${selectedId}` : 'http://localhost:8080/api/pqrs';
+        
+        const url = editMode 
+            ? `http://localhost:8080/api/pqrs/${selectedId}` 
+            : 'http://localhost:8080/api/pqrs';
+        
         const method = editMode ? 'PUT' : 'POST';
 
-        const res = await fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
+        // Construcción del objeto para enviar (Ajustado para evitar errores 400)
+        const objetoParaEnviar = {
+            ...formData,
+            id_usuario: 1, // Cambiar por ID del usuario logueado en el futuro
+            fecha_envio: editMode ? undefined : new Date().toISOString(),
+            estado: editMode ? 'EN PROCESO' : 'PENDIENTE',
+            comentario_usuario: "Enviado desde el panel de gestión"
+        };
 
-        if (res.ok) {
-            setFormData({ tipo: 'PETICION', asunto: '', descripcion: '' });
-            setEditMode(false);
-            cargarPqrs();
+        try {
+            const res = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(objetoParaEnviar)
+            });
+
+            if (res.ok) {
+                alert(editMode ? "✅ PQRS actualizada correctamente" : "✅ PQRS enviada con éxito");
+                setFormData({ tipo: 'Peticion', asunto: '', descripcion: '' });
+                setEditMode(false);
+                setSelectedId(null);
+                cargarPqrs();
+            } else {
+                const errorLog = await res.text();
+                console.error("Error del servidor:", errorLog);
+                alert("Hubo un problema con los datos. Revisa la consola de IntelliJ.");
+            }
+        } catch (error) {
+            alert("Error crítico: No se pudo conectar con el servidor.");
         }
     };
 
-    const handleEliminar = async (id) => {
-        if (window.confirm("¿Eliminar este registro?")) {
-            await fetch(`http://localhost:8080/api/pqrs/${id}`, { method: 'DELETE' });
-            cargarPqrs();
+    // 3. ELIMINAR (Solución al error 'undefined')
+    const handleEliminar = async (item) => {
+        // Buscamos el ID en ambas nomenclaturas posibles
+        const id = item.id_pqrs || item.idPqrs;
+
+        if (!id) {
+            alert("Error: No se encontró un ID válido para este registro.");
+            console.log("Objeto recibido:", item);
+            return;
+        }
+
+        if (!window.confirm(`¿Seguro que quieres eliminar la PQRS #${id}?`)) return;
+        
+        try {
+            const res = await fetch(`http://localhost:8080/api/pqrs/${id}`, { 
+                method: 'DELETE' 
+            });
+
+            if (res.ok) {
+                cargarPqrs();
+            } else {
+                alert("El servidor denegó la eliminación.");
+            }
+        } catch (error) {
+            console.error("Error al eliminar:", error);
         }
     };
 
+    // 4. INICIAR EDICIÓN
     const iniciarEdicion = (item) => {
-        setEditMode(true);
-        setSelectedId(item.idPqrs); // Verifica que el nombre del ID coincida con tu entidad
-        setFormData({ tipo: item.tipo, asunto: item.asunto, descripcion: item.descripcion });
+        window.scrollTo(0, 0);
+        const id = item.id_pqrs || item.idPqrs;
+
+        if (id) {
+            setEditMode(true);
+            setSelectedId(id);
+            setFormData({
+                tipo: item.tipo,
+                asunto: item.asunto,
+                descripcion: item.descripcion
+            });
+        }
     };
 
     return (
-        <div className="container mt-4">
-            <h3 className="mb-4"><i className="fa-solid fa-comments"></i> Gestión de PQRS</h3>
-            
-            {/* Formulario */}
-            <div className="card mb-4 shadow-sm">
-                <div className="card-body">
-                    <form onSubmit={handleSubmit} className="row g-3">
-                        <div className="col-md-3">
-                            <label className="form-label">Tipo</label>
-                            <select className="form-select" value={formData.tipo} 
-                                onChange={(e) => setFormData({...formData, tipo: e.target.value})}>
-                                <option value="PETICION">Petición</option>
-                                <option value="QUEJA">Queja</option>
-                                <option value="RECLAMO">Reclamo</option>
-                                <option value="SUGERENCIA">Sugerencia</option>
-                            </select>
-                        </div>
-                        <div className="col-md-9">
-                            <label className="form-label">Asunto</label>
-                            <input type="text" className="form-control" value={formData.asunto} required
-                                onChange={(e) => setFormData({...formData, asunto: e.target.value})} />
-                        </div>
-                        <div className="col-12">
-                            <label className="form-label">Descripción</label>
-                            <textarea className="form-control" rows="2" value={formData.descripcion} required
-                                onChange={(e) => setFormData({...formData, descripcion: e.target.value})}></textarea>
-                        </div>
-                        <div className="col-12 text-end">
-                            {editMode && <button type="button" className="btn btn-secondary me-2" onClick={() => setEditMode(false)}>Cancelar</button>}
-                            <button type="submit" className={`btn ${editMode ? 'btn-warning' : 'btn-primary'}`}>
-                                {editMode ? 'Actualizar PQRS' : 'Enviar PQRS'}
-                            </button>
-                        </div>
-                    </form>
+        <div className="main-content-inner">
+            {/* PANEL DE FORMULARIO */}
+            <div className="card-panel">
+                <h3 className="text-primary">
+                    <i className={`fa-solid ${editMode ? 'fa-edit' : 'fa-plus-circle'} me-2`}></i>
+                    {editMode ? 'Editar Solicitud' : 'Nueva PQRS'}
+                </h3>
+                <hr />
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label className="fw-bold">Tipo</label>
+                        <select 
+                            className="input-bs" 
+                            value={formData.tipo} 
+                            onChange={e => setFormData({...formData, tipo: e.target.value})}
+                        >
+                            <option value="Peticion">Petición</option>
+                            <option value="Queja">Queja</option>
+                            <option value="Reclamo">Reclamo</option>
+                            <option value="Sugerencia">Sugerencia</option>
+                        </select>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="fw-bold">Asunto</label>
+                        <input 
+                            className="input-bs" 
+                            placeholder="Resumen de tu solicitud"
+                            value={formData.asunto} 
+                            onChange={e => setFormData({...formData, asunto: e.target.value})} 
+                            required 
+                        />
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="fw-bold">Descripción</label>
+                        <textarea 
+                            className="input-bs" 
+                            rows="4" 
+                            placeholder="Explica detalladamente..."
+                            value={formData.descripcion} 
+                            onChange={e => setFormData({...formData, descripcion: e.target.value})} 
+                            required 
+                        />
+                    </div>
+
+                    <button type="submit" className={`btn-bs ${editMode ? 'btn-success' : 'btn-primary'} w-100`}>
+                        <i className={`fa-solid ${editMode ? 'fa-save' : 'fa-paper-plane'} me-2`}></i>
+                        {editMode ? 'Guardar Cambios' : 'Enviar Solicitud'}
+                    </button>
+
+                    {editMode && (
+                        <button 
+                            type="button" 
+                            className="btn-bs btn-danger w-100 mt-2" 
+                            onClick={() => {
+                                setEditMode(false); 
+                                setSelectedId(null);
+                                setFormData({tipo:'Peticion', asunto:'', descripcion:''});
+                            }}
+                        >
+                            Cancelar
+                        </button>
+                    )}
+                </form>
+            </div>
+
+            {/* TABLA DE RESULTADOS */}
+            <div className="card-panel mt-4">
+                <h5 className="text-muted mb-3">Historial de PQRS</h5>
+                <div className="custom-table-container">
+                    <div className="custom-table-header">
+                        <div>Fecha</div>
+                        <div>Tipo</div>
+                        <div>Asunto</div>
+                        <div>Estado</div>
+                        <div className="text-center">Acciones</div>
+                    </div>
+
+                    {listaPqrs.length > 0 ? (
+                        listaPqrs.map((item) => {
+                            const currentId = item.id_pqrs || item.idPqrs;
+                            return (
+                                <div className="custom-table-row" key={currentId || Math.random()}>
+                                    <div>{item.fecha_envio ? new Date(item.fecha_envio).toLocaleDateString() : 'N/A'}</div>
+                                    <div>{item.tipo}</div>
+                                    <div className="text-truncate" style={{maxWidth: '200px'}}>{item.asunto}</div>
+                                    <div className="fw-bold text-primary">{item.estado || 'RECIBIDO'}</div>
+                                    <div style={{display: 'flex', justifyContent: 'center', gap: '8px'}}>
+                                        <button 
+                                            className="btn-bs btn-success btn-sm" 
+                                            onClick={() => iniciarEdicion(item)}
+                                            title="Editar"
+                                        >
+                                            <i className="fa-solid fa-pen"></i>
+                                        </button>
+                                        <button 
+                                            className="btn-bs btn-danger btn-sm" 
+                                            onClick={() => handleEliminar(item)}
+                                            title="Eliminar"
+                                        >
+                                            <i className="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <div className="p-4 text-center text-muted">No hay solicitudes registradas.</div>
+                    )}
                 </div>
             </div>
-
-            {/* Buscador */}
-            <div className="input-group mb-3">
-                <input type="text" className="form-control" placeholder="Buscar por tipo o asunto..." 
-                    value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
-                <button className="btn btn-outline-secondary" onClick={() => cargarPqrs(busqueda)}>Buscar</button>
-            </div>
-
-            {/* Tabla */}
-            <table className="table table-hover align-middle">
-                <thead className="table-light">
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Tipo</th>
-                        <th>Asunto</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {listaPqrs.map((item) => (
-                        <tr key={item.idPqrs}>
-                            <td>{new Date(item.fecha).toLocaleDateString()}</td>
-                            <td><span className="badge bg-info text-dark">{item.tipo}</span></td>
-                            <td>{item.asunto}</td>
-                            <td>
-                                <span className={`badge ${item.estado === 'PENDIENTE' ? 'bg-warning' : 'bg-success'}`}>
-                                    {item.estado}
-                                </span>
-                            </td>
-                            <td>
-                                <button className="btn btn-sm btn-outline-success me-2" onClick={() => iniciarEdicion(item)}>
-                                    <i className="fa-solid fa-edit"></i>
-                                </button>
-                                <button className="btn btn-sm btn-outline-danger" onClick={() => handleEliminar(item.idPqrs)}>
-                                    <i className="fa-solid fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
         </div>
     );
 };
