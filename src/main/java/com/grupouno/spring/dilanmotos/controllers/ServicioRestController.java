@@ -23,25 +23,26 @@ public class ServicioRestController {
     @Autowired
     private MecanicoRepository mecanicoRepository;
 
-    // 📋 Listar todos los servicios
+    // Listar todos los servicios
     @GetMapping
     public List<Servicio> listarServicios() {
         return servicioRepository.findAll();
     }
 
-    // 🔍 Buscar por estado o comentario
+    // Buscar por estado o comentario
     @GetMapping("/buscar")
     public List<Servicio> buscarServicios(@RequestParam("q") String query) {
-        return servicioRepository.findByComentarioContainingIgnoreCaseOrEstadoServicioContainingIgnoreCase(query, query);
+        return servicioRepository.findByComentarioContainingIgnoreCaseOrEstadoServicioContainingIgnoreCase(query,
+                query);
     }
 
-    // 📄 Obtener un servicio por ID
+    // Obtener un servicio por ID
     @GetMapping("/{id}")
     public Optional<Servicio> obtenerServicio(@PathVariable Integer id) {
         return servicioRepository.findById(id);
     }
 
-    // ➕ Crear nuevo servicio
+    // Crear nuevo servicio
     @PostMapping
     public Servicio crearServicio(@RequestBody Servicio servicio) {
         // Validar relaciones: usuario y mecánico deben existir
@@ -56,7 +57,7 @@ public class ServicioRestController {
         return servicioRepository.save(servicio);
     }
 
-    // 🔄 Actualizar servicio existente
+    // Actualizar servicio existente
     @PutMapping("/{id}")
     public Servicio actualizarServicio(@PathVariable Integer id, @RequestBody Servicio servicio) {
         servicio.setIdServicio(id);
@@ -73,7 +74,7 @@ public class ServicioRestController {
         return servicioRepository.save(servicio);
     }
 
-    // 🗑 Eliminar servicio
+    // Eliminar servicio
     @DeleteMapping("/{id}")
     public void eliminarServicio(@PathVariable Integer id) {
         servicioRepository.deleteById(id);

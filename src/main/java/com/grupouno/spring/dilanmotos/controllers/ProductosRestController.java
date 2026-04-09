@@ -9,19 +9,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
-@CrossOrigin(origins = "http://localhost:5173") // 💡 Importante para React
+@CrossOrigin(origins = "http://localhost:5173") /
 public class ProductosRestController {
 
     @Autowired
     private ProductosRepository productosRepository;
 
-    // 💡 Habilita el método GET (Evita Error 405 al cargar)
+    //  Habilita el método GET (Evita Error 405 al cargar)
     @GetMapping
     public List<Productos> listar() {
         return productosRepository.findAll();
     }
 
-    // 💡 Habilita el método POST (Evita Error 405 al guardar)
+    //  Habilita el método POST (Evita Error 405 al guardar)
     @PostMapping
     public Productos guardar(@RequestBody Productos producto) {
         return productosRepository.save(producto);

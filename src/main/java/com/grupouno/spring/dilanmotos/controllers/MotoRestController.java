@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController // 👈 CAMBIO CLAVE: Cambiamos @Controller por @RestController
-@RequestMapping("/api/motos") // 👈 Definimos la ruta base para React
-@CrossOrigin(origins = "http://localhost:5173") // 👈 Permiso para React
+@RestController
+@RequestMapping("/api/motos")
+@CrossOrigin(origins = "http://localhost:5173")
 public class MotoRestController {
 
     @Autowired
@@ -39,13 +39,14 @@ public class MotoRestController {
     // --- REGISTRAR MOTO ---
     @PostMapping
     public ResponseEntity<?> registrarMoto(@RequestBody Moto nuevaMoto) {
-        // Nota: Como en React no tenemos el "Authentication auth" de sesión clásica fácilmente,
+        // Nota: Como en React no tenemos el "Authentication auth" de sesión clásica
+        // fácilmente,
         // por ahora asignamos el usuario que venga en el JSON o el usuario ID 1.
         if (nuevaMoto.getUsuario() == null) {
             Usuarios porDefecto = usuarioRepository.findById(1).orElse(null);
             nuevaMoto.setUsuario(porDefecto);
         }
-        
+
         Moto guardada = motoRepository.save(nuevaMoto);
         return ResponseEntity.ok(guardada);
     }
