@@ -8,6 +8,7 @@ import Usuarios from './components/usuarios';
 import PqrsManager from './components/pqrs';
 import Caracteristicas from './components/caracteristicas';
 import Productos from './components/productos';
+import Motos from './components/moto';
 
 // Estilos
 import './global.css';

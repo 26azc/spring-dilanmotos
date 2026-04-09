@@ -76,7 +76,6 @@ public class PQRS {
     private String calificacion_servicio;
 
     /** Comentario adicional del usuario. Obligatorio. */
-    @NotBlank
     @Column(name = "comentario_usuario")
     private String comentario_usuario;
 
