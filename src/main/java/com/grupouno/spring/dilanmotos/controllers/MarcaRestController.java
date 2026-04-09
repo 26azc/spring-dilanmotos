@@ -7,14 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/marcas")
+@CrossOrigin(origins = "http://localhost:5173")
 public class MarcaRestController {
-
-    @Autowired
-    private MarcaRepository MarcaRepository;
-
-    @GetMapping("/marca")
-    public List<Marca> listarMarcas() {
-        return MarcaRepository.findAll();
-    }
+    @Autowired private MarcaRepository repo;
+    @GetMapping public List<Marca> listar() { return repo.findAll(); }
 }

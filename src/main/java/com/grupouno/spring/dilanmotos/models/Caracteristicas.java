@@ -1,7 +1,7 @@
 package com.grupouno.spring.dilanmotos.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "caracteristicas")
@@ -9,39 +9,26 @@ public class Caracteristicas {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCaracteristica;
+    @Column(name = "id_caracteristica")
+    private int idCaracteristica;
 
-    // Relación con Moto
-    @ManyToOne
-    @JoinColumn(name = "id_moto") // columna en la tabla Caracteristicas
-    private Moto moto;
-
-    @NotBlank(message = "La descripción no puede estar vacía")
-    @Column(name = "descripcion")
+    @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
-    // Getters y setters
-    public Integer getIdCaracteristica() {
-        return idCaracteristica;
-    }
+    @ManyToOne
+    @JoinColumn(name = "id_moto", nullable = false)
+    @JsonIgnoreProperties("listaCaracteristicas") 
+    private Moto moto;
 
-    public void setIdCaracteristica(Integer idCaracteristica) {
-        this.idCaracteristica = idCaracteristica;
-    }
+    public Caracteristicas() {}
 
-    public Moto getMoto() {
-        return moto;
-    }
-
-    public void setMoto(Moto moto) {
-        this.moto = moto;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    // Getters y Setters
+    public int getIdCaracteristica() { return idCaracteristica; }
+    public void setIdCaracteristica(int idCaracteristica) { this.idCaracteristica = idCaracteristica; }
+    
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    
+    public Moto getMoto() { return moto; }
+    public void setMoto(Moto moto) { this.moto = moto; }
 }
