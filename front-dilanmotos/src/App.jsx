@@ -8,6 +8,7 @@ import Usuarios from './components/usuarios';
 import PqrsManager from './components/pqrs';
 import Caracteristicas from './components/caracteristicas';
 import Productos from './components/productos';
+import Marcas from './components/marcas';
 import Motos from './components/moto';
 
 // Estilos
@@ -41,6 +42,10 @@ const Sidebar = () => {
                 <Link to = "/productos" className ={`nav-link ${location.pathname === '/productos' ? 'active' : ''}`}>
                     <i className="fa-solid fa-boxes-stacked me-2"></i> Productos
                 </Link>
+                
+                <Link to="/marcas" className={`nav-link ${location.pathname === '/marcas' ? 'active' : ''}`}>
+                <i className="fa-solid fa-tag me-2"></i> Marcas
+                </Link> 
             </nav>
             <div className="sidebar-footer">
                 <button onClick={handleLogout} className="btn-bs btn-danger w-100">
@@ -73,6 +78,7 @@ function App() {
                                     <Route path="/pqrs" element={<PqrsManager />} />
                                     <Route path="/caracteristicas" element={<Caracteristicas />} />
                                     <Route path="/productos" element={<Productos />} />
+                                    <Route path="/marcas" element={<Marcas />} />
                                     {/* Si alguien pone una ruta mal dentro del panel, vuelve a usuarios */}
                                     <Route path="*" element={<Navigate to="/usuarios" />} />
                                 </Routes>
