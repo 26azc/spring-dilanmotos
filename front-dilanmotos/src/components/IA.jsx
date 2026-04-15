@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm'; // 👈 Instala esto: npm install remark-gfm
+import remarkGfm from 'remark-gfm'; // Instalar esto: npm install remark-gfm
 import './AsistenteMotos.css';
 
 const AsistenteMotos = () => {
