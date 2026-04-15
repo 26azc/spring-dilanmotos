@@ -1,94 +1,68 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../auth.css';
 
 const Register = () => {
+    const navigate = useNavigate();
     const [marcas, setMarcas] = useState([]);
-    const [modelos, setModelos] = useState([]);
+    const [modelosFiltrados, setModelosFiltrados] = useState([]);
     const [formData, setFormData] = useState({
         nombre: '',
         correo: '',
         contrasena: '',
         idMarca: '',
-        modelo: '',
-        cilindraje: ''
+        modelo: ''
     });
 
-    // Cargar marcas al inicio
     useEffect(() => {
-        fetch("http://localhost:8080/api/marcas")
-            .then(res => res.json())
-            .then(data => setMarcas(data))
-            .catch(err => console.error("Error al traer marcas:", err));
+        fetch("http://localhost:8080/api/marcas").then(res => res.json()).then(setMarcas);
     }, []);
 
-    // Cargar modelos cuando cambie la marca
-    useEffect(() => {
-        if (formData.idMarca) {
-            fetch(`http://localhost:8080/api/motos/marca/${formData.idMarca}`)
-                .then(res => {
-                    if (!res.ok) throw new Error("Error 404");
-                    return res.json();
-                })
-                .then(data => {
-                    if (Array.isArray(data)) {
-                        const listaUnica = [...new Set(data.map(m => m.modelo))];
-                        setModelos(listaUnica);
-                    }
-                })
-                .catch(err => {
-                    console.log("No hay modelos para esta marca aún");
-                    setModelos([]);
-                });
-        }
-    }, [formData.idMarca]);
+    const handleMarcaChange = (e) => {
+        const id = e.target.value;
+        setFormData({...formData, idMarca: id, modelo: ''});
+        // Cargar modelos de esa marca para el segundo select
+        fetch(`http://localhost:8080/api/motos/marca/${id}`)
+            .then(res => res.json())
+            .then(data => setModelosFiltrados([...new Set(data.map(m => m.modelo))]));
+    };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value,
-            ...(name === 'idMarca' && { modelo: '' }) // Resetear modelo si cambia marca
-        }));
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const res = await fetch("http://localhost:8080/api/usuarios/registrar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+        });
+
+        if (res.ok) {
+            alert("¡Cuenta y moto registradas!");
+            navigate("/login");
+        }
     };
 
     return (
         <div className="auth-body">
             <div className="auth-card">
-                <h2>Registro de Usuario</h2>
-                <form>
-                    <div className="form-group">
-                        <label>Nombre Completo</label>
-                        <input className="auth-input" type="text" name="nombre" onChange={handleChange} />
-                    </div>
-                    <div className="form-group">
-                        <label>Correo Electrónico</label>
-                        <input className="auth-input" type="email" name="correo" onChange={handleChange} />
-                    </div>
+                <h2>Únete a Dilan Motos</h2>
+                <form onSubmit={handleSubmit}>
+                    <input className="auth-input" type="text" placeholder="Nombre" onChange={e => setFormData({...formData, nombre: e.target.value})} required />
+                    <input className="auth-input" type="email" placeholder="Correo" onChange={e => setFormData({...formData, correo: e.target.value})} required />
+                    <input className="auth-input" type="password" placeholder="Contraseña" onChange={e => setFormData({...formData, contrasena: e.target.value})} required />
                     
-                    <hr style={{margin: '20px 0', opacity: 0.2}} />
-                    <p style={{fontWeight: 'bold'}}>Datos de la Máquina</p>
+                    <label>Tu Marca</label>
+                    <select className="auth-input" onChange={handleMarcaChange} required>
+                        <option value="">Selecciona marca</option>
+                        {marcas.map(m => <option key={m.idMarca} value={m.idMarca}>{m.nombre}</option>)}
+                    </select>
 
-                    <div className="form-group">
-                        <label>Marca</label>
-                        <select className="auth-input" name="idMarca" value={formData.idMarca} onChange={handleChange}>
-                            <option value="">Seleccione una marca</option>
-                            {marcas.map(m => (
-                                <option key={m.idMarca} value={m.idMarca}>{m.nombre}</option>
-                            ))}
-                        </select>
-                    </div>
+                    <label>Tu Modelo</label>
+                    <select className="auth-input" onChange={e => setFormData({...formData, modelo: e.target.value})} disabled={!formData.idMarca} required>
+                        <option value="">Selecciona modelo</option>
+                        {modelosFiltrados.map(mod => <option key={mod} value={mod}>{mod}</option>)}
+                    </select>
 
-                    <div className="form-group">
-                        <label>Modelo</label>
-                        <select className="auth-input" name="modelo" value={formData.modelo} onChange={handleChange} disabled={!formData.idMarca}>
-                            <option value="">Seleccione un modelo</option>
-                            {modelos.map(mod => (
-                                <option key={mod} value={mod}>{mod}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <button type="submit" className="auth-btn-primary">Registrarme</button>
+                    <button type="submit" className="auth-btn-primary">Crear Cuenta</button>
                 </form>
             </div>
         </div>

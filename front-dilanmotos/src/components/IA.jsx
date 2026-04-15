@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm'; // 👈 Instala esto: npm install remark-gfm
+import remarkGfm from 'remark-gfm';
 import './AsistenteMotos.css';
 
 const AsistenteMotos = () => {
@@ -19,27 +19,26 @@ const AsistenteMotos = () => {
             if (!idLogueado) return;
             try {
                 const res = await fetch(`http://localhost:8080/api/motos/usuario/${idLogueado}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    setModeloSeleccionado(data.modelo);
+                const data = await res.json();
+                
+                if (data && data.modelo) {
+                    setModeloSeleccionado(data.modelo.toUpperCase());
+                } else {
+                    setModeloSeleccionado("SIN MOTO ASIGNADA");
                 }
-            } catch (error) { setModeloSeleccionado("Moto genérica"); }
+            } catch (error) { 
+                setModeloSeleccionado("ERROR DE CONEXIÓN"); 
+            }
         };
         cargarMoto();
     }, [idLogueado]);
-
-    useEffect(() => {
-        mensajesFinRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [mensajes, cargando]);
 
     const consultarIA = async (e) => {
         e.preventDefault();
         if (!pregunta.trim() || cargando) return;
 
         const nuevoMensaje = { rol: 'usuario', texto: pregunta };
-        const historialActualizado = [...mensajes, nuevoMensaje];
-        
-        setMensajes(historialActualizado);
+        setMensajes([...mensajes, nuevoMensaje]);
         setPregunta('');
         setCargando(true);
 
@@ -50,16 +49,13 @@ const AsistenteMotos = () => {
                 body: JSON.stringify({ 
                     motor: modeloSeleccionado,
                     falla: pregunta,
-                    historial: historialActualizado 
+                    historial: mensajes 
                 })
             });
-
-            if (res.ok) {
-                const data = await res.json();
-                setMensajes(prev => [...prev, { rol: 'ia', texto: data.recomendacion }]);
-            }
+            const data = await res.json();
+            setMensajes(prev => [...prev, { rol: 'ia', texto: data.recomendacion }]);
         } catch (error) {
-            setMensajes(prev => [...prev, { rol: 'ia', texto: "🚨 **Error de conexión**, parcero. Revisa el motor (backend)." }]);
+            setMensajes(prev => [...prev, { rol: 'ia', texto: "🚨 Error en el motor del chat." }]);
         } finally {
             setCargando(false);
         }
@@ -71,45 +67,28 @@ const AsistenteMotos = () => {
                 <div className="avatar">DM</div>
                 <div className="header-info">
                     <h2>Mecánico Virtual</h2>
-                    <p><span className="status-dot"></span> Memoria de taller 100%</p>
+                    <p>Memoria de taller 100%</p>
                 </div>
             </div>
-
             <div className="vehicle-selector">
                 <span>🏍️ Moto detectada:</span>
                 <strong style={{marginLeft: '10px', color: '#e74c3c'}}>{modeloSeleccionado}</strong>
             </div>
-
             <div className="chat-messages">
-                {mensajes.map((msg, index) => (
-                    <div key={index} className={`message-row ${msg.rol === 'usuario' ? 'user' : 'ia'}`}>
-                        <div className={`bubble ${msg.rol === 'usuario' ? 'user' : 'ia'}`}>
-                            {/* remarkGfm sirve para que las tablas de Markdown funcionen */}
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                {msg.texto}
-                            </ReactMarkdown>
+                {mensajes.map((msg, i) => (
+                    <div key={i} className={`message-row ${msg.rol}`}>
+                        <div className={`bubble ${msg.rol}`}>
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.texto}</ReactMarkdown>
                         </div>
                     </div>
                 ))}
-                {cargando && (
-                    <div className="message-row ia">
-                        <div className="bubble ia">Analizando los fierros...</div>
-                    </div>
-                )}
+                {cargando && <div className="bubble ia">Analizando...</div>}
                 <div ref={mensajesFinRef} />
             </div>
-
-            <div className="chat-input-area">
-                <form onSubmit={consultarIA}>
-                    <input 
-                        type="text" 
-                        value={pregunta} 
-                        onChange={e => setPregunta(e.target.value)} 
-                        placeholder="¿Qué le suena a la máquina?" 
-                    />
-                    <button type="submit" disabled={cargando}>Enviar</button>
-                </form>
-            </div>
+            <form className="chat-input-area" onSubmit={consultarIA}>
+                <input type="text" value={pregunta} onChange={e => setPregunta(e.target.value)} placeholder="¿Qué falla tiene la máquina?" />
+                <button type="submit">Enviar</button>
+            </form>
         </div>
     );
 };
