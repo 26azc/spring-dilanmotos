@@ -1,72 +1,100 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import './AsistenteMotos.css';
 
 const AsistenteMotos = () => {
   const [pregunta, setPregunta] = useState('');
-  const [respuesta, setRespuesta] = useState('');
-  const [cargando, setCargando] = useState(false); // Nuevo estado para la carga
+  const [cargando, setCargando] = useState(false);
+  const [modeloSeleccionado, setModeloSeleccionado] = useState('CFMoto 250NK');
+  const [mensajes, setMensajes] = useState([
+    { rol: 'ia', texto: '¡Habla pues **parcero**! Bienvenido a **Dilan Motos**. ¿Qué máquinas vamos a revisar hoy?' }
+  ]);
 
-  const consultarIA = async () => {
-    if (!pregunta.trim()) return; // Evita enviar consultas vacías
+  const mensajesFinRef = useRef(null);
+
+  useEffect(() => {
+    mensajesFinRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [mensajes, cargando]);
+
+  const consultarIA = async (e) => {
+    e.preventDefault();
+    if (!pregunta.trim()) return;
+
+    // 1. Creamos el nuevo mensaje del usuario
+    const nuevoMensaje = { rol: 'usuario', texto: pregunta };
+    const historialActualizado = [...mensajes, nuevoMensaje];
     
-    setCargando(true); // Activamos el mensaje de "Pensando..."
-    setRespuesta('');  // Limpiamos la respuesta anterior
+    setMensajes(historialActualizado);
+    setPregunta('');
+    setCargando(true);
+
+    // 2. Formateamos el historial para que Gemini lo entienda (user/model)
+    const historialFormateado = historialActualizado.map(msg => ({
+      role: msg.rol === 'usuario' ? 'user' : 'model',
+      parts: [{ text: msg.texto }]
+    }));
 
     try {
       const res = await fetch('http://localhost:8080/api/ia/consultar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pregunta: pregunta, modelo: "CFMoto 250NK" })
+        body: JSON.stringify({ 
+          historial: historialFormateado,
+          modelo: modeloSeleccionado 
+        })
       });
 
-      // TRUCO: Leemos la respuesta como texto crudo primero. 
-      // Así no importa si Spring Boot manda JSON o Texto, React no se rompe.
-      const textoCrudo = await res.text();
-      
-      try {
-        // Intentamos ver si es un JSON válido
-        const data = JSON.parse(textoCrudo);
-        setRespuesta(data.recomendacion || textoCrudo);
-      } catch (e) {
-        // Si no era JSON (era texto con asteriscos de Gemini), lo mostramos tal cual
-        setRespuesta(textoCrudo);
-      }
-
+      const textoRespuesta = await res.text();
+      setMensajes(prev => [...prev, { rol: 'ia', texto: textoRespuesta }]);
     } catch (error) {
-      setRespuesta("Error: No se pudo conectar con el servidor de Dilan Motos.");
+      setMensajes(prev => [...prev, { rol: 'ia', texto: "🚨 Se cayó la conexión, parcero." }]);
     } finally {
-      setCargando(false); // Apagamos el estado de carga
+      setCargando(false);
     }
   };
 
   return (
-    <div className="p-4 border rounded shadow-lg max-w-2xl mx-auto mt-10">
-      <h3 className="text-xl font-bold mb-4">Chanda AI</h3>
-      
-      <div className="flex gap-2 mb-4">
-        <input 
-          type="text"
-          className="border p-2 flex-grow rounded"
-          value={pregunta} 
-          onChange={(e) => setPregunta(e.target.value)}
-          placeholder="Ej: ¿Qué llantas le sirven a mi moto?"
-          disabled={cargando}
-        />
-        <button 
-          className="bg-blue-600 text-white px-4 py-2 rounded disabled:bg-gray-400"
-          onClick={consultarIA} 
-          disabled={cargando}
-        >
-          {cargando ? 'Pensando...' : 'Consultar'}
-        </button>
+    <div className="chat-container">
+      <div className="chat-header">
+        <div className="avatar">DM</div>
+        <div className="header-info">
+          <h2>Mecánico Virtual</h2>
+          <p><span className="status-dot"></span> Memoria Activada - Dilan Motos</p>
+        </div>
       </div>
-      
-      {/* Caja de respuesta */}
-      <div className="mt-4 p-3 bg-gray-50 border rounded min-h-[100px]">
-        {cargando ? (
-          <p className="text-gray-500 italic">⏳ El experto está analizando el manual de taller...</p>
-        ) : (
-          <p className="whitespace-pre-wrap">{respuesta}</p> 
-        )}
+
+      <div className="vehicle-selector">
+        <span>🏍️ Moto actual:</span>
+        <select value={modeloSeleccionado} onChange={(e) => setModeloSeleccionado(e.target.value)}>
+          <option value="CFMoto 250NK">CFMoto 250NK</option>
+          <option value="CFMoto 450NK">CFMoto 450NK</option>
+          <option value="KTM Duke 200">KTM Duke 200</option>
+          <option value="Yamaha R3">Yamaha R3</option>
+        </select>
+      </div>
+
+      <div className="chat-messages">
+        {mensajes.map((msg, index) => (
+          <div key={index} className={`message-row ${msg.rol === 'usuario' ? 'user' : 'ia'}`}>
+            <div className={`bubble ${msg.rol === 'usuario' ? 'user' : 'ia'}`}>
+              <ReactMarkdown>{msg.texto}</ReactMarkdown>
+            </div>
+          </div>
+        ))}
+        {cargando && <div className="message-row ia"><div className="bubble ia">Recordando y analizando...</div></div>}
+        <div ref={mensajesFinRef} />
+      </div>
+
+      <div className="chat-input-area">
+        <form onSubmit={consultarIA}>
+          <input 
+            type="text" 
+            value={pregunta} 
+            onChange={(e) => setPregunta(e.target.value)} 
+            placeholder="Dime los repuestos y luego pídeme la factura..." 
+          />
+          <button type="submit" className={pregunta.trim() ? 'active' : ''} disabled={cargando}>Enviar</button>
+        </form>
       </div>
     </div>
   );

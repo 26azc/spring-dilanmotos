@@ -1,228 +1,150 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
 
-const PqrsManager = () => {
-    const [listaPqrs, setListaPqrs] = useState([]);
-    const [formData, setFormData] = useState({ tipo: 'Peticion', asunto: '', descripcion: '' });
+export default function Pqrs() {
+    const [solicitudes, setSolicitudes] = useState([]);
+    const [nuevo, setNuevo] = useState({ 
+        tipo: 'Peticion', asunto: '', descripcion: '', 
+        estado: 'PENDIENTE', respuesta_admin: '', idUsuario: 1 
+    });
     const [editMode, setEditMode] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
 
-    // 1. CARGAR DATOS DESDE EL BACKEND
-    const cargarPqrs = async () => {
+    const API_URL = 'http://localhost:8080/api/pqrs';
+
+    const cargarDatos = async () => {
         try {
-            const res = await fetch('http://localhost:8080/api/pqrs');
-            if (!res.ok) throw new Error("Error al obtener datos");
+            const res = await fetch(API_URL);
             const data = await res.json();
-            setListaPqrs(data);
-        } catch (error) {
-            console.error("Error en fetch cargarPqrs:", error);
-        }
+            setSolicitudes(Array.isArray(data) ? data : []);
+        } catch (error) { console.error("Error cargando PQRS:", error); }
     };
 
-    useEffect(() => {
-        cargarPqrs();
-    }, []);
+    useEffect(() => { cargarDatos(); }, []);
 
-    // 2. GUARDAR O ACTUALIZAR
-    const handleSubmit = async (e) => {
+    const guardar = async (e) => {
         e.preventDefault();
+        const url = editMode ? `${API_URL}/${selectedId}` : API_URL;
         
-        const url = editMode 
-            ? `http://localhost:8080/api/pqrs/${selectedId}` 
-            : 'http://localhost:8080/api/pqrs';
-        
-        const method = editMode ? 'PUT' : 'POST';
-
-        // Construcción del objeto para enviar (Ajustado para evitar errores 400)
-        const objetoParaEnviar = {
-            ...formData,
-            id_usuario: 1, // Cambiar por ID del usuario logueado en el futuro
-            fecha_envio: editMode ? undefined : new Date().toISOString(),
-            estado: editMode ? 'EN PROCESO' : 'PENDIENTE',
-            comentario_usuario: "Enviado desde el panel de gestión"
-        };
-
         try {
             const res = await fetch(url, {
-                method: method,
+                method: editMode ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(objetoParaEnviar)
+                body: JSON.stringify(nuevo)
             });
 
             if (res.ok) {
-                alert(editMode ? "✅ PQRS actualizada correctamente" : "✅ PQRS enviada con éxito");
-                setFormData({ tipo: 'Peticion', asunto: '', descripcion: '' });
+                alert(editMode ? "✅ PQRS Atendida" : "✅ PQRS Enviada");
+                setNuevo({ tipo: 'Peticion', asunto: '', descripcion: '', estado: 'PENDIENTE', respuesta_admin: '', idUsuario: 1 });
                 setEditMode(false);
-                setSelectedId(null);
-                cargarPqrs();
+                cargarDatos();
             } else {
-                const errorLog = await res.text();
-                console.error("Error del servidor:", errorLog);
-                alert("Hubo un problema con los datos. Revisa la consola de IntelliJ.");
+                alert("Error 500: Revisa la consola de Java.");
             }
-        } catch (error) {
-            alert("Error crítico: No se pudo conectar con el servidor.");
-        }
+        } catch (err) { alert("Error de conexión"); }
     };
 
-    // 3. ELIMINAR (Solución al error 'undefined')
-    const handleEliminar = async (item) => {
-        // Buscamos el ID en ambas nomenclaturas posibles
-        const id = item.id_pqrs || item.idPqrs;
-
-        if (!id) {
-            alert("Error: No se encontró un ID válido para este registro.");
-            console.log("Objeto recibido:", item);
-            return;
-        }
-
-        if (!window.confirm(`¿Seguro que quieres eliminar la PQRS #${id}?`)) return;
-        
-        try {
-            const res = await fetch(`http://localhost:8080/api/pqrs/${id}`, { 
-                method: 'DELETE' 
-            });
-
-            if (res.ok) {
-                cargarPqrs();
-            } else {
-                alert("El servidor denegó la eliminación.");
-            }
-        } catch (error) {
-            console.error("Error al eliminar:", error);
-        }
-    };
-
-    // 4. INICIAR EDICIÓN
-    const iniciarEdicion = (item) => {
+    const iniciarEdicion = (p) => {
         window.scrollTo(0, 0);
-        const id = item.id_pqrs || item.idPqrs;
+        setEditMode(true);
+        setSelectedId(p.idPqrs);
+        setNuevo({
+            tipo: p.tipo,
+            asunto: p.asunto,
+            descripcion: p.descripcion,
+            estado: p.estado,
+            respuesta_admin: p.respuesta_admin || '',
+            idUsuario: p.idUsuario
+        });
+    };
 
-        if (id) {
-            setEditMode(true);
-            setSelectedId(id);
-            setFormData({
-                tipo: item.tipo,
-                asunto: item.asunto,
-                descripcion: item.descripcion
-            });
-        }
+    const formatearFecha = (fechaRaw) => {
+        if (!fechaRaw) return "En proceso...";
+        // LocalDateTime llega como string "2026-04-15T..."
+        return fechaRaw.replace('T', ' ').substring(0, 16);
     };
 
     return (
         <div className="main-content-inner">
-            {/* PANEL DE FORMULARIO */}
             <div className="card-panel">
-                <h3 className="text-primary">
-                    <i className={`fa-solid ${editMode ? 'fa-edit' : 'fa-plus-circle'} me-2`}></i>
-                    {editMode ? 'Editar Solicitud' : 'Nueva PQRS'}
-                </h3>
+                <h3 className="text-primary">{editMode ? 'Atender Solicitud' : 'Nueva PQRS'}</h3>
                 <hr />
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <label className="fw-bold">Tipo</label>
-                        <select 
-                            className="input-bs" 
-                            value={formData.tipo} 
-                            onChange={e => setFormData({...formData, tipo: e.target.value})}
-                        >
-                            <option value="Peticion">Peticion</option>
-                            <option value="Queja">Queja</option>
-                            <option value="Reclamo">Reclamo</option>
-                            <option value="Sugerencia">Sugerencia</option>
-                        </select>
+                <form onSubmit={guardar}>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <label className="fw-bold">Tipo de Solicitud</label>
+                            <select className="input-bs" value={nuevo.tipo} onChange={e => setNuevo({...nuevo, tipo: e.target.value})} disabled={editMode}>
+                                <option value="Peticion">Petición</option>
+                                <option value="Queja">Queja</option>
+                                <option value="Reclamo">Reclamo</option>
+                                <option value="Sugerencia">Sugerencia</option>
+                            </select>
+                        </div>
+                        {editMode && (
+                            <div className="col-md-6">
+                                <label className="fw-bold text-danger">Cambiar Estado</label>
+                                <select className="input-bs border-danger" value={nuevo.estado} onChange={e => setNuevo({...nuevo, estado: e.target.value})}>
+                                    <option value="PENDIENTE">PENDIENTE</option>
+                                    <option value="RECIBIDO">RECIBIDO</option>
+                                    <option value="EN PROCESO">EN PROCESO</option>
+                                    <option value="RESPONDIDA">RESPONDIDA</option>
+                                    <option value="CERRADA">CERRADA</option>
+                                </select>
+                            </div>
+                        )}
                     </div>
 
-                    <div className="mb-3">
-                        <label className="fw-bold">Asunto</label>
-                        <input 
-                            className="input-bs" 
-                            placeholder="Resumen de tu solicitud"
-                            value={formData.asunto} 
-                            onChange={e => setFormData({...formData, asunto: e.target.value})} 
-                            required 
-                        />
-                    </div>
-
-                    <div className="mb-3">
-                        <label className="fw-bold">Descripción</label>
-                        <textarea 
-                            className="input-bs" 
-                            rows="4" 
-                            placeholder="Explica detalladamente..."
-                            value={formData.descripcion} 
-                            onChange={e => setFormData({...formData, descripcion: e.target.value})} 
-                            required 
-                        />
-                    </div>
-
-                    <button type="submit" className={`btn-bs ${editMode ? 'btn-success' : 'btn-primary'} w-100`}>
-                        <i className={`fa-solid ${editMode ? 'fa-save' : 'fa-paper-plane'} me-2`}></i>
-                        {editMode ? 'Guardar Cambios' : 'Enviar Solicitud'}
-                    </button>
+                    <label className="mt-2 fw-bold">Asunto</label>
+                    <input className="input-bs" value={nuevo.asunto} onChange={e => setNuevo({...nuevo, asunto: e.target.value})} required disabled={editMode} />
+                    
+                    <label className="fw-bold">Descripción detallada</label>
+                    <textarea className="input-bs" rows="3" value={nuevo.descripcion} onChange={e => setNuevo({...nuevo, descripcion: e.target.value})} required disabled={editMode} />
 
                     {editMode && (
-                        <button 
-                            type="button" 
-                            className="btn-bs btn-danger w-100 mt-2" 
-                            onClick={() => {
-                                setEditMode(false); 
-                                setSelectedId(null);
-                                setFormData({tipo:'Peticion', asunto:'', descripcion:''});
-                            }}
-                        >
-                            Cancelar
-                        </button>
+                        <div className="mt-3 p-3 bg-light border border-success rounded">
+                            <label className="fw-bold text-success">Respuesta del Administrador</label>
+                            <textarea className="input-bs border-success" rows="3" value={nuevo.respuesta_admin} onChange={e => setNuevo({...nuevo, respuesta_admin: e.target.value})} placeholder="Escribe la respuesta formal aquí..." />
+                        </div>
                     )}
+
+                    <button type="submit" className={`btn-bs ${editMode ? 'btn-success' : 'btn-primary'} w-100 mt-3`}>
+                        {editMode ? 'Guardar Cambios y Notificar' : 'Enviar Mi Solicitud'}
+                    </button>
+                    {editMode && <button type="button" className="btn-bs btn-secondary w-100 mt-2" onClick={() => {setEditMode(false); setNuevo({tipo:'Peticion', asunto:'', descripcion:'', estado:'PENDIENTE', idUsuario: 1})}}>Cancelar</button>}
                 </form>
             </div>
 
-            {/* TABLA DE RESULTADOS */}
             <div className="card-panel mt-4">
-                <h5 className="text-muted mb-3">Historial de PQRS</h5>
+                <h5>Historial de Solicitudes</h5>
                 <div className="custom-table-container">
                     <div className="custom-table-header">
-                        <div>Fecha</div>
-                        <div>Tipo</div>
-                        <div>Asunto</div>
-                        <div>Estado</div>
-                        <div className="text-center">Acciones</div>
+                        <div>Fecha</div><div>Asunto</div><div>Estado</div><div className="text-center">Acciones</div>
                     </div>
-
-                    {listaPqrs.length > 0 ? (
-                        listaPqrs.map((item) => {
-                            const currentId = item.id_pqrs || item.idPqrs;
-                            return (
-                                <div className="custom-table-row" key={currentId || Math.random()}>
-                                    <div>{item.fecha_envio ? new Date(item.fecha_envio).toLocaleDateString() : 'N/A'}</div>
-                                    <div>{item.tipo}</div>
-                                    <div className="text-truncate" style={{maxWidth: '200px'}}>{item.asunto}</div>
-                                    <div className="fw-bold text-primary">{item.estado || 'RECIBIDO'}</div>
-                                    <div style={{display: 'flex', justifyContent: 'center', gap: '8px'}}>
-                                        <button 
-                                            className="btn-bs btn-success btn-sm" 
-                                            onClick={() => iniciarEdicion(item)}
-                                            title="Editar"
-                                        >
-                                            <i className="fa-solid fa-pen"></i>
-                                        </button>
-                                        <button 
-                                            className="btn-bs btn-danger btn-sm" 
-                                            onClick={() => handleEliminar(item)}
-                                            title="Eliminar"
-                                        >
-                                            <i className="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            );
-                        })
-                    ) : (
-                        <div className="p-4 text-center text-muted">No hay solicitudes registradas.</div>
-                    )}
+                    {solicitudes.map(p => (
+                        <div className="custom-table-row" key={p.idPqrs}>
+                            <div className="small">{formatearFecha(p.fecha)}</div>
+                            <div className="fw-bold">{p.asunto}</div>
+                            <div>
+                                <span className={`badge ${p.estado === 'PENDIENTE' ? 'bg-warning' : p.estado === 'RESPONDIDA' ? 'bg-success' : 'bg-primary'}`}>
+                                    {p.estado}
+                                </span>
+                            </div>
+                            <div className="text-center">
+                                <button className="btn-bs btn-success btn-sm me-2" onClick={() => iniciarEdicion(p)}>
+                                    <i className="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button className="btn-bs btn-danger btn-sm" onClick={async () => {
+                                    if(window.confirm("¿Eliminar registro?")) {
+                                        await fetch(`${API_URL}/${p.idPqrs}`, {method:'DELETE'});
+                                        cargarDatos();
+                                    }
+                                }}>
+                                    <i className="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
     );
-};
-
-export default PqrsManager;
+}
