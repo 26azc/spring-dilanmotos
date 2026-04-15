@@ -1,139 +1,141 @@
-package com.grupouno.spring.dilanmotos.controllers;
+// //*
 
-import com.grupouno.spring.dilanmotos.models.Productos;
-import com.grupouno.spring.dilanmotos.repositories.ProductosRepository;
-import com.grupouno.spring.dilanmotos.repositories.CategoriaRepository;
-import com.grupouno.spring.dilanmotos.repositories.MarcaRepository;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+// package com.grupouno.spring.dilanmotos.controllers;
 
-import java.util.List;
+// import com.grupouno.spring.dilanmotos.models.Productos;
+// import com.grupouno.spring.dilanmotos.repositories.ProductosRepository;
+// import com.grupouno.spring.dilanmotos.repositories.CategoriaRepository;
+// import com.grupouno.spring.dilanmotos.repositories.MarcaRepository;
+// import jakarta.validation.Valid;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.lang.NonNull;
+// import org.springframework.stereotype.Controller;
+// import org.springframework.ui.Model;
+// import org.springframework.validation.BindingResult;
+// import org.springframework.web.bind.annotation.*;
 
-@Controller
-public class ProductosController {
+// import java.util.List;
 
-    @Autowired private ProductosRepository productosRepository;
-    @Autowired private CategoriaRepository categoriaRepository;
-    @Autowired private MarcaRepository marcaRepository;
+// @Controller
+// public class ProductosController {
 
-    // ---------------- CRUD GENERAL ----------------
+//     @Autowired private ProductosRepository productosRepository;
+//     @Autowired private CategoriaRepository categoriaRepository;
+//     @Autowired private MarcaRepository marcaRepository;
 
-    // Listar productos
-    @GetMapping("/productos")
-    public String mostrarProducto(@RequestParam(value = "search", required = false) String search, Model model) {
-        List<Productos> resultados = (search != null && !search.isEmpty())
-            ? productosRepository.findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCase(search, search)
-            : productosRepository.findAll();
+//     // ---------------- CRUD GENERAL ----------------
 
-        model.addAttribute("productos", resultados);
-        model.addAttribute("nuevoProducto", new Productos());
-        model.addAttribute("categorias", categoriaRepository.findAll());
-        model.addAttribute("marcas", marcaRepository.findAll());
-        return "productos";
-    }
+//     // Listar productos
+//     @GetMapping("/productos")
+//     public String mostrarProducto(@RequestParam(value = "search", required = false) String search, Model model) {
+//         List<Productos> resultados = (search != null && !search.isEmpty())
+//             ? productosRepository.findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCase(search, search)
+//             : productosRepository.findAll();
 
-    // Guardar producto
-    @PostMapping("/productos/guardar")
-    public String guardarProducto(@Valid @NonNull @ModelAttribute("nuevoProducto") Productos producto,
-                                  BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("productos", productosRepository.findAll());
-            model.addAttribute("categorias", categoriaRepository.findAll());
-            model.addAttribute("marcas", marcaRepository.findAll());
-            return "productos";
-        }
-        productosRepository.save(producto);
-        return "redirect:/productos?creado";
-    }
+//         model.addAttribute("productos", resultados);
+//         model.addAttribute("nuevoProducto", new Productos());
+//         model.addAttribute("categorias", categoriaRepository.findAll());
+//         model.addAttribute("marcas", marcaRepository.findAll());
+//         return "productos";
+//     }
 
-    // Editar producto
-    @GetMapping("/productos/editar/{id}")
-    public String editarProducto(@PathVariable("id") int id, Model model) {
-        return productosRepository.findById(id)
-            .map(producto -> {
-                model.addAttribute("productoEditada", producto);
-                model.addAttribute("categorias", categoriaRepository.findAll());
-                model.addAttribute("marcas", marcaRepository.findAll());
-                return "editar_productos";
-            })
-            .orElse("redirect:/productos?error=not_found");
-    }
+//     // Guardar producto
+//     @PostMapping("/productos/guardar")
+//     public String guardarProducto(@Valid @NonNull @ModelAttribute("nuevoProducto") Productos producto,
+//                                   BindingResult result, Model model) {
+//         if (result.hasErrors()) {
+//             model.addAttribute("productos", productosRepository.findAll());
+//             model.addAttribute("categorias", categoriaRepository.findAll());
+//             model.addAttribute("marcas", marcaRepository.findAll());
+//             return "productos";
+//         }
+//         productosRepository.save(producto);
+//         return "redirect:/productos?creado";
+//     }
 
-    // Actualizar producto
-    @PostMapping("/productos/actualizar")
-    public String actualizarProducto(@Valid @NonNull @ModelAttribute("productoEditada") Productos producto,
-                                     BindingResult result) {
-        if (result.hasErrors()) {
-            return "editar_productos";
-        }
-        productosRepository.save(producto);
-        return "redirect:/productos?actualizado";
-    }
+//     // Editar producto
+//     @GetMapping("/productos/editar/{id}")
+//     public String editarProducto(@PathVariable("id") int id, Model model) {
+//         return productosRepository.findById(id)
+//             .map(producto -> {
+//                 model.addAttribute("productoEditada", producto);
+//                 model.addAttribute("categorias", categoriaRepository.findAll());
+//                 model.addAttribute("marcas", marcaRepository.findAll());
+//                 return "editar_productos";
+//             })
+//             .orElse("redirect:/productos?error=not_found");
+//     }
 
-    // Eliminar producto
-    @GetMapping("/productos/eliminar/{id}")
-    public String eliminarProducto(@PathVariable("id") int id) {
-        if (productosRepository.existsById(id)) {
-            productosRepository.deleteById(id);
-            return "redirect:/productos?eliminado";
-        }
-        return "redirect:/productos?error=not_found";
-    }
+//     // Actualizar producto
+//     @PostMapping("/productos/actualizar")
+//     public String actualizarProducto(@Valid @NonNull @ModelAttribute("productoEditada") Productos producto,
+//                                      BindingResult result) {
+//         if (result.hasErrors()) {
+//             return "editar_productos";
+//         }
+//         productosRepository.save(producto);
+//         return "redirect:/productos?actualizado";
+//     }
 
-    // ---------------- NUEVAS RUTAS DE CATÁLOGO ----------------
+//     // Eliminar producto
+//     @GetMapping("/productos/eliminar/{id}")
+//     public String eliminarProducto(@PathVariable("id") int id) {
+//         if (productosRepository.existsById(id)) {
+//             productosRepository.deleteById(id);
+//             return "redirect:/productos?eliminado";
+//         }
+//         return "redirect:/productos?error=not_found";
+//     }
 
-    // Catálogo Kit de Arrastre
-    @GetMapping("/CatalogoKitArrastreAutenticado")
-    public String catalogoKitArrastre(@RequestParam(required = false) String marca, Model model) {
-        String categoria = "Kit de arrastre";
+//     // ---------------- NUEVAS RUTAS DE CATÁLOGO ----------------
 
-        List<Productos> productos = (marca == null || marca.equals("Todas"))
-            ? productosRepository.findByCategoriaNombre(categoria)
-            : productosRepository.findByCategoriaNombreAndMarcaNombre(categoria, marca);
+//     // Catálogo Kit de Arrastre
+//     @GetMapping("/CatalogoKitArrastreAutenticado")
+//     public String catalogoKitArrastre(@RequestParam(required = false) String marca, Model model) {
+//         String categoria = "Kit de arrastre";
 
-        model.addAttribute("productos", productos);
-        model.addAttribute("marcaSeleccionada", marca != null ? marca : "Todas");
+//         List<Productos> productos = (marca == null || marca.equals("Todas"))
+//             ? productosRepository.findByCategoriaNombre(categoria)
+//             : productosRepository.findByCategoriaNombreAndMarcaNombre(categoria, marca);
 
-        return "CatalogoKitArrastreAutenticado";
-    }
+//         model.addAttribute("productos", productos);
+//         model.addAttribute("marcaSeleccionada", marca != null ? marca : "Todas");
 
-    // Catálogo Aceites
-    @GetMapping("/CatalogoAceiteAutenticado")
-    public String catalogoAceite(@RequestParam(required = false) String marca, Model model) {
-        String categoria = "Aceites";
+//         return "CatalogoKitArrastreAutenticado";
+//     }
 
-        List<Productos> productos = (marca == null || marca.equals("Todas"))
-            ? productosRepository.findByCategoriaNombre(categoria)
-            : productosRepository.findByCategoriaNombreAndMarcaNombre(categoria, marca);
+//     // Catálogo Aceites
+//     @GetMapping("/CatalogoAceiteAutenticado")
+//     public String catalogoAceite(@RequestParam(required = false) String marca, Model model) {
+//         String categoria = "Aceites";
 
-        model.addAttribute("productos", productos);
-        model.addAttribute("marcaSeleccionada", marca != null ? marca : "Todas");
+//         List<Productos> productos = (marca == null || marca.equals("Todas"))
+//             ? productosRepository.findByCategoriaNombre(categoria)
+//             : productosRepository.findByCategoriaNombreAndMarcaNombre(categoria, marca);
 
-        return "CatalogoAceiteAutenticado";
-    }
+//         model.addAttribute("productos", productos);
+//         model.addAttribute("marcaSeleccionada", marca != null ? marca : "Todas");
 
-    // Catálogo Llantas
-  @GetMapping("/CatalogoLlantaAutenticado")
-public String catalogoLlanta(@RequestParam(required = false) String marca, Model model) {
-    String categoria = "Llantas";
-    List<Productos> productos;
+//         return "CatalogoAceiteAutenticado";
+//     }
 
-    if (marca == null || marca.equalsIgnoreCase("Todas")) {
-        // Mostrar todos los productos de la categoría "Llantas"
-        productos = productosRepository.findByCategoriaNombre(categoria);
-    } else {
-        // Buscar productos cuyo nombre contenga la marca (aunque no esté en tabla Marca)
-        productos = productosRepository.findByCategoriaNombreAndNombreContainingIgnoreCase(categoria, marca);
-    }
+//     // Catálogo Llantas
+//   @GetMapping("/CatalogoLlantaAutenticado")
+// public String catalogoLlanta(@RequestParam(required = false) String marca, Model model) {
+//     String categoria = "Llantas";
+//     List<Productos> productos;
 
-    model.addAttribute("productos", productos);
-    model.addAttribute("marcaSeleccionada", marca != null ? marca : "Todas");
+//     if (marca == null || marca.equalsIgnoreCase("Todas")) {
+//         // Mostrar todos los productos de la categoría "Llantas"
+//         productos = productosRepository.findByCategoriaNombre(categoria);
+//     } else {
+//         // Buscar productos cuyo nombre contenga la marca (aunque no esté en tabla Marca)
+//         productos = productosRepository.findByCategoriaNombreAndNombreContainingIgnoreCase(categoria, marca);
+//     }
 
-    return "CatalogoLlantaAutenticado";
-}
-    }
+//     model.addAttribute("productos", productos);
+//     model.addAttribute("marcaSeleccionada", marca != null ? marca : "Todas");
+
+//     return "CatalogoLlantaAutenticado";
+// }
+//     }

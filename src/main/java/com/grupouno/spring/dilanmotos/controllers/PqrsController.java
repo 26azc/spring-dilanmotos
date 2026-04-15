@@ -76,8 +76,6 @@ public class PqrsController {
         pqrs.setFecha(LocalDateTime.now());
         pqrs.setEstado("PENDIENTE");
         pqrs.setRespuesta_admin("Sin respuesta.");
-        pqrs.setCalificacion_servicio("-");
-        pqrs.setComentario_servicio("-");
         pqrs.setFecha_respuesta(null);
 
         pqrsRepository.save(pqrs);

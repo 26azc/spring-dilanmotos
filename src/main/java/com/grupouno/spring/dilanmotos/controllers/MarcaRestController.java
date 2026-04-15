@@ -10,6 +10,12 @@ import java.util.List;
 @RequestMapping("/api/marcas")
 @CrossOrigin(origins = "http://localhost:5173")
 public class MarcaRestController {
-    @Autowired private MarcaRepository repo;
-    @GetMapping public List<Marca> listar() { return repo.findAll(); }
+
+    @Autowired
+    private MarcaRepository marcaRepository;
+
+    @GetMapping
+    public List<Marca> listarTodas() {
+        return marcaRepository.findAll();
+    }
 }
