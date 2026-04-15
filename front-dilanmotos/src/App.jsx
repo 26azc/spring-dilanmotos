@@ -9,6 +9,7 @@ import PqrsManager from './components/pqrs';
 import Caracteristicas from './components/caracteristicas';
 import Productos from './components/productos';
 import Motos from './components/moto';
+import AsistenteMotos from './components/IA';
 
 // Estilos
 import './global.css';
@@ -41,6 +42,9 @@ const Sidebar = () => {
                 <Link to = "/productos" className ={`nav-link ${location.pathname === '/productos' ? 'active' : ''}`}>
                     <i className="fa-solid fa-boxes-stacked me-2"></i> Productos
                 </Link>
+                <Link to = "/asistente" className ={`nav-link ${location.pathname === '/asistente' ? 'active' : ''}`}>
+                    <i className="fa-solid fa-robot me-2"></i> Asistente IA
+                </Link>
             </nav>
             <div className="sidebar-footer">
                 <button onClick={handleLogout} className="btn-bs btn-danger w-100">
@@ -69,6 +73,7 @@ function App() {
                             <Sidebar />
                             <main className="main-content">
                                 <Routes>
+                                    <Route path="/asistente" element={<PrivateRoute><AsistenteMotos /></PrivateRoute>} />
                                     <Route path="/usuarios" element={<Usuarios />} />
                                     <Route path="/pqrs" element={<PqrsManager />} />
                                     <Route path="/caracteristicas" element={<Caracteristicas />} />
