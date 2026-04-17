@@ -29,9 +29,8 @@ public class Usuarios {
     private String rol = "USER";
     private boolean habilitado = true;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Moto> motos = new ArrayList<>();
+@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+private List<Moto> motos;
 
     public Usuarios() {
     }

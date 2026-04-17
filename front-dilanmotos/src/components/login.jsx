@@ -27,13 +27,19 @@ const Login = () => {
             if (response.ok) {
                 const usuario = await response.json();
                 
-                // 🔑 Llavés de acceso para PrivateRoute y el Asistente
+                // 🔑 Guardamos las llaves de acceso
                 localStorage.setItem('isAuthenticated', 'true'); 
                 localStorage.setItem("idUsuario", usuario.idUsuario);
                 localStorage.setItem("nombreUsuario", usuario.nombre);
                 
-                // Redirección forzada para refrescar el estado de las rutas
-                window.location.href = "/asistente"; 
+                // 🛡️ GUARDAR EL ROL (Asegúrate que tu backend envíe "rol")
+                // Si el backend envía "ADMIN" o "USER", aquí se guarda para PrivateRoute
+                localStorage.setItem("rolUsuario", usuario.rol || 'USER'); 
+                
+                // Redireccionamos al Dashboard (la nueva página central)
+                // Usamos window.location para asegurar que App.jsx recargue el estado de las rutas
+                window.location.href = "/dashboard"; 
+
             } else {
                 alert("Correo o contraseña incorrectos, parcero.");
             }

@@ -1,102 +1,122 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './Dashboard.css'; // Mueve aquí el contenido de estilo_dashboard.css
+import './Dashboard.css';
 
 const Dashboard = () => {
     const navigate = useNavigate();
     const [showDropdown, setShowDropdown] = useState(false);
-    const [nombreUsuario, setNombreUsuario] = useState("Usuario");
+    const [user, setUser] = useState({ nombre: "Socio", rol: "USER", id: null });
 
     useEffect(() => {
-        // Recuperamos el nombre guardado en el login
+        const id = localStorage.getItem('idUsuario');
         const nombre = localStorage.getItem('nombreUsuario');
-        if (nombre) setNombreUsuario(nombre);
+        const rol = localStorage.getItem('rolUsuario');
+        
+        setUser({ nombre: nombre || "Socio", rol: rol || "USER", id });
     }, []);
 
     const handleLogout = () => {
-        localStorage.clear(); // Limpiamos idUsuario, isAuthenticated, etc.
+        localStorage.clear();
         navigate('/login');
     };
 
     return (
-        <div className="dashboard-container">
-            {/* Header */}
-            <header className="header">
-                <img src="/assets/LogoDylanMotosI.png" alt="Dilan Motos" className="logo" />
-                
-                <div className="search-bar">
-                    <input type="text" placeholder="Buscar repuestos..." />
-                </div>
-
-                <div className="icons">
-                    <nav className="main-nav">
-                        <span className="money-icon">
-                            <Link to="/cotizacion">
-                                <img src="/assets/simboloPesos.png" alt="Pesos" />
-                            </Link>
-                        </span>
-                        
-                        <div className="user-menu" style={{ position: 'relative' }}>
-                            <span className="user-icon" onClick={() => setShowDropdown(!showDropdown)}>
-                                <img src="/assets/iconoPerfil.png" alt="Perfil" />
-                                <span className="ms-2 text-white small">{nombreUsuario}</span>
-                            </span>
-
-                            {showDropdown && (
-                                <ul className="dropdown-menu-custom">
-                                    <li><Link to="/cuenta">Mi cuenta</Link></li>
-                                    <li><Link to="/pqrs">Mis PQRS</Link></li>
-                                    <li><hr className="dropdown-divider" /></li>
-                                    <li>
-                                        <button onClick={handleLogout} className="dropdown-logout-btn">
-                                            Cerrar Sesión
-                                        </button>
-                                    </li>
-                                </ul>
-                            )}
+        <div className="dashboard-wrapper">
+            {/* Cabecera */}
+            <header className="dashboard-header">
+                <div className="header-container">
+                    <img 
+                        src="/LogoDilanMotos.png" 
+                        alt="Dilan Motos" 
+                        className="main-logo" 
+                        style={{cursor: 'pointer'}} 
+                        onClick={() => navigate('/dashboard')} 
+                    />
+                    
+                    <div className="header-nav">
+                        <div className="user-trigger" onClick={() => setShowDropdown(!showDropdown)}>
+                            <img src="/iconoPerfil.png" alt="Perfil" className="nav-icon avatar" />
+                            <span>{user.nombre}</span>
                         </div>
-                    </nav>
+
+                        {showDropdown && (
+                            <ul className="dropdown-menu-custom shadow-lg">
+                                <li><Link to="/perfil">Mi Cuenta</Link></li>
+                                <li><Link to="/asistente">Asistente IA</Link></li>
+                                
+                                {user.rol === 'ADMIN' && (
+                                    <>
+                                        <li className="divider"></li>
+                                        <li>
+                                            <Link to="/usuarios" className="admin-link">
+                                                Gestion de Sistema
+                                            </Link>
+                                        </li>
+                                    </>
+                                )}
+                                
+                                <li className="divider"></li>
+                                <li>
+                                    <button onClick={handleLogout} className="logout-btn-custom">
+                                        Cerrar Sesion
+                                    </button>
+                                </li>
+                            </ul>
+                        )}
+                    </div>
                 </div>
             </header>
 
-            {/* Main Content */}
-            <main className="main-content">
-                <nav className="nav-central">
-                    <Link to="/recomendacion" className="btn-category-main">Recomendaciones para ti</Link>
-                </nav>
+            {/* Contenido Principal */}
+            <main className="dashboard-content">
+                <div className="hero-section text-center">
+                    <h1 style={{marginBottom: '20px', fontWeight: '800'}}>Mantenimiento Inteligente</h1>
+                    
+                    {/* Enlace a la nueva pagina de recomendaciones */}
+                    <Link 
+                        to="/recomendaciones" 
+                        className="promo-banner"
+                    >
+                        Ver Recomendaciones de la IA
+                    </Link>
+                </div>
 
-                <div className="row text-center mt-4">
-                    {/* Tarjeta 1: Kits */}
-                    <div className="col-md-4 mb-4">
-                        <div className="category-card">
-                            <img src="/assets/KitDeArrastre.png" alt="Kit de arrastre" className="img-fluid mb-3" />
-                            <Link to="/catalogo/kits" className="btn-category">Kits de arrastre</Link>
+                {/* Seccion de Categorias de Productos */}
+                <h2 style={{margin: '40px 0 20px 0', fontWeight: '700'}}>Nuestros Productos</h2>
+                <div className="categories-grid">
+                    {/* Kit de Arrastre */}
+                    <div className="category-item">
+                        <div className="category-img">
+                            <img src="/KitDeArrastre.png" alt="Kits" />
                         </div>
+                        <h3>Kits de Arrastre</h3>
+                        <Link to="/catalogo/kits" className="category-btn">Ver Catalogo</Link>
                     </div>
 
-                    {/* Tarjeta 2: Llantas */}
-                    <div className="col-md-4 mb-4">
-                        <div className="category-card">
-                            <img src="/assets/Llanta.png" alt="Llanta" className="img-fluid mb-3" />
-                            <Link to="/catalogo/llantas" className="btn-category">Llantas</Link>
+                    {/* Llantas */}
+                    <div className="category-item">
+                        <div className="category-img">
+                            <img src="/Llanta.png" alt="Llantas" />
                         </div>
+                        <h3>Llantas</h3>
+                        <Link to="/catalogo/llantas" className="category-btn">Ver Catalogo</Link>
                     </div>
 
-                    {/* Tarjeta 3: Aceites */}
-                    <div className="col-md-4 mb-4">
-                        <div className="category-card">
-                            <img src="/assets/AceiteMotul.png" alt="Aceite" className="img-fluid mb-3" />
-                            <Link to="/catalogo/aceites" className="btn-category">Aceites</Link>
+                    {/* Aceites */}
+                    <div className="category-item">
+                        <div className="category-img">
+                            <img src="/AceiteMotul.png" alt="Aceites" />
                         </div>
+                        <h3>Aceites y Lubricantes</h3>
+                        <Link to="/catalogo/aceites" className="category-btn">Ver Catalogo</Link>
                     </div>
                 </div>
             </main>
 
-            {/* Footer */}
             <footer className="dashboard-footer">
-                <Link to="/comunicacion-tec" className="btn-comunicar">
-                    Comunícate con un técnico
-                </Link>
+                <div className="btn-tech-support">
+                    Soporte Tecnico: 300-XXX-XXXX
+                </div>
             </footer>
         </div>
     );

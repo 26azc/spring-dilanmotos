@@ -125,4 +125,13 @@ public class UsuarioRestController {
         usuarioRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Obtener perfil de usuario", description = "Retorna los datos del usuario y sus motos asociadas")
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuarios> obtenerPerfil(@PathVariable int id) {
+        // Usamos findByCorreoConMotos o findById para traer al usuario
+        return usuarioRepository.findById(id)
+                .map(usuario -> ResponseEntity.ok(usuario))
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
