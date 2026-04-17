@@ -1,4 +1,4 @@
-package com.grupouno.spring.dilanmotos.controllers;
+/* package com.grupouno.spring.dilanmotos.controllers;
 
 import com.grupouno.spring.dilanmotos.models.Moto;
 import com.grupouno.spring.dilanmotos.models.Usuarios;
@@ -107,4 +107,4 @@ public class MotoController {
         motoRepository.deleteById(idMoto);
         return "redirect:/moto?eliminado=true";
     }
-}
+} */

@@ -11,6 +11,7 @@ import Productos from './components/productos';
 import Motos from './components/moto';
 import TipoServicio from './components/tipoServicio';
 import AsistenteMotos from './components/IA';
+import Referencia from './components/referencia';
 
 // Estilos
 import './global.css';
@@ -40,12 +41,19 @@ const Sidebar = () => {
                 <Link to = "/caracteristicas" className ={`nav-link ${location.pathname === '/caracteristicas' ? 'active' : ''}`}>
                     <i className="fa-solid fa-cogs me-2"></i> Características
                 </Link>
+                <Link to = "/referencias" className ={`nav-link ${location.pathname === '/referencias' ? 'active' : ''}`}>
+                    <i className="fa-solid fa-cogs me-2"></i> Referencias
+                </Link>
                 <Link to = "/productos" className ={`nav-link ${location.pathname === '/productos' ? 'active' : ''}`}>
                     <i className="fa-solid fa-boxes-stacked me-2"></i> Productos
                 </Link>
                 <Link to = "/tipo-servicio" className ={`nav-link ${location.pathname === '/tipo-servicio' ? 'active' : ''}`}>
                     <i className="fa-solid fa-boxes-stacked me-2"></i> Tipos de Servicios
                 </Link>
+                <Link to = "/motos" className ={`nav-link ${location.pathname === '/motos' ? 'active' : ''}`}>
+                    <i className="fa-solid fa-motorcycle me-2"></i> Motos
+                </Link>
+
                 <Link to = "/asistente" className ={`nav-link ${location.pathname === '/asistente' ? 'active' : ''}`}>
                     <i className="fa-solid fa-robot me-2"></i> Asistente IA
                 </Link>
@@ -77,11 +85,13 @@ function App() {
                             <Sidebar />
                             <main className="main-content">
                                 <Routes>
+                                    <Route path="/referencias" element={<Referencia />} />
                                     <Route path="/asistente" element={<PrivateRoute><AsistenteMotos /></PrivateRoute>} />
                                     <Route path="/usuarios" element={<Usuarios />} />
                                     <Route path="/pqrs" element={<PqrsManager />} />
                                     <Route path="/caracteristicas" element={<Caracteristicas />} />
                                     <Route path="/productos" element={<Productos />} />
+                                    <Route path="/motos" element={<Motos />} />
                                     <Route path="/Tipo-servicio" element={<TipoServicio/>} />
                                     {/* Si alguien pone una ruta mal dentro del panel, vuelve a usuarios */}
                                     <Route path="*" element={<Navigate to="/usuarios" />} />
