@@ -16,8 +16,8 @@ public class Moto {
     private String modelo;
     private Double cilindraje;
 
-    @Column(name = "tipo_reparacion")
-    private String tipoReparacion;
+    @Column(name = "tipo_servicio")
+    private String tipoServicio;
 
     @ManyToOne
     @JoinColumn(name = "id_marca")
@@ -43,8 +43,8 @@ public class Moto {
     public void setModelo(String modelo) { this.modelo = modelo; }
     public Double getCilindraje() { return cilindraje; }
     public void setCilindraje(Double cilindraje) { this.cilindraje = cilindraje; }
-    public String getTipoReparacion() { return tipoReparacion; }
-    public void setTipoReparacion(String tipoReparacion) { this.tipoReparacion = tipoReparacion; }
+    public String getTipoServicio() { return tipoServicio; }
+    public void setTipoServicio(String tipoServicio) { this.tipoServicio = tipoServicio; }
     public Marca getMarca() { return marca; }
     public void setMarca(Marca marca) { this.marca = marca; }
     public Usuarios getUsuario() { return usuario; }

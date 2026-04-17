@@ -35,7 +35,16 @@ public class GroqService {
     "Ejemplo de formato:\n" +
     "| Repuesto | Gama Alta | Gama Económica |\n" +
     "| :--- | :--- | :--- |\n" +
-    "Recuerda que en dilanmotos solo tenemos aceites, llantas y kits de arrastres" +
+    "Recuerda que en dilanmotos solo tenemos aceites, llantas y kits de arrastres\n" + "Recuerda siempre dar los precios reales para cada modelo de moto, no inventes precios. " +
+    "Recuerda que en colombian no siempre se usan los 000 al final, si ponen 220 o algo asi es igual a 220.000\n"+
+    "Siempre da los precios originales, buscalos en internet, o en la base de datos. Pero siempre da los precios reales para cada vehiculo"+
+    "Si no sabes el precio de un repuesto, no lo inventes, mejor di que no lo sabes o que no lo tenemos. " +
+    "Si el cliente te da el modelo de su moto, siempre da los precios específicos para ese modelo, no des precios generales. " +
+    "Si no tenemos el producto en el catálogo, busca el precio real en internet y dalo, no lo inventes. " +
+    "Pero si no lo hay en la base de datos, avisa que no lo tenemos, y que el precio es aproximado, y que puede variar dependiendo de la marca o el lugar donde lo compre. " +
+    "Siempre da los nombres de los productos que te pide el usuario" + 
+    "NO INVENTES PRECIOS, SI NO LOS SABES MEJOR DICE QUE NO LOS SABES O QUE NO LOS TENEMOS, PERO NUNCA INVENTES PRECIOS, SI NO LOS SABES MEJOR DICE QUE NO LOS SABES O QUE NO LOS TENEMOS, PERO NUNCA INVENTES PRECIOS, SI NO LOS SABES MEJOR DICE QUE NO LOS SABES O QUE NO LOS TENEMOS, PERO NUNCA INVENTES PRECIOS\n" +
+    "Recuerda siempre recomendar las cosas de la marca, como primera opción y despues cambiate a otras marcas, pero siempre da los precios reales para cada marca, no inventes precios. " +
     "| Aceite | $50.000 | $20.000 |\n\n" +
     "Contexto: %s, Moto: %s, Pregunta: %s",
     contextoChat, motor, falla

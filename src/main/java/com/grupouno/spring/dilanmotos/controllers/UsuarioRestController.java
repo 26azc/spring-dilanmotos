@@ -1,5 +1,7 @@
 package com.grupouno.spring.dilanmotos.controllers;
 
+import com.grupouno.spring.dilanmotos.models.Moto;
+import com.grupouno.spring.dilanmotos.models.Referencia;
 import com.grupouno.spring.dilanmotos.models.Usuarios;
 import com.grupouno.spring.dilanmotos.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
+import com.grupouno.spring.dilanmotos.repositories.MarcaRepository;
+import com.grupouno.spring.dilanmotos.repositories.MotoRepository;
+import com.grupouno.spring.dilanmotos.repositories.ReferenciaRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +28,10 @@ public class UsuarioRestController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired 
+    private MotoRepository motoRepository;
+    @Autowired
+    private ReferenciaRepository referenciaRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -60,17 +68,38 @@ public class UsuarioRestController {
 
     @Operation(summary = "Registrar nuevo usuario", description = "Crea un usuario con contraseña encriptada")
     @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente")
-    @PostMapping
-    public ResponseEntity<?> guardarUsuario(@Valid @RequestBody Usuarios usuario) {
-        if (usuarioRepository.findByCorreoConMotos(usuario.getCorreo()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("El correo ya está registrado");
-        }
-        // Encriptamos antes de guardar
-        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
-        Usuarios nuevoUsuario = usuarioRepository.save(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
-    }
+    
+@PostMapping("/registrar")
+@Transactional
+public ResponseEntity<?> guardarUsuario(@RequestBody Map<String, Object> datos) {
+    try {
+        // 1. Guardar Usuario
+        Usuarios usuario = new Usuarios();
+        usuario.setNombre((String) datos.get("nombre"));
+        usuario.setCorreo((String) datos.get("correo"));
+        usuario.setContrasena(passwordEncoder.encode((String) datos.get("contrasena")));
+        Usuarios usuarioGuardado = usuarioRepository.save(usuario);
 
+        // 2. Obtener la referencia del catálogo
+        Integer idRef = Integer.parseInt(datos.get("idReferencia").toString());
+        Referencia ref = referenciaRepository.findById(idRef)
+                            .orElseThrow(() -> new RuntimeException("Modelo no encontrado en el catálogo"));
+
+        // 3. Clonar los datos a la tabla 'moto' del usuario
+        Moto motoUsuario = new Moto();
+        motoUsuario.setModelo(ref.getNombre()); 
+        motoUsuario.setCilindraje(ref.getCilindraje()); 
+        motoUsuario.setMarca(ref.getMarca());
+        motoUsuario.setUsuario(usuarioGuardado); 
+        
+        motoRepository.save(motoUsuario);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioGuardado);
+    } catch (Exception e) {
+        return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+    }
+}
+    
     @Operation(summary = "Actualizar usuario por ID", description = "Modifica los datos de un usuario existente.")
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarUsuario(@PathVariable int id, @Valid @RequestBody Usuarios usuarioDetalles) {

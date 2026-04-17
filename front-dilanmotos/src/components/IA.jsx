@@ -8,37 +8,52 @@ const AsistenteMotos = () => {
     const [cargando, setCargando] = useState(false);
     const [modeloSeleccionado, setModeloSeleccionado] = useState('Buscando máquina...');
     const [mensajes, setMensajes] = useState([
-        { rol: 'ia', texto: '¡Habla pues **parcero**! Bienvenido a **Dilan Motos**. ¿Qué máquinas vamos a revisar hoy?' }
+        { rol: 'ia', texto: '¡Habla pues **parcero**! Bienvenido a **Dilan Motos**. ¿Qué máquina vamos a revisar hoy?' }
     ]);
 
     const idLogueado = localStorage.getItem("idUsuario");
     const mensajesFinRef = useRef(null);
 
+    // 🏍️ Efecto para cargar la moto al iniciar el componente
     useEffect(() => {
         const cargarMoto = async () => {
-            if (!idLogueado) return;
+            if (!idLogueado) {
+                setModeloSeleccionado("USUARIO NO LOGUEADO");
+                return;
+            }
             try {
                 const res = await fetch(`http://localhost:8080/api/motos/usuario/${idLogueado}`);
-                const data = await res.json();
-                
-                if (data && data.modelo) {
-                    setModeloSeleccionado(data.modelo.toUpperCase());
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.modelo) {
+                        setModeloSeleccionado(data.modelo.toUpperCase());
+                    } else {
+                        setModeloSeleccionado("SIN MOTO REGISTRADA");
+                    }
                 } else {
-                    setModeloSeleccionado("SIN MOTO ASIGNADA");
+                    setModeloSeleccionado("SIN MOTO REGISTRADA");
                 }
-            } catch (error) { 
-                setModeloSeleccionado("ERROR DE CONEXIÓN"); 
+            } catch (error) {
+                console.error("Error al cargar la moto:", error);
+                setModeloSeleccionado("ERROR DE CONEXIÓN");
             }
         };
         cargarMoto();
     }, [idLogueado]);
+
+    // Auto-scroll al final de los mensajes
+    useEffect(() => {
+        mensajesFinRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [mensajes, cargando]);
 
     const consultarIA = async (e) => {
         e.preventDefault();
         if (!pregunta.trim() || cargando) return;
 
         const nuevoMensaje = { rol: 'usuario', texto: pregunta };
-        setMensajes([...mensajes, nuevoMensaje]);
+        const historial = [...mensajes, nuevoMensaje];
+        
+        setMensajes(historial);
         setPregunta('');
         setCargando(true);
 
@@ -49,13 +64,18 @@ const AsistenteMotos = () => {
                 body: JSON.stringify({ 
                     motor: modeloSeleccionado,
                     falla: pregunta,
-                    historial: mensajes 
+                    historial: historial 
                 })
             });
-            const data = await res.json();
-            setMensajes(prev => [...prev, { rol: 'ia', texto: data.recomendacion }]);
+
+            if (res.ok) {
+                const data = await res.json();
+                setMensajes(prev => [...prev, { rol: 'ia', texto: data.recomendacion }]);
+            } else {
+                throw new Error("Falla en el servicio de IA");
+            }
         } catch (error) {
-            setMensajes(prev => [...prev, { rol: 'ia', texto: "🚨 Error en el motor del chat." }]);
+            setMensajes(prev => [...prev, { rol: 'ia', texto: "🚨 **Error**, parcero. El motor de la IA se apagó." }]);
         } finally {
             setCargando(false);
         }
@@ -67,28 +87,44 @@ const AsistenteMotos = () => {
                 <div className="avatar">DM</div>
                 <div className="header-info">
                     <h2>Mecánico Virtual</h2>
-                    <p>Memoria de taller 100%</p>
+                    <p><span className="status-dot"></span> Online - Dilan Motos</p>
                 </div>
             </div>
+
             <div className="vehicle-selector">
                 <span>🏍️ Moto detectada:</span>
                 <strong style={{marginLeft: '10px', color: '#e74c3c'}}>{modeloSeleccionado}</strong>
             </div>
+
             <div className="chat-messages">
-                {mensajes.map((msg, i) => (
-                    <div key={i} className={`message-row ${msg.rol}`}>
-                        <div className={`bubble ${msg.rol}`}>
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.texto}</ReactMarkdown>
+                {mensajes.map((msg, index) => (
+                    <div key={index} className={`message-row ${msg.rol === 'usuario' ? 'user' : 'ia'}`}>
+                        <div className={`bubble ${msg.rol === 'usuario' ? 'user' : 'ia'}`}>
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {msg.texto}
+                            </ReactMarkdown>
                         </div>
                     </div>
                 ))}
-                {cargando && <div className="bubble ia">Analizando...</div>}
+                {cargando && (
+                    <div className="message-row ia">
+                        <div className="bubble ia pulse">Analizando los fierros...</div>
+                    </div>
+                )}
                 <div ref={mensajesFinRef} />
             </div>
-            <form className="chat-input-area" onSubmit={consultarIA}>
-                <input type="text" value={pregunta} onChange={e => setPregunta(e.target.value)} placeholder="¿Qué falla tiene la máquina?" />
-                <button type="submit">Enviar</button>
-            </form>
+
+            <div className="chat-input-area">
+                <form onSubmit={consultarIA}>
+                    <input 
+                        type="text" 
+                        value={pregunta} 
+                        onChange={e => setPregunta(e.target.value)} 
+                        placeholder="Ej: ¿Por qué mi moto pierde fuerza?" 
+                    />
+                    <button type="submit" disabled={cargando}>Enviar</button>
+                </form>
+            </div>
         </div>
     );
 };

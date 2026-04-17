@@ -5,26 +5,33 @@ import '../auth.css';
 const Register = () => {
     const navigate = useNavigate();
     const [marcas, setMarcas] = useState([]);
-    const [modelosFiltrados, setModelosFiltrados] = useState([]);
+    const [referencias, setReferencias] = useState([]);
     const [formData, setFormData] = useState({
-        nombre: '',
-        correo: '',
-        contrasena: '',
-        idMarca: '',
-        modelo: ''
+        nombre: '', correo: '', contrasena: '', idReferencia: ''
     });
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/marcas").then(res => res.json()).then(setMarcas);
+        fetch("http://localhost:8080/api/marcas")
+            .then(res => res.json())
+            .then(setMarcas);
     }, []);
 
     const handleMarcaChange = (e) => {
-        const id = e.target.value;
-        setFormData({...formData, idMarca: id, modelo: ''});
-        // Cargar modelos de esa marca para el segundo select
-        fetch(`http://localhost:8080/api/motos/marca/${id}`)
-            .then(res => res.json())
-            .then(data => setModelosFiltrados([...new Set(data.map(m => m.modelo))]));
+        const idMarca = e.target.value;
+        setReferencias([]);
+        setFormData({ ...formData, idReferencia: '' });
+
+        if (idMarca) {
+            fetch(`http://localhost:8080/api/referencias?marcaId=${idMarca}`)
+                .then(res => res.json())
+                .then(data => {
+                    console.log("Catálogo cargado:", data); // Para debug
+                    setReferencias(data);
+                    const validos = data.filter(ref => ref.nombre && ref.nombre !== '');
+                    setReferencias(validos);
+
+                });
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -36,33 +43,45 @@ const Register = () => {
         });
 
         if (res.ok) {
-            alert("¡Cuenta y moto registradas!");
+            alert("¡Bienvenido a Dilan Motos!");
             navigate("/login");
+        } else {
+            alert("Hubo un problema al registrarte.");
         }
     };
 
     return (
         <div className="auth-body">
             <div className="auth-card">
-                <h2>Únete a Dilan Motos</h2>
+                <h2>Crea tu cuenta</h2>
                 <form onSubmit={handleSubmit}>
-                    <input className="auth-input" type="text" placeholder="Nombre" onChange={e => setFormData({...formData, nombre: e.target.value})} required />
+                    <input className="auth-input" type="text" placeholder="Tu Nombre" onChange={e => setFormData({...formData, nombre: e.target.value})} required />
                     <input className="auth-input" type="email" placeholder="Correo" onChange={e => setFormData({...formData, correo: e.target.value})} required />
                     <input className="auth-input" type="password" placeholder="Contraseña" onChange={e => setFormData({...formData, contrasena: e.target.value})} required />
-                    
-                    <label>Tu Marca</label>
+
+                    <label>Marca de tu moto</label>
                     <select className="auth-input" onChange={handleMarcaChange} required>
-                        <option value="">Selecciona marca</option>
+                        <option value="">-- Elige Marca --</option>
                         {marcas.map(m => <option key={m.idMarca} value={m.idMarca}>{m.nombre}</option>)}
                     </select>
 
-                    <label>Tu Modelo</label>
-                    <select className="auth-input" onChange={e => setFormData({...formData, modelo: e.target.value})} disabled={!formData.idMarca} required>
-                        <option value="">Selecciona modelo</option>
-                        {modelosFiltrados.map(mod => <option key={mod} value={mod}>{mod}</option>)}
+                    <label>Modelo (de nuestro catálogo)</label>
+                    <select 
+                        className="auth-input" 
+                        value={formData.idReferencia}
+                        onChange={e => setFormData({...formData, idReferencia: e.target.value})}
+                        disabled={referencias.length === 0}
+                        required
+                    >
+                        <option value="">-- Elige el modelo --</option>
+                        {referencias.map(ref => (
+                            <option key={ref.idReferencia} value={ref.idReferencia}>
+                                {ref.nombre} ({ref.cilindraje} cc)
+                            </option>
+                        ))}
                     </select>
 
-                    <button type="submit" className="auth-btn-primary">Crear Cuenta</button>
+                    <button type="submit" className="auth-btn-primary">Registrarme</button>
                 </form>
             </div>
         </div>
