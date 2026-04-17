@@ -22,10 +22,10 @@ public class TipoServicioController {
     @GetMapping("/tipoServicio")
     public String mostrarTipoServicios(@RequestParam(value = "search", required = false) String search, Model model) {
         List<TipoServicio> tipoServicios = (search != null && !search.isEmpty())
-            ? tipoServicioRepository.findByNombreContainingIgnoreCase(search)
-            : tipoServicioRepository.findAll();
+                ? tipoServicioRepository.findByNombreContainingIgnoreCase(search)
+                : tipoServicioRepository.findAll();
 
-        model.addAttribute("listaTipoServicio", tipoServicios); 
+        model.addAttribute("listaTipoServicio", tipoServicios);
         model.addAttribute("nuevoTipoServicio", new TipoServicio());
         return "tipoServicio";
     }
@@ -33,10 +33,9 @@ public class TipoServicioController {
     // Guardar nuevo tipo de servicio
     @PostMapping("/tipoServicio")
     public String guardarTipoServicio(
-        @Valid @NonNull @ModelAttribute("nuevoTipoServicio") TipoServicio tipoServicio,
-        BindingResult result,
-        Model model
-    ) {
+            @Valid @NonNull @ModelAttribute("nuevoTipoServicio") TipoServicio tipoServicio,
+            BindingResult result,
+            Model model) {
         if (result.hasErrors()) {
             model.addAttribute("listaTipoServicio", tipoServicioRepository.findAll());
             return "tipoServicio";
@@ -50,19 +49,18 @@ public class TipoServicioController {
     @GetMapping("/tipoServicio/editar/{id}")
     public String editarTipoServicio(@PathVariable("id") int id, Model model) {
         return tipoServicioRepository.findById(id)
-            .map(tipoServicio -> {
-                model.addAttribute("tipoServicioEditado", tipoServicio);
-                return "editar_tipoServicio";
-            })
-            .orElse("redirect:/tipoServicio?error=not_found");
+                .map(tipoServicio -> {
+                    model.addAttribute("tipoServicioEditado", tipoServicio);
+                    return "editar_tipoServicio";
+                })
+                .orElse("redirect:/tipoServicio?error=not_found");
     }
 
     // Actualizar tipo de servicio
     @PostMapping("/tipoServicio/actualizar")
     public String actualizarTipoServicio(
-        @Valid @NonNull @ModelAttribute("tipoServicioEditado") TipoServicio tipoServicio,
-        BindingResult result
-    ) {
+            @Valid @NonNull @ModelAttribute("tipoServicioEditado") TipoServicio tipoServicio,
+            BindingResult result) {
         if (result.hasErrors()) {
             return "editar_tipoServicio";
         }
