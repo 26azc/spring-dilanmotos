@@ -182,7 +182,7 @@ html, body, #root {
 }
 
 /* --- 6. UTILIDADES --- */
-.text-center { text-align: center; }
+.text-center { text-align: center; gap: 10px; }
 .mt-4 { margin-top: 1.5rem; }
 .mb-3 { margin-bottom: 1rem; }
 .w-100 { width: 100%; }

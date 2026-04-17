@@ -9,6 +9,7 @@ import PqrsManager from './components/pqrs';
 import Caracteristicas from './components/caracteristicas';
 import Productos from './components/productos';
 import Motos from './components/moto';
+import TipoServicio from './components/tipoServicio';
 import AsistenteMotos from './components/IA';
 
 // Estilos
@@ -42,7 +43,7 @@ const Sidebar = () => {
                 <Link to = "/productos" className ={`nav-link ${location.pathname === '/productos' ? 'active' : ''}`}>
                     <i className="fa-solid fa-boxes-stacked me-2"></i> Productos
                 </Link>
-                <Link to = "/tipoServicios" className ={`nav-link ${location.pathname === '/tipoServicios' ? 'active' : ''}`}>
+                <Link to = "/tipo-servicio" className ={`nav-link ${location.pathname === '/tipo-servicio' ? 'active' : ''}`}>
                     <i className="fa-solid fa-boxes-stacked me-2"></i> Tipos de Servicios
                 </Link>
                 <Link to = "/asistente" className ={`nav-link ${location.pathname === '/asistente' ? 'active' : ''}`}>
@@ -81,6 +82,7 @@ function App() {
                                     <Route path="/pqrs" element={<PqrsManager />} />
                                     <Route path="/caracteristicas" element={<Caracteristicas />} />
                                     <Route path="/productos" element={<Productos />} />
+                                    <Route path="/Tipo-servicio" element={<TipoServicio/>} />
                                     {/* Si alguien pone una ruta mal dentro del panel, vuelve a usuarios */}
                                     <Route path="*" element={<Navigate to="/usuarios" />} />
                                 </Routes>
