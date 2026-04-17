@@ -39,7 +39,6 @@ public class TipoServicioRestController {
         }
 
         return repository.findAll();
-
     }
 
     @Operation(summary = "Crear o actualizar tipo de servicio")
@@ -55,8 +54,7 @@ public class TipoServicioRestController {
     @Operation(summary = "Eliminar tipo de servicio")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Servicio eliminado con exito"),
-            @ApiResponse(responseCode = "404", description = "El ID del serviico no existe"),
-
+            @ApiResponse(responseCode = "404", description = "El ID del servicio no existe"),
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable int id) {
@@ -65,5 +63,18 @@ public class TipoServicioRestController {
         }
         repository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Actualizar tipo de servicio")
+    @PutMapping("/{id}")
+    public ResponseEntity<TipoServicio> actualizar(@PathVariable int id, @RequestBody TipoServicio detalle) {
+        return repository.findById(id)
+                .map(tipo -> {
+                    // Sincronizado con los setters en minúscula corregidos en el modelo
+                    tipo.setNombre(detalle.getNombre());
+                    tipo.setDescripcion(detalle.getDescripcion());
+                    return ResponseEntity.ok(repository.save(tipo));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }

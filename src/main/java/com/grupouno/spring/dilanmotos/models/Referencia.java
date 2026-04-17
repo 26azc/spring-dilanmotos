@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "referencia_motos") // Nombre de la tabla en SQL
+@Table(name = "referencia_motos")
 public class Referencia {
 
     @Id
@@ -14,22 +14,45 @@ public class Referencia {
 
     @Column(nullable = false)
     private String nombre;
-    private Double cilindraje; 
+    private Double cilindraje;
 
     @ManyToOne
     @JoinColumn(name = "id_marca")
     @JsonIgnoreProperties("referencias")
     private Marca marca;
 
-    public Referencia() {}
+    public Referencia() {
+    }
 
-    // Getters y Setters
-    public Integer getIdReferencia() { return idReferencia; }
-    public void setIdReferencia(Integer idReferencia) { this.idReferencia = idReferencia; }
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-    public Double getCilindraje() { return cilindraje; }
-    public void setCilindraje(Double cilindraje) { this.cilindraje = cilindraje; }
-    public Marca getMarca() { return marca; }
-    public void setMarca(Marca marca) { this.marca = marca; }
+    public Integer getIdReferencia() {
+        return idReferencia;
+    }
+
+    public void setIdReferencia(Integer idReferencia) {
+        this.idReferencia = idReferencia;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Double getCilindraje() {
+        return cilindraje;
+    }
+
+    public void setCilindraje(Double cilindraje) {
+        this.cilindraje = cilindraje;
+    }
+
+    public Marca getMarca() {
+        return marca;
+    }
+
+    public void setMarca(Marca marca) {
+        this.marca = marca;
+    }
 }

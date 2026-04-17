@@ -28,7 +28,7 @@ public class UsuarioRestController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-    @Autowired 
+    @Autowired
     private MotoRepository motoRepository;
     @Autowired
     private ReferenciaRepository referenciaRepository;
@@ -45,15 +45,15 @@ public class UsuarioRestController {
 
         // Buscamos al usuario por correo usando el método que ya tienes en tu repo
         return usuarioRepository.findByCorreoConMotos(correo)
-            .map(usuario -> {
-                // Comparamos la contraseña plana con la encriptada
-                if (passwordEncoder.matches(contrasena, usuario.getContrasena())) {
-                    return ResponseEntity.ok(usuario); // Retorna el usuario completo (con su ID)
-                } else {
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
-                }
-            })
-            .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado"));
+                .map(usuario -> {
+                    // Comparamos la contraseña plana con la encriptada
+                    if (passwordEncoder.matches(contrasena, usuario.getContrasena())) {
+                        return ResponseEntity.ok(usuario); // Retorna el usuario completo (con su ID)
+                    } else {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
+                    }
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado"));
     }
 
     @Operation(summary = "Obtener lista de usuarios", description = "Retorna todos los usuarios o filtra por nombre/correo si se envía el parámetro search")
@@ -68,38 +68,38 @@ public class UsuarioRestController {
 
     @Operation(summary = "Registrar nuevo usuario", description = "Crea un usuario con contraseña encriptada")
     @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente")
-    
-@PostMapping("/registrar")
-@Transactional
-public ResponseEntity<?> guardarUsuario(@RequestBody Map<String, Object> datos) {
-    try {
-        // 1. Guardar Usuario
-        Usuarios usuario = new Usuarios();
-        usuario.setNombre((String) datos.get("nombre"));
-        usuario.setCorreo((String) datos.get("correo"));
-        usuario.setContrasena(passwordEncoder.encode((String) datos.get("contrasena")));
-        Usuarios usuarioGuardado = usuarioRepository.save(usuario);
+    // Se quita "/registrar" para que el POST a /api/usuarios funcione desde el CRUD
+    @PostMapping
+    @Transactional
+    public ResponseEntity<?> guardarUsuario(@RequestBody Map<String, Object> datos) {
+        try {
+            // 1. Guardar Usuario
+            Usuarios usuario = new Usuarios();
+            usuario.setNombre((String) datos.get("nombre"));
+            usuario.setCorreo((String) datos.get("correo"));
+            usuario.setContrasena(passwordEncoder.encode((String) datos.get("contrasena")));
+            Usuarios usuarioGuardado = usuarioRepository.save(usuario);
 
-        // 2. Obtener la referencia del catálogo
-        Integer idRef = Integer.parseInt(datos.get("idReferencia").toString());
-        Referencia ref = referenciaRepository.findById(idRef)
-                            .orElseThrow(() -> new RuntimeException("Modelo no encontrado en el catálogo"));
+            // 2. Obtener la referencia del catálogo
+            Integer idRef = Integer.parseInt(datos.get("idReferencia").toString());
+            Referencia ref = referenciaRepository.findById(idRef)
+                    .orElseThrow(() -> new RuntimeException("Modelo no encontrado en el catálogo"));
 
-        // 3. Clonar los datos a la tabla 'moto' del usuario
-        Moto motoUsuario = new Moto();
-        motoUsuario.setModelo(ref.getNombre()); 
-        motoUsuario.setCilindraje(ref.getCilindraje()); 
-        motoUsuario.setMarca(ref.getMarca());
-        motoUsuario.setUsuario(usuarioGuardado); 
-        
-        motoRepository.save(motoUsuario);
+            // 3. Clonar los datos a la tabla 'moto' del usuario
+            Moto motoUsuario = new Moto();
+            motoUsuario.setModelo(ref.getNombre());
+            motoUsuario.setCilindraje(ref.getCilindraje());
+            motoUsuario.setMarca(ref.getMarca());
+            motoUsuario.setUsuario(usuarioGuardado);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioGuardado);
-    } catch (Exception e) {
-        return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+            motoRepository.save(motoUsuario);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioGuardado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
     }
-}
-    
+
     @Operation(summary = "Actualizar usuario por ID", description = "Modifica los datos de un usuario existente.")
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarUsuario(@PathVariable int id, @Valid @RequestBody Usuarios usuarioDetalles) {

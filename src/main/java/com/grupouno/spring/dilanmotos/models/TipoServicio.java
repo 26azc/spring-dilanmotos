@@ -7,10 +7,10 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "tiposervicio") // nombre exacto de la tabla
 public class TipoServicio {
 
-    @Id    
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tipo_servicio", nullable = false, updatable = false) // snake_case
-    private int idTipoServicio;
+    private int id_tipo_servicio;
 
     @NotBlank(message = "El nombre es obligatorio")
     @Column(name = "nombre")
@@ -20,15 +20,31 @@ public class TipoServicio {
     @Column(name = "descripcion")
     private String descripcion;
 
-    public TipoServicio() {}
+    public TipoServicio() {
+    }
 
     // Getters y Setters
-    public int getIdTipoServicio() { return idTipoServicio; }
-    public void setIdTipoServicio(int idTipoServicio) { this.idTipoServicio = idTipoServicio; }
+    public int getId_tipo_servicio() {
+        return id_tipo_servicio;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setId_tipo_servicio(int id_tipo_servicio) {
+        this.id_tipo_servicio = id_tipo_servicio;
+    }
 
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 }
