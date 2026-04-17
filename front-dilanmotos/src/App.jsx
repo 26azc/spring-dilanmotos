@@ -12,9 +12,11 @@ import Motos from './components/moto';
 import TipoServicio from './components/tipoServicio';
 import AsistenteMotos from './components/IA';
 import Referencia from './components/referencia';
+import Mecanico from './components/mecanico';
 
 // Estilos
 import './global.css';
+
 
 const PrivateRoute = ({ children }) => {
     const auth = localStorage.getItem('isAuthenticated');
@@ -49,6 +51,9 @@ const Sidebar = () => {
                 </Link>
                 <Link to = "/tipo-servicio" className ={`nav-link ${location.pathname === '/tipo-servicio' ? 'active' : ''}`}>
                     <i className="fa-solid fa-boxes-stacked me-2"></i> Tipos de Servicios
+                </Link>
+                 <Link to = "/mecanicos" className ={`nav-link ${location.pathname === '/mecanicos' ? 'active' : ''}`}>
+                    <i className="fa-solid fa-boxes-stacked me-2"></i> Mecanicos
                 </Link>
                 <Link to = "/motos" className ={`nav-link ${location.pathname === '/motos' ? 'active' : ''}`}>
                     <i className="fa-solid fa-motorcycle me-2"></i> Motos
@@ -93,6 +98,7 @@ function App() {
                                     <Route path="/productos" element={<Productos />} />
                                     <Route path="/motos" element={<Motos />} />
                                     <Route path="/Tipo-servicio" element={<TipoServicio/>} />
+                                    <Route path="/mecanicos" element={<Mecanico/>} />
                                     {/* Si alguien pone una ruta mal dentro del panel, vuelve a usuarios */}
                                     <Route path="*" element={<Navigate to="/usuarios" />} />
                                 </Routes>
