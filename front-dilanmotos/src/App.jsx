@@ -42,6 +42,9 @@ const Sidebar = () => {
                 <Link to = "/productos" className ={`nav-link ${location.pathname === '/productos' ? 'active' : ''}`}>
                     <i className="fa-solid fa-boxes-stacked me-2"></i> Productos
                 </Link>
+                <Link to = "/tipoServicios" className ={`nav-link ${location.pathname === '/tipoServicios' ? 'active' : ''}`}>
+                    <i className="fa-solid fa-boxes-stacked me-2"></i> Tipos de Servicios
+                </Link>
                 <Link to = "/asistente" className ={`nav-link ${location.pathname === '/asistente' ? 'active' : ''}`}>
                     <i className="fa-solid fa-robot me-2"></i> Asistente IA
                 </Link>
