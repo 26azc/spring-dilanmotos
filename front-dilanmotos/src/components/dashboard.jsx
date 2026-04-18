@@ -43,7 +43,8 @@ const Dashboard = () => {
                             <ul className="dropdown-menu-custom shadow-lg">
                                 <li><Link to="/perfil">Mi Cuenta</Link></li>
                                 <li><Link to="/asistente">Asistente IA</Link></li>
-                                
+                                <li><Link to="/historial">Mi Historial</Link></li>
+                                <li><Link to="/nueva-pqrs">Radicar PQRS</Link></li>
                                 {user.rol === 'ADMIN' && (
                                     <>
                                         <li className="divider"></li>

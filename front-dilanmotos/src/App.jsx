@@ -7,7 +7,9 @@ import Register from './components/register';
 import Dashboard from './components/dashboard';
 import PerfilUsuario from './components/perfilUsuario';
 import AsistenteMotos from './components/IA';
-import Recomendaciones from './components/RecomendacionesPanel'; 
+import Recomendaciones from './components/RecomendacionesPanel';
+import CrearPqrs from './components/CrearPqrs'; 
+import ServicioAdmin from './components/Servicio';
 
 // Componentes de Gestión (ADMIN)
 import Usuarios from './components/usuarios';
@@ -17,6 +19,7 @@ import Productos from './components/productos';
 import Caracteristicas from './components/caracteristicas';
 import TipoServicio from './components/tipoServicio';
 import PqrsManager from './components/pqrs';
+import Historial from './components/Historial';
 
 import './global.css';
 
@@ -65,6 +68,19 @@ const AdminLayout = ({ children }) => {
                     <Link to="/productos" className={`nav-link ${activeClass('/productos')}`}>
                         <i className="fa-solid fa-box me-2"></i> Productos
                     </Link>
+
+
+                    <Link to="/servicios" className={`nav-link ${activeClass('/servicios')}`}>
+                        <i className="fa-solid fa-wrench me-2"></i> Servicios
+                    </Link>
+
+                    <Link to="/caracteristicas" className={`nav-link ${activeClass('/caracteristicas')}`}> 
+                        <i className="fa-solid fa-list me-2"></i> Características
+                    </Link>
+                    <Link to="/tipo-servicio" className={`nav-link ${activeClass('/tipo-servicio')}`}>
+                        <i className="fa-solid fa-gear me-2"></i> Tipos de Servicio
+                    </Link>
+
                     <Link to="/pqrs" className={`nav-link ${activeClass('/pqrs')}`}>
                         <i className="fa-solid fa-comments me-2"></i> PQRS
                     </Link>
@@ -96,9 +112,12 @@ function App() {
                 <Route path="/dashboard" element={
                     <PrivateRoute><Dashboard /></PrivateRoute>
                 } />
+                <Route path="/historial" element={<PrivateRoute><Historial /></PrivateRoute>} />
+                <Route path="/nueva-pqrs" element={<PrivateRoute><CrearPqrs /></PrivateRoute>} />
                 <Route path="/perfil" element={
                     <PrivateRoute><PerfilUsuario /></PrivateRoute>
                 } />
+                
                 <Route path="/asistente" element={
                     <PrivateRoute><AsistenteMotos /></PrivateRoute>
                 } />
@@ -110,6 +129,11 @@ function App() {
                 <Route path="/usuarios" element={
                     <PrivateRoute requireAdmin><AdminLayout><Usuarios /></AdminLayout></PrivateRoute>
                 } />
+
+                <Route path="/servicios" element={
+                    <PrivateRoute requireAdmin><AdminLayout><ServicioAdmin /></AdminLayout></PrivateRoute>
+                } />
+
                 <Route path="/referencias" element={
                     <PrivateRoute requireAdmin><AdminLayout><Referencia /></AdminLayout></PrivateRoute>
                 } />

@@ -18,6 +18,10 @@ public class Servicio {
     private Usuarios usuario;
 
     @ManyToOne
+    @JoinColumn(name = "id_moto") // 🏍️ RELACIÓN CON MOTO AGREGADA
+    private Moto moto;
+
+    @ManyToOne
     @JoinColumn(name = "id_mecanico")
     private Mecanico mecanico;
 
@@ -34,8 +38,11 @@ public class Servicio {
     private String estadoServicio;
 
     @NotBlank
-    @Column(name = "comentario")
+    @Column(name = "comentario") // Comentario del cliente
     private String comentario;
+
+    @Column(name = "observaciones_mecanico") // 🛠️ NUEVO: Comentario del mecánico
+    private String observacionesMecanico;
 
     @NotNull
     @Min(1)
@@ -47,6 +54,12 @@ public class Servicio {
     @Column(name = "visible_en_historial")
     private Boolean visibleEnHistorial;
 
+    // --- AGREGAR GETTERS Y SETTERS PARA LOS NUEVOS CAMPOS ---
+    public Moto getMoto() { return moto; }
+    public void setMoto(Moto moto) { this.moto = moto; }
+
+    public String getObservacionesMecanico() { return observacionesMecanico; }
+    public void setObservacionesMecanico(String observacionesMecanico) { this.observacionesMecanico = observacionesMecanico; }
     public Integer getIdServicio() { return idServicio; }
     public void setIdServicio(Integer idServicio) { this.idServicio = idServicio; }
 

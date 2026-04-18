@@ -42,5 +42,7 @@ public interface PqrsRepository extends JpaRepository<PQRS, Integer> {
      * @param asunto texto a buscar dentro del campo asunto
      * @return lista de registros que coinciden con los criterios
      */
+
+    List<PQRS> findByIdUsuario(Integer idUsuario);
     List<PQRS> findByTipoContainingIgnoreCaseOrAsuntoContainingIgnoreCase(String tipo, String asunto);
 }

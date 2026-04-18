@@ -13,6 +13,6 @@ public interface MotoRepository extends JpaRepository<Moto, Integer> {
 
     @Query("SELECT m FROM Moto m JOIN FETCH m.marca JOIN FETCH m.usuario WHERE m.usuario.idUsuario = :idUsuario")
     Optional<Moto> findMotoCompletaPorUsuario(@Param("idUsuario") Integer idUsuario);
-
+    List<Moto> findByUsuario_IdUsuario(Integer idUsuario);
     List<Moto> findByMarca_IdMarca(int idMarca);
 }

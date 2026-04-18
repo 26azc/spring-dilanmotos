@@ -1,82 +1,75 @@
 package com.grupouno.spring.dilanmotos.controllers;
 
 import com.grupouno.spring.dilanmotos.models.Servicio;
-import com.grupouno.spring.dilanmotos.repositories.ServicioRepository;
-import com.grupouno.spring.dilanmotos.repositories.UsuarioRepository;
-import com.grupouno.spring.dilanmotos.repositories.MecanicoRepository;
+import com.grupouno.spring.dilanmotos.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/servicios")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ServicioRestController {
 
     @Autowired
     private ServicioRepository servicioRepository;
-
     @Autowired
     private UsuarioRepository usuarioRepository;
-
     @Autowired
-    private MecanicoRepository mecanicoRepository;
+    private MotoRepository motoRepository;
+    @Autowired
+    private TipoServicioRepository tipoServicioRepository;
 
-    // Listar todos los servicios
     @GetMapping
-    public List<Servicio> listarServicios() {
+    public List<Servicio> listar() {
         return servicioRepository.findAll();
     }
 
-    // Buscar por estado o comentario
-    @GetMapping("/buscar")
-    public List<Servicio> buscarServicios(@RequestParam("q") String query) {
-        return servicioRepository.findByComentarioContainingIgnoreCaseOrEstadoServicioContainingIgnoreCase(query,
-                query);
+    @GetMapping("/usuario/{id}")
+    public List<Servicio> listarPorUsuario(@PathVariable Integer id) {
+        return servicioRepository.findByUsuario_IdUsuario(id);
     }
 
-    // Obtener un servicio por ID
-    @GetMapping("/{id}")
-    public Optional<Servicio> obtenerServicio(@PathVariable Integer id) {
-        return servicioRepository.findById(id);
-    }
-
-    // Crear nuevo servicio
     @PostMapping
-    public Servicio crearServicio(@RequestBody Servicio servicio) {
-        // Validar relaciones: usuario y mecánico deben existir
-        if (servicio.getUsuario() != null) {
-            usuarioRepository.findById(servicio.getUsuario().getIdUsuario())
-                    .ifPresent(servicio::setUsuario);
-        }
-        if (servicio.getMecanico() != null) {
-            mecanicoRepository.findById(servicio.getMecanico().getIdMecanico())
-                    .ifPresent(servicio::setMecanico);
-        }
-        return servicioRepository.save(servicio);
+    public ResponseEntity<?> crear(@RequestBody Servicio servicio) {
+        return guardarOActualizar(servicio);
     }
 
-    // Actualizar servicio existente
     @PutMapping("/{id}")
-    public Servicio actualizarServicio(@PathVariable Integer id, @RequestBody Servicio servicio) {
-        servicio.setIdServicio(id);
-
-        if (servicio.getUsuario() != null) {
-            usuarioRepository.findById(servicio.getUsuario().getIdUsuario())
-                    .ifPresent(servicio::setUsuario);
-        }
-        if (servicio.getMecanico() != null) {
-            mecanicoRepository.findById(servicio.getMecanico().getIdMecanico())
-                    .ifPresent(servicio::setMecanico);
-        }
-
-        return servicioRepository.save(servicio);
+    public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody Servicio servicioDetalles) {
+        if (!servicioRepository.existsById(id)) return ResponseEntity.notFound().build();
+        servicioDetalles.setIdServicio(id); // Aseguramos que use el ID de la URL
+        return guardarOActualizar(servicioDetalles);
     }
 
-    // Eliminar servicio
+    // Método privado para evitar repetir la lógica de vinculación de IDs
+    private ResponseEntity<?> guardarOActualizar(Servicio servicio) {
+        try {
+            if (servicio.getUsuario() != null) {
+                usuarioRepository.findById(servicio.getUsuario().getIdUsuario()).ifPresent(servicio::setUsuario);
+            }
+            if (servicio.getMoto() != null) {
+                motoRepository.findById(servicio.getMoto().getIdMoto()).ifPresent(servicio::setMoto);
+            }
+            if (servicio.getTipoServicio() != null) {
+                tipoServicioRepository.findById(servicio.getTipoServicio().getId_tipo_servicio()).ifPresent(servicio::setTipoServicio);
+            }
+            return ResponseEntity.ok(servicioRepository.save(servicio));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error de persistencia: " + e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}")
-    public void eliminarServicio(@PathVariable Integer id) {
-        servicioRepository.deleteById(id);
+    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
+        try {
+            if (!servicioRepository.existsById(id)) return ResponseEntity.notFound().build();
+            servicioRepository.deleteById(id);
+            return ResponseEntity.ok().body("{\"mensaje\": \"Eliminado correctamente\"}");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al eliminar: " + e.getMessage());
+        }
     }
 }
