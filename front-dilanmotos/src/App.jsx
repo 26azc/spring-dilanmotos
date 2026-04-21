@@ -10,6 +10,9 @@ import AsistenteMotos from './components/IA';
 import Recomendaciones from './components/RecomendacionesPanel';
 import CrearPqrs from './components/CrearPqrs'; 
 import ServicioAdmin from './components/Servicio';
+import CatalogoKit from './components/catalogoKit';
+import CatalogoAceites from './components/catalogoAceites';
+import CatalogoLlantas from './components/catalogoLlantas';
 
 // Componentes de Gestión (ADMIN)
 import Usuarios from './components/usuarios';
@@ -107,6 +110,9 @@ function App() {
                 <Route path="/" element={<Navigate to="/login" />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/catalogoKit" element={<CatalogoKit />} />
+                <Route path="/catalogoAceites" element={<CatalogoAceites />} />
+                <Route path="/catalogoLlantas" element={<CatalogoLlantas />} />
 
                 {/* 🏍️ RUTAS DEL SOCIO (Vistas limpias, sin sidebar) */}
                 <Route path="/dashboard" element={

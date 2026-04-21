@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './Dashboard.css';
+import './Dashboard.css'; // Asegúrate de crear este archivo con los estilos de la imagen
 
-const Dashboard = () => {
+const CatalogoKit = () => {
     const navigate = useNavigate();
     const [showDropdown, setShowDropdown] = useState(false);
-    const [user, setUser] = useState({ nombre: "Socio", rol: "USER", id: null });
+    const [user, setUser] = useState({ nombre: "Admin", rol: "ADMIN", id: null });
 
+    // Carga de datos de sesión (basado en tu referencia)
     useEffect(() => {
         const id = localStorage.getItem('idUsuario');
         const nombre = localStorage.getItem('nombreUsuario');
         const rol = localStorage.getItem('rolUsuario');
         
-        setUser({ nombre: nombre || "Socio", rol: rol || "USER", id });
+        if (nombre) {
+            setUser({ nombre: nombre, rol: rol || "USER", id });
+        }
     }, []);
 
     const handleLogout = () => {
@@ -22,7 +25,7 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard-wrapper">
-            {/* Cabecera */}
+            {/* Header consistente con la imagen */}
             <header className="dashboard-header">
                 <div className="header-container">
                     <img 
@@ -68,48 +71,44 @@ const Dashboard = () => {
                 </div>
             </header>
 
-            {/* Contenido Principal */}
+            {/* Contenido Principal Estilo Imagen */}
             <main className="dashboard-content">
                 <div className="hero-section text-center">
-                    <h1 style={{marginBottom: '20px', fontWeight: '800'}}>Mantenimiento Inteligente</h1>
+                    <h1 className="main-title">Mantenimiento Inteligente</h1>
                     
-                    {/* Enlace a la nueva pagina de recomendaciones */}
-                    <Link 
-                        to="/recomendaciones" 
-                        className="promo-banner"
-                    >
+                    <Link to="/recomendacion" className="promo-banner">
                         Ver Recomendaciones de la IA
                     </Link>
                 </div>
 
-                {/* Seccion de Categorias de Productos */}
-                <h2 style={{margin: '40px 0 20px 0', fontWeight: '700'}}>Nuestros Productos</h2>
+                <h2 className="section-subtitle">Nuestros Productos</h2>
+                
                 <div className="categories-grid">
                     {/* Kit de Arrastre */}
                     <div className="category-item">
                         <div className="category-img">
                             <img src="/KitDeArrastre.png" alt="Kits" />
                         </div>
-                        <h3>Kits de Arrastre</h3>
-                        <Link to="/catalogoKit" className="category-btn">Ver Catalogo</Link>
+                        <h3>Nombre del producto</h3>
+                        <Link to="/CatalogoKitArrastreAutenticado" className="category-btn">Ver ficha técnica</Link>
                     </div>
 
                     {/* Llantas */}
                     <div className="category-item">
                         <div className="category-img">
-                            <img src="/Llanta.png" alt="Llantas" />
+                            <img src="/KitDeArrastre.png" alt="Kits" />
                         </div>
-                        <h3>Llantas</h3>
-                        <Link to="/catalogoLlantas" className="category-btn">Ver Catalogo</Link>
+                        <h3>Nombre del producto</h3>
+                        <Link to="/catalogo/llantas" className="category-btn">Ver ficha técnica</Link>
                     </div>
 
                     {/* Aceites */}
                     <div className="category-item">
                         <div className="category-img">
-                            <img src="/AceiteMotul.png" alt="Aceites" />
+                            <img src="/KitDeArrastre.png" alt="Kits" />
                         </div>
-                        <h3>Aceites y Lubricantes</h3>
-                        <Link to="/catalogoAceites" className="category-btn">Ver Catalogo</Link>
+                        <h3>Nombre del producto</h3>
+                        <Link to="/catalogo/aceites" className="category-btn">Ver ficha técnica</Link>
                     </div>
                 </div>
             </main>
@@ -123,4 +122,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default CatalogoKit;
