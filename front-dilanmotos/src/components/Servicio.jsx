@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../global.css';
+import { authFetch } from "../api";
 
 const Servicio = () => {
     // Estados para las listas
@@ -32,7 +33,7 @@ const Servicio = () => {
         const cargarBase = async () => {
             try {
                 const u = await fetch('http://localhost:8080/api/usuarios').then(r => r.json());
-                const t = await fetch('http://localhost:8080/api/tipo-servicio').then(r => r.json());
+                const t = await fetch('http://localhost:8080/api/tiposervicio').then(r => r.json());
                 setUsuarios(u);
                 setTipos(t);
             } catch(e) { 

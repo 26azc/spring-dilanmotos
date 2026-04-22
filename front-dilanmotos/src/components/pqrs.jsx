@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import '../global.css';
+import { authFetch } from "../api";
 
 export default function Pqrs() {
     const idLogueado = localStorage.getItem("idUsuario");

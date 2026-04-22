@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './Dashboard.css'; // Asegúrate de crear este archivo con los estilos de la imagen
+import './Dashboard.css';
+
 
 const CatalogoAceites = () => {
     const navigate = useNavigate();

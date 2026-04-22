@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tipo-servicio")
+@RequestMapping("/api/tiposervicio")
 @CrossOrigin(origins = "http://localhost:5173")
 @Tag(name = "Tipo de Servicio", description = "Gestión de categorías de servicios de taller")
 public class TipoServicioRestController {

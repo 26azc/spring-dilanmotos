@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../global.css';
 
+
 const CrearPqrs = () => {
     const navigate = useNavigate();
     const [enviando, setEnviando] = useState(false);

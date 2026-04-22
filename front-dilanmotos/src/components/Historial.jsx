@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './historial.css';
 
+
 const Historial = () => {
     const navigate = useNavigate();
     const [tab, setTab] = useState('pqrs');

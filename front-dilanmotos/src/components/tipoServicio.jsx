@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../global.css';
+import { authFetch } from "../api";
 
 const TipoServicio = () => {
     const [tipoServicios, setTipoServicios] = useState([]); 
@@ -7,7 +8,7 @@ const TipoServicio = () => {
     const [nuevoTipo, setNuevoTipo] = useState({ nombre: "", descripcion: "" }); 
     const [editMode, setEditMode] = useState(false); 
 
-    const API_URL = "http://localhost:8080/api/tipo-servicio";
+    const API_URL = "http://localhost:8080/api/tiposervicio";
     const token = localStorage.getItem('token');
 
     useEffect(() => {

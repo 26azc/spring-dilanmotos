@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Dashboard.css'; // Reutilizamos tus estilos para que sea coherente
+import './Dashboard.css';
 
 const Recomendaciones = () => {
     const navigate = useNavigate();

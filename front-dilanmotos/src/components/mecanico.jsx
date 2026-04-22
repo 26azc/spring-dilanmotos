@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { authFetch } from "../api";
 
 export default function Servicio() {
     const [clientes, setClientes] = useState([]);
