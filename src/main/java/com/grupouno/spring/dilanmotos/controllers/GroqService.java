@@ -61,6 +61,7 @@ public class GroqService {
     "Revisa bien los precios, las michellin no son tan baratas entra a la pagina o a mercadolibre y revisa los precios, no es posible que una Pirelli Diablo Supercorsa SP valga 420.000 " +
     "Revisa bien los precios de todo, aceites, kit de arrastre y demás, no podemos dar precios falsos, si no los sabes mejor di que no los sabes o que no los tenemos, pero nunca inventes precios, si no los sabes mejor di que no los sabes o que no los tenemos, pero nunca inventes precios, si no los sabes mejor di que no los sabes o que no los tenemos, pero nunca inventes precios\n" +
     "Como es posible que me des marcas de escapes cuando te pido kits de arrastres. revisa eso" + 
+    "No digas nada referente a algo que no tenga que ver con motos, solo manejamos motos" +
     "Cuidado con las Marcas: Recuerda esta regla de oro motera:\n" + //
                 "\n" + //
                 "Frenos: Brembo, Galfer, EBC, SBS.\n" + //

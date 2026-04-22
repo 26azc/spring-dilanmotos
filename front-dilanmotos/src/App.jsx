@@ -1,111 +1,172 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 
-// Importa tus componentes
+// ---  IMPORTACIÓN DE COMPONENTES ---
 import Login from './components/login';
 import Register from './components/register'; 
-import Usuarios from './components/usuarios';
-import PqrsManager from './components/pqrs';
-import Caracteristicas from './components/caracteristicas';
-import Productos from './components/productos';
-import Motos from './components/moto';
-import TipoServicio from './components/tipoServicio';
+import Dashboard from './components/dashboard';
+import PerfilUsuario from './components/perfilUsuario';
 import AsistenteMotos from './components/IA';
+import Recomendaciones from './components/RecomendacionesPanel';
+import CrearPqrs from './components/CrearPqrs'; 
+import ServicioAdmin from './components/Servicio';
+import CatalogoKit from './components/catalogoKit';
+import CatalogoAceites from './components/catalogoAceites';
+import CatalogoLlantas from './components/catalogoLlantas';
+
+// Componentes de Gestión (ADMIN)
+import Usuarios from './components/usuarios';
 import Referencia from './components/referencia';
+import Motos from './components/moto';
+import Productos from './components/productos';
+import Caracteristicas from './components/caracteristicas';
+import TipoServicio from './components/tipoServicio';
+import PqrsManager from './components/pqrs';
+import Historial from './components/Historial';
 import Mecanico from './components/mecanico';
 
-// Estilos
 import './global.css';
 
+// ---  PROTECCIÓN POR ROL ---
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ children, requireAdmin = false }) => {
     const auth = localStorage.getItem('isAuthenticated');
-    return auth === 'true' ? children : <Navigate to="/login" />;
+    const rol = localStorage.getItem('rolUsuario');
+
+    if (auth !== 'true') return <Navigate to="/login" />;
+    if (requireAdmin && rol !== 'ADMIN') return <Navigate to="/dashboard" />;
+
+    return children;
 };
 
-const Sidebar = () => {
+// ---  LAYOUT ADMIN (Sidebar) ---
+// Este se aplica solo a las rutas de gestión para no ensuciar la vista del socio
+const AdminLayout = ({ children }) => {
     const location = useLocation();
-    const handleLogout = () => {
-        localStorage.removeItem('isAuthenticated');
-        window.location.href = '/login';
+    const handleLogout = () => { 
+        localStorage.clear(); 
+        window.location.href = '/login'; 
     };
 
-    return (
-        <aside className="sidebar">
-            <div className="sidebar-header">Dilan Motos</div>
-            <nav className="sidebar-nav">
-                <Link to="/usuarios" className={`nav-link ${location.pathname === '/usuarios' ? 'active' : ''}`}>
-                    <i className="fa-solid fa-users me-2"></i> Usuarios
-                </Link>
-                <Link to="/pqrs" className={`nav-link ${location.pathname === '/pqrs' ? 'active' : ''}`}>
-                    <i className="fa-solid fa-comments me-2"></i> PQRS
-                </Link>
-                <Link to = "/caracteristicas" className ={`nav-link ${location.pathname === '/caracteristicas' ? 'active' : ''}`}>
-                    <i className="fa-solid fa-cogs me-2"></i> Características
-                </Link>
-                <Link to = "/referencias" className ={`nav-link ${location.pathname === '/referencias' ? 'active' : ''}`}>
-                    <i className="fa-solid fa-cogs me-2"></i> Referencias
-                </Link>
-                <Link to = "/productos" className ={`nav-link ${location.pathname === '/productos' ? 'active' : ''}`}>
-                    <i className="fa-solid fa-boxes-stacked me-2"></i> Productos
-                </Link>
-                <Link to = "/tipo-servicio" className ={`nav-link ${location.pathname === '/tipo-servicio' ? 'active' : ''}`}>
-                    <i className="fa-solid fa-boxes-stacked me-2"></i> Tipos de Servicios
-                </Link>
-                 <Link to = "/mecanicos" className ={`nav-link ${location.pathname === '/mecanicos' ? 'active' : ''}`}>
-                    <i className="fa-solid fa-boxes-stacked me-2"></i> Mecanicos
-                </Link>
-                <Link to = "/motos" className ={`nav-link ${location.pathname === '/motos' ? 'active' : ''}`}>
-                    <i className="fa-solid fa-motorcycle me-2"></i> Motos
-                </Link>
+    const activeClass = (path) => location.pathname === path ? 'active' : '';
 
-                <Link to = "/asistente" className ={`nav-link ${location.pathname === '/asistente' ? 'active' : ''}`}>
-                    <i className="fa-solid fa-robot me-2"></i> Asistente IA
-                </Link>
-            </nav>
-            <div className="sidebar-footer">
-                <button onClick={handleLogout} className="btn-bs btn-danger w-100">
-                    <i className="fa-solid fa-right-from-bracket me-2"></i> Cerrar Sesión
-                </button>
-            </div>
-        </aside>
+    return (
+        <div className="app-container">
+            <aside className="sidebar">
+                <div className="sidebar-header">🛠️ PANEL CONTROL</div>
+                <nav className="sidebar-nav">
+                    <Link to="/dashboard" className="nav-link">
+                        <i className="fa-solid fa-house me-2"></i> Inicio Usuario
+                    </Link>
+                    <hr style={{opacity: 0.1, margin: '15px 0'}}/>
+                    
+                    <Link to="/usuarios" className={`nav-link ${activeClass('/usuarios')}`}>
+                        <i className="fa-solid fa-users me-2"></i> Usuarios
+                    </Link>
+                    <Link to="/motos" className={`nav-link ${activeClass('/motos')}`}>
+                        <i className="fa-solid fa-motorcycle me-2"></i> Motos
+                    </Link>
+                    <Link to="/referencias" className={`nav-link ${activeClass('/referencias')}`}>
+                        <i className="fa-solid fa-tags me-2"></i> Referencias
+                    </Link>
+                    <Link to="/productos" className={`nav-link ${activeClass('/productos')}`}>
+                        <i className="fa-solid fa-box me-2"></i> Productos
+                    </Link>
+
+                    <Link to="/servicios" className={`nav-link ${activeClass('/servicios')}`}>
+                        <i className="fa-solid fa-wrench me-2"></i> Servicios
+                    </Link>
+
+                    <Link to="/caracteristicas" className={`nav-link ${activeClass('/caracteristicas')}`}> 
+                        <i className="fa-solid fa-list me-2"></i> Características
+                    </Link>
+                    <Link to="/tipo-servicio" className={`nav-link ${activeClass('/tipo-servicio')}`}>
+                        <i className="fa-solid fa-gear me-2"></i> Tipos de Servicio
+                    </Link>
+                    <Link to="/mecanico" className={`nav-link ${activeClass('/mecanico')}`}>
+                        <i className="fa-solid fa-gear me-2"></i> Mecanicos
+                    </Link>
+
+                    <Link to="/pqrs" className={`nav-link ${activeClass('/pqrs')}`}>
+                        <i className="fa-solid fa-comments me-2"></i> PQRS
+                    </Link>
+                </nav>
+                <div className="sidebar-footer">
+                    <button onClick={handleLogout} className="btn-bs btn-danger w-100">
+                        <i className="fa-solid fa-power-off me-2"></i> Salir
+                    </button>
+                </div>
+            </aside>
+            <main className="main-content">
+                {children}
+            </main>
+        </div>
     );
 };
 
+// ---  COMPONENTE PRINCIPAL ---
 function App() {
     return (
         <Router>
             <Routes>
-                {/* 1. Redirección inicial: Si entran a "/" los manda a "/login" */}
+                {/* RUTAS PÚBLICAS */}
                 <Route path="/" element={<Navigate to="/login" />} />
-
-                {/* 2. Rutas Públicas */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/catalogoKit" element={<CatalogoKit />} />
+                <Route path="/catalogoAceites" element={<CatalogoAceites />} />
+                <Route path="/catalogoLlantas" element={<CatalogoLlantas />} />
 
-                {/* 3. Rutas Privadas Protegidas */}
-                <Route path="/*" element={
-                    <PrivateRoute>
-                        <div className="app-container">
-                            <Sidebar />
-                            <main className="main-content">
-                                <Routes>
-                                    <Route path="/referencias" element={<Referencia />} />
-                                    <Route path="/asistente" element={<PrivateRoute><AsistenteMotos /></PrivateRoute>} />
-                                    <Route path="/usuarios" element={<Usuarios />} />
-                                    <Route path="/pqrs" element={<PqrsManager />} />
-                                    <Route path="/caracteristicas" element={<Caracteristicas />} />
-                                    <Route path="/productos" element={<Productos />} />
-                                    <Route path="/motos" element={<Motos />} />
-                                    <Route path="/Tipo-servicio" element={<TipoServicio/>} />
-                                    <Route path="/mecanicos" element={<Mecanico/>} />
-                                    {/* Si alguien pone una ruta mal dentro del panel, vuelve a usuarios */}
-                                    <Route path="*" element={<Navigate to="/usuarios" />} />
-                                </Routes>
-                            </main>
-                        </div>
-                    </PrivateRoute>
+                {/* RUTAS DEL SOCIO (Vistas limpias, sin sidebar) */}
+                <Route path="/dashboard" element={
+                    <PrivateRoute><Dashboard /></PrivateRoute>
                 } />
+                <Route path="/historial" element={<PrivateRoute><Historial /></PrivateRoute>} />
+                <Route path="/nueva-pqrs" element={<PrivateRoute><CrearPqrs /></PrivateRoute>} />
+                <Route path="/perfil" element={
+                    <PrivateRoute><PerfilUsuario /></PrivateRoute>
+                } />
+                
+                <Route path="/asistente" element={
+                    <PrivateRoute><AsistenteMotos /></PrivateRoute>
+                } />
+                <Route path="/recomendaciones" element={
+                    <PrivateRoute><Recomendaciones /></PrivateRoute>
+                } />
+
+                {/* RUTAS ADMINISTRATIVAS (Con Sidebar y bloqueo de rol) */}
+                <Route path="/usuarios" element={
+                    <PrivateRoute requireAdmin><AdminLayout><Usuarios /></AdminLayout></PrivateRoute>
+                } />
+
+                <Route path="/servicios" element={
+                    <PrivateRoute requireAdmin><AdminLayout><ServicioAdmin /></AdminLayout></PrivateRoute>
+                } />
+
+                <Route path="/referencias" element={
+                    <PrivateRoute requireAdmin><AdminLayout><Referencia /></AdminLayout></PrivateRoute>
+                } />
+                <Route path="/motos" element={
+                    <PrivateRoute requireAdmin><AdminLayout><Motos /></AdminLayout></PrivateRoute>
+                } />
+                <Route path="/productos" element={
+                    <PrivateRoute requireAdmin><AdminLayout><Productos /></AdminLayout></PrivateRoute>
+                } />
+                <Route path="/caracteristicas" element={
+                    <PrivateRoute requireAdmin><AdminLayout><Caracteristicas /></AdminLayout></PrivateRoute>
+                } />
+                <Route path="/tipo-servicio" element={
+                    <PrivateRoute requireAdmin><AdminLayout><TipoServicio /></AdminLayout></PrivateRoute>
+                } />
+                <Route path="/pqrs" element={
+                    <PrivateRoute requireAdmin><AdminLayout><PqrsManager /></AdminLayout></PrivateRoute>
+                } />
+                <Route path="/mecanico" element={
+                    <PrivateRoute requireAdmin><AdminLayout><Mecanico /></AdminLayout></PrivateRoute>
+                } />
+
+                {/* REDIRECCIÓN POR DEFECTO */}
+                <Route path="*" element={<Navigate to="/dashboard" />} />
             </Routes>
         </Router>
     );

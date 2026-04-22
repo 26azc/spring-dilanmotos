@@ -4,14 +4,15 @@ import com.grupouno.spring.dilanmotos.models.Moto;
 import com.grupouno.spring.dilanmotos.models.Referencia;
 import com.grupouno.spring.dilanmotos.models.Usuarios;
 import com.grupouno.spring.dilanmotos.repositories.UsuarioRepository;
+import com.grupouno.spring.dilanmotos.repositories.MarcaRepository;
+import com.grupouno.spring.dilanmotos.repositories.MotoRepository;
+import com.grupouno.spring.dilanmotos.repositories.ReferenciaRepository;
+import com.grupouno.spring.dilanmotos.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import com.grupouno.spring.dilanmotos.repositories.MarcaRepository;
-import com.grupouno.spring.dilanmotos.repositories.MotoRepository;
-import com.grupouno.spring.dilanmotos.repositories.ReferenciaRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,27 +29,39 @@ public class UsuarioRestController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
     @Autowired
     private MotoRepository motoRepository;
+
     @Autowired
     private ReferenciaRepository referenciaRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // --- 💡 NUEVO MÉTODO: LOGIN ---
-    @Operation(summary = "Autenticar usuario", description = "Verifica credenciales y retorna los datos del usuario incluyendo el ID")
+    @Autowired
+    private JwtUtil jwtUtil; // Inyectamos la fábrica de tokens
+
+    // --- MÉTODO LOGIN CORREGIDO ---
+    @Operation(summary = "Autenticar usuario", description = "Verifica credenciales y retorna los datos del usuario incluyendo el TOKEN JWT")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales) {
         String correo = credenciales.get("correo");
         String contrasena = credenciales.get("contrasena");
 
-        // Buscamos al usuario por correo usando el método que ya tienes en tu repo
         return usuarioRepository.findByCorreoConMotos(correo)
                 .map(usuario -> {
-                    // Comparamos la contraseña plana con la encriptada
                     if (passwordEncoder.matches(contrasena, usuario.getContrasena())) {
-                        return ResponseEntity.ok(usuario); // Retorna el usuario completo (con su ID)
+                        // Generamos el token para el usuario
+                        String token = jwtUtil.generateToken(usuario.getCorreo());
+
+                        // Retornamos un mapa con el token y los datos necesarios para el frontend
+                        return ResponseEntity.ok(Map.of(
+                                "token", token,
+                                "idUsuario", usuario.getIdUsuario(),
+                                "nombre", usuario.getNombre(),
+                                "correo", usuario.getCorreo(),
+                                "rol", usuario.getRol() != null ? usuario.getRol() : "USER"));
                     } else {
                         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
                     }
@@ -68,7 +81,6 @@ public class UsuarioRestController {
 
     @Operation(summary = "Registrar nuevo usuario", description = "Crea un usuario con contraseña encriptada")
     @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente")
-    // Se quita "/registrar" para que el POST a /api/usuarios funcione desde el CRUD
     @PostMapping
     @Transactional
     public ResponseEntity<?> guardarUsuario(@RequestBody Map<String, Object> datos) {
@@ -124,5 +136,13 @@ public class UsuarioRestController {
         }
         usuarioRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Obtener perfil de usuario", description = "Retorna los datos del usuario y sus motos asociadas")
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuarios> obtenerPerfil(@PathVariable int id) {
+        return usuarioRepository.findById(id)
+                .map(usuario -> ResponseEntity.ok(usuario))
+                .orElse(ResponseEntity.notFound().build());
     }
 }

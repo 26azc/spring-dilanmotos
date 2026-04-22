@@ -1,31 +1,35 @@
 import { useEffect, useState } from "react";
 
 export default function Motos() {
-    const [motos, setMotos] = useState([]); // Inicializado como array siempre
+    const [motos, setMotos] = useState([]); 
     const [marcas, setMarcas] = useState([]);
-    const [nuevo, setNuevo] = useState({ modelo: '', cilindraje: '', idMarca: '', tipoReparacion: '' });
+    const [nuevo, setNuevo] = useState({ modelo: '', cilindraje: '', idMarca: '', tipoServicio: '' });
     const [editMode, setEditMode] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
+
+    // 1. Obtener el token del localStorage
+    const token = localStorage.getItem('token');
 
     const cargarDatos = async () => {
         try {
             const [resM, resMa] = await Promise.all([
-                fetch('http://localhost:8080/api/motos'),
-                fetch('http://localhost:8080/api/marcas')
+                fetch('http://localhost:8080/api/motos', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }),
+                fetch('http://localhost:8080/api/marcas', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
             ]);
 
-            // Verificamos que las respuestas sean exitosas antes de convertir a JSON
             if (resM.ok && resMa.ok) {
                 const dataMotos = await resM.json();
                 const dataMarcas = await resMa.json();
-                
-                // Blindaje: Si el backend no devuelve un array, forzamos uno vacío
                 setMotos(Array.isArray(dataMotos) ? dataMotos : []);
                 setMarcas(Array.isArray(dataMarcas) ? dataMarcas : []);
             }
         } catch (error) {
             console.error("Error cargando datos:", error);
-            setMotos([]); // Evita que .map() falle si el servidor está caído
+            setMotos([]); 
         }
     };
 
@@ -38,7 +42,7 @@ export default function Motos() {
             modelo: moto.modelo,
             cilindraje: moto.cilindraje,
             idMarca: moto.marca?.idMarca || '',
-            tipoReparacion: moto.tipoReparacion || ''
+            tipoServicio: moto.tipoServicio || ''
         });
     };
 
@@ -49,27 +53,56 @@ export default function Motos() {
         const payload = {
             modelo: nuevo.modelo,
             cilindraje: parseFloat(nuevo.cilindraje),
-            tipoReparacion: nuevo.tipoReparacion,
+            tipoServicio: nuevo.tipoServicio,
             marca: { idMarca: parseInt(nuevo.idMarca) },
-            usuario: { idUsuario: 1 } // Mantener el ID del usuario logueado aquí
+            usuario: { idUsuario: 1 } 
         };
 
         try {
             const res = await fetch(url, {
                 method: editMode ? 'PUT' : 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(payload)
             });
 
             if (res.ok) {
-                alert(editMode ? "Moto actualizada" : "Moto guardada");
-                setNuevo({ modelo: '', cilindraje: '', idMarca: '', tipoReparacion: '' });
+                alert(editMode ? "✅ Moto actualizada" : "✅ Moto guardada");
+                setNuevo({ modelo: '', cilindraje: '', idMarca: '', tipoServicio: '' });
                 setEditMode(false);
                 setSelectedId(null);
-                cargarDatos();
+                await cargarDatos();
             }
         } catch (error) {
-            alert("Error al conectar con el servidor");
+            alert("❌ Error al conectar con el servidor");
+        }
+    };
+
+    // 2. Función de eliminación con Authorization Header y Await
+    const eliminarMoto = async (id) => {
+        if(window.confirm("¿Estás seguro de eliminar esta moto?")) {
+            try {
+                const res = await fetch(`http://localhost:8080/api/motos/${id}`, {
+                    method: 'DELETE',
+                    headers: { 
+                        'Authorization': `Bearer ${token}` 
+                    }
+                });
+
+                if (res.ok) {
+                    // Refrescar la tabla solo si el servidor confirma el borrado
+                    await cargarDatos(); 
+                } else {
+                    const errorMsg = await res.text();
+                    console.error("Error del servidor:", errorMsg);
+                    alert("No se pudo eliminar la moto (Error " + res.status + ")");
+                }
+            } catch (error) {
+                console.error("Error en la petición DELETE:", error);
+                alert("Error de red al intentar eliminar");
+            }
         }
     };
 
@@ -99,7 +132,7 @@ export default function Motos() {
                         </div>
                         <div className="col-md-6 mb-3">
                             <label className="form-label">Estado / Reparación</label>
-                            <input className="input-bs" value={nuevo.tipoReparacion} onChange={e => setNuevo({...nuevo, tipoReparacion: e.target.value})} required />
+                            <input className="input-bs" value={nuevo.tipoServicio} onChange={e => setNuevo({...nuevo, tipoServicio: e.target.value})} required />
                         </div>
                     </div>
 
@@ -110,7 +143,7 @@ export default function Motos() {
                         {editMode && (
                             <button type="button" className="btn-bs btn-secondary" onClick={() => {
                                 setEditMode(false);
-                                setNuevo({ modelo: '', cilindraje: '', idMarca: '', tipoReparacion: '' });
+                                setNuevo({ modelo: '', cilindraje: '', idMarca: '', tipoServicio: '' });
                             }}>Cancelar</button>
                         )}
                     </div>
@@ -122,7 +155,6 @@ export default function Motos() {
                     <div className="custom-table-header">
                         <div>Marca</div><div>Modelo</div><div>Cilindraje</div><div className="text-center">Acciones</div>
                     </div>
-                    {/* El operador && asegura que solo mapee si hay datos */}
                     {motos.length > 0 ? (
                         motos.map(m => (
                             <div className="custom-table-row" key={m.idMoto}>
@@ -133,12 +165,7 @@ export default function Motos() {
                                     <button className="btn-bs btn-warning btn-sm" onClick={() => prepararEdicion(m)}>
                                         <i className="fa-solid fa-pen"></i>
                                     </button>
-                                    <button className="btn-bs btn-danger btn-sm" onClick={() => {
-                                        if(window.confirm("¿Eliminar esta moto?")) {
-                                            fetch(`http://localhost:8080/api/motos/${m.idMoto}`, {method:'DELETE'})
-                                            .then(() => cargarDatos());
-                                        }
-                                    }}>
+                                    <button className="btn-bs btn-danger btn-sm" onClick={() => eliminarMoto(m.idMoto)}>
                                         <i className="fa-solid fa-trash"></i>
                                     </button>
                                 </div>

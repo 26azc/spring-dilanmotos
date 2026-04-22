@@ -8,15 +8,24 @@ export default function Caracteristicas() {
     const [selectedId, setSelectedId] = useState(null);
 
     const API_URL = 'http://localhost:8080/api/caracteristicas';
+    const token = localStorage.getItem('token');
 
     const cargarDatos = async () => {
         try {
+            const opciones = {
+                headers: { 'Authorization': `Bearer ${token}` }
+            };
             const [resCar, resMoto] = await Promise.all([
-                fetch(API_URL).then(res => res.json()),
-                fetch('http://localhost:8080/api/motos').then(res => res.json())
+                fetch(API_URL, opciones),
+                fetch('http://localhost:8080/api/motos', opciones)
             ]);
-            setCaracteristicas(resCar);
-            setMotos(resMoto);
+            
+            if (resCar.ok && resMoto.ok) {
+                const dataCar = await resCar.json();
+                const dataMoto = await resMoto.json();
+                setCaracteristicas(dataCar);
+                setMotos(dataMoto);
+            }
         } catch (e) { console.error("Error cargando:", e); }
     };
 
@@ -33,7 +42,10 @@ export default function Caracteristicas() {
         try {
             const res = await fetch(editMode ? `${API_URL}/${selectedId}` : API_URL, {
                 method: editMode ? 'PUT' : 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(payload)
             });
 
@@ -92,8 +104,14 @@ export default function Caracteristicas() {
                             <div className="text-wrap">{c.descripcion}</div>
                             <div className="fw-bold text-primary">{c.moto?.modelo || 'N/A'}</div>
                             <div className="text-center">
-                                <button className="btn-bs btn-danger btn-sm" onClick={() => {
-                                    if(window.confirm("¿Borrar?")) fetch(`${API_URL}/${c.idCaracteristica}`, {method:'DELETE'}).then(()=>cargarDatos())
+                                <button className="btn-bs btn-danger btn-sm" onClick={async () => {
+                                    if(window.confirm("¿Borrar?")) {
+                                        await fetch(`${API_URL}/${c.idCaracteristica}`, {
+                                            method:'DELETE',
+                                            headers: { 'Authorization': `Bearer ${token}` }
+                                        });
+                                        cargarDatos();
+                                    }
                                 }}>
                                     <i className="fa-solid fa-trash"></i>
                                 </button>

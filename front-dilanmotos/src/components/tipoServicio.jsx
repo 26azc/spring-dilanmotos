@@ -2,44 +2,46 @@ import React, { useState, useEffect } from 'react';
 import '../global.css';
 
 const TipoServicio = () => {
-    // ESTADOS
-    const [tipoServicios, setTipoServicios] = useState([]); // lista de servicios
-    const [busqueda, setBusqueda] = useState(""); // barra de búsqueda 
-    const [nuevoTipo, setNuevoTipo] = useState({ nombre: "", descripcion: "" }); // formulario
-    const [editMode, setEditMode] = useState(false); // controla si estamos editando
+    const [tipoServicios, setTipoServicios] = useState([]); 
+    const [busqueda, setBusqueda] = useState(""); 
+    const [nuevoTipo, setNuevoTipo] = useState({ nombre: "", descripcion: "" }); 
+    const [editMode, setEditMode] = useState(false); 
 
     const API_URL = "http://localhost:8080/api/tipo-servicio";
+    const token = localStorage.getItem('token');
 
-    // Cargamos los datos al iniciar 
     useEffect(() => {
         cargarServicios();
     }, []);
 
-    // GET - Cargar servicios
     const cargarServicios = async () => {
         try {
             const url = busqueda ? `${API_URL}?search=${busqueda}` : API_URL;
-            const response = await fetch(url);
-            const data = await response.json();
-            setTipoServicios(data);
+            const response = await fetch(url, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setTipoServicios(data);
+            }
         } catch (error) {
             console.log("Error al conectar con la API:", error);
         }
     };
 
-    // POST / PUT - Guardar o Actualizar
     const handleGuardar = async (e) => {
         e.preventDefault();
         const metodo = editMode ? 'PUT' : 'POST';
-        
-        // CORRECCIÓN: Usamos id_tipo_servicio (sincronizado con Java y DB)
         const idActual = nuevoTipo.id_tipo_servicio;
         const url = editMode ? `${API_URL}/${idActual}` : API_URL;
 
         try {
             const response = await fetch(url, {
                 method: metodo,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(nuevoTipo)
             });
 
@@ -54,15 +56,12 @@ const TipoServicio = () => {
         }
     };
 
-    // Preparar el formulario para editar
     const iniciarEdicion = (servicio) => {
         setEditMode(true);
-        setNuevoTipo(servicio); // Carga los datos en el formulario
+        setNuevoTipo(servicio); 
     };
 
-    // DELETE - Eliminar
     const handleEliminar = async (id) => {
-        // Validación preventiva para evitar el error 'undefined'
         if (!id) {
             console.error("ID no recibido en handleEliminar");
             return;
@@ -71,11 +70,11 @@ const TipoServicio = () => {
         if (window.confirm("¿Estás seguro de eliminar este servicio?")) {
             try {
                 const response = await fetch(`${API_URL}/${id}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
                
                 if (response.status === 204 || response.ok) {
-                    // Filtramos usando el nombre de variable correcto
                     setTipoServicios(tipoServicios.filter(ts => ts.id_tipo_servicio !== id));
                     alert("Registro eliminado con éxito!");
                 } else {
@@ -91,7 +90,6 @@ const TipoServicio = () => {
         <div className="container mt-4">
             <h2 className="text-primary">Gestión de Tipos de Servicio</h2>
             <div className="main-content-inner">
-                {/* Formulario de Registro/Edición */}
                 <div className="card-panel">
                     <h3 className="text-primary">{editMode ? 'Editar Tipo de Servicio' : 'Registrar Nuevo Servicio'}</h3>
                     <hr />
@@ -130,7 +128,6 @@ const TipoServicio = () => {
                     </form>
                 </div>
 
-                {/* Tabla de Datos */}
                 <div className="card-panel mt-4">
                     <div className="custom-table-container">
                         <div className="custom-table-header">                        

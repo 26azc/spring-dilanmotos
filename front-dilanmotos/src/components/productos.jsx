@@ -9,19 +9,29 @@ export default function Productos() {
         nombre: '', descripcion: '', precio: '', idMarca: '', idCategoria: '' 
     });
 
+    // Recuperamos el token del localStorage para todas las peticiones
+    const token = localStorage.getItem('token');
+
     const cargarDatos = async () => {
         try {
-            // Usamos try/catch individual para que un 404 no rompa todo
-            const fetchJson = (url) => fetch(url).then(r => r.ok ? r.json() : []);
+            // Definimos los headers con el Bearer Token
+            const headers = { 'Authorization': `Bearer ${token}` };
             
-            const dataP = await fetchJson('http://localhost:8080/api/productos');
-            const dataM = await fetchJson('http://localhost:8080/api/marcas');
-            const dataC = await fetchJson('http://localhost:8080/api/categorias');
+            const fetchJson = (url) => fetch(url, { headers }).then(r => r.ok ? r.json() : []);
+            
+            // Cargamos todo en paralelo
+            const [dataP, dataM, dataC] = await Promise.all([
+                fetchJson('http://localhost:8080/api/productos'),
+                fetchJson('http://localhost:8080/api/marcas'),
+                fetchJson('http://localhost:8080/api/categorias')
+            ]);
 
             setProductos(dataP);
             setMarcas(dataM);
             setCategorias(dataC);
-        } catch (e) { console.error("Error cargando productos:", e); }
+        } catch (e) { 
+            console.error("Error cargando datos:", e); 
+        }
     };
 
     useEffect(() => { cargarDatos(); }, []);
@@ -36,16 +46,44 @@ export default function Productos() {
             categoria: { idCategoria: parseInt(nuevo.idCategoria) }
         };
 
-        const res = await fetch('http://localhost:8080/api/productos', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+        try {
+            const res = await fetch('http://localhost:8080/api/productos', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify(payload)
+            });
 
-        if (res.ok) {
-            setNuevo({ nombre: '', descripcion: '', precio: '', idMarca: '', idCategoria: '' });
-            cargarDatos();
-            alert("Producto guardado");
+            if (res.ok) {
+                setNuevo({ nombre: '', descripcion: '', precio: '', idMarca: '', idCategoria: '' });
+                await cargarDatos();
+                alert("✅ Producto guardado");
+            } else {
+                alert("❌ Error al guardar: " + res.status);
+            }
+        } catch (error) {
+            console.error("Error en POST:", error);
+        }
+    };
+
+    const eliminarProducto = async (id) => {
+        if (window.confirm("¿Estás seguro de eliminar este producto?")) {
+            try {
+                const res = await fetch(`http://localhost:8080/api/productos/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    await cargarDatos();
+                } else {
+                    alert("No se pudo eliminar el producto.");
+                }
+            } catch (error) {
+                console.error("Error en DELETE:", error);
+            }
         }
     };
 
@@ -60,19 +98,21 @@ export default function Productos() {
                     
                     <div className="row">
                         <div className="col-md-6">
+                            <label className="form-label text-muted small">Marca</label>
                             <select className="input-bs" value={nuevo.idMarca} onChange={e => setNuevo({...nuevo, idMarca: e.target.value})} required>
-                                <option value="">Marca...</option>
+                                <option value="">Seleccione marca...</option>
                                 {marcas.map(m => <option key={m.idMarca} value={m.idMarca}>{m.nombre}</option>)}
                             </select>
                         </div>
                         <div className="col-md-6">
+                            <label className="form-label text-muted small">Categoría</label>
                             <select className="input-bs" value={nuevo.idCategoria} onChange={e => setNuevo({...nuevo, idCategoria: e.target.value})} required>
-                                <option value="">Categoría...</option>
+                                <option value="">Seleccione categoría...</option>
                                 {categorias.map(c => <option key={c.idCategoria} value={c.idCategoria}>{c.nombre}</option>)}
                             </select>
                         </div>
                     </div>
-                    <button type="submit" className="btn-bs btn-primary w-100 mt-2">Registrar Producto</button>
+                    <button type="submit" className="btn-bs btn-primary w-100 mt-3">Registrar Producto</button>
                 </form>
             </div>
 
@@ -81,18 +121,22 @@ export default function Productos() {
                     <div className="custom-table-header">
                         <div>Producto</div><div>Marca</div><div>Precio</div><div className="text-center">Acciones</div>
                     </div>
-                    {productos.map(p => (
-                        <div className="custom-table-row" key={p.idProducto}>
-                            <div className="fw-bold">{p.nombre}</div>
-                            <div>{p.marca?.nombre || 'S/M'}</div>
-                            <div className="text-success fw-bold">${p.precio}</div>
-                            <div className="text-center">
-                                <button className="btn-bs btn-danger btn-sm" onClick={() => {/* eliminar */}}>
-                                    <i className="fa-solid fa-trash"></i>
-                                </button>
+                    {productos.length > 0 ? (
+                        productos.map(p => (
+                            <div className="custom-table-row" key={p.idProducto}>
+                                <div className="fw-bold">{p.nombre}</div>
+                                <div>{p.marca?.nombre || 'S/M'}</div>
+                                <div className="text-success fw-bold">${p.precio}</div>
+                                <div className="text-center">
+                                    <button className="btn-bs btn-danger btn-sm" onClick={() => eliminarProducto(p.idProducto)}>
+                                        <i className="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    ) : (
+                        <div className="p-3 text-center text-muted">No hay productos disponibles.</div>
+                    )}
                 </div>
             </div>
         </div>

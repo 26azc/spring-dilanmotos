@@ -66,4 +66,9 @@ public class MotoRestController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/motos/usuario/{id}")
+public List<Moto> listarPorUsuario(@PathVariable Integer id) {
+    return motoRepository.findByUsuario_IdUsuario(id);
+}
 }

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import '../global.css';
 
 export default function Pqrs() {
-    // 💡 Obtenemos el ID del usuario logueado
     const idLogueado = localStorage.getItem("idUsuario");
-
+    const token = localStorage.getItem("token");
     const [solicitudes, setSolicitudes] = useState([]);
     const [nuevo, setNuevo] = useState({ 
         tipo: 'Peticion', 
@@ -23,7 +23,9 @@ export default function Pqrs() {
 
     const cargarDatos = async () => {
         try {
-            const res = await fetch(API_URL);
+            const res = await fetch(API_URL, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             if (res.ok) {
                 const data = await res.json();
                 setSolicitudes(Array.isArray(data) ? data : []);
@@ -40,18 +42,12 @@ export default function Pqrs() {
     const guardar = async (e) => {
         e.preventDefault();
 
-        if (!idLogueado) {
-            alert("⚠️ Debes iniciar sesión para gestionar solicitudes.");
-            return;
-        }
-
-        // 🛡️ BLINDAJE: Construimos el JSON exacto para evitar errores de nulos en la DB
         const payload = {
             idUsuario: parseInt(idLogueado),
             tipo: nuevo.tipo,
             asunto: nuevo.asunto,
             descripcion: nuevo.descripcion,
-            comentario_usuario: nuevo.comentario_usuario.trim() || "Sin comentario",
+            comentario_usuario: nuevo.comentario_usuario || nuevo.descripcion,
             estado: nuevo.estado || 'PENDIENTE',
             respuesta_admin: nuevo.respuesta_admin || "Sin respuesta",
             calificacion_servicio: nuevo.calificacion_servicio || "-",
@@ -64,21 +60,22 @@ export default function Pqrs() {
         try {
             const res = await fetch(url, {
                 method: method,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(payload)
             });
 
             if (res.ok) {
-                alert(editMode ? "✅ Solicitud actualizada con éxito" : "✅ Solicitud enviada correctamente");
+                alert(editMode ? "Registro actualizado" : "Registro creado");
                 resetForm();
                 cargarDatos();
             } else {
-                const errorData = await res.text();
-                console.error("Fallo del servidor:", errorData);
-                alert("❌ Error 500: Revisa que todos los campos coincidan en Java y la DB.");
+                alert("Error 500 en el servidor");
             }
         } catch (err) {
-            alert("❌ Error de conexión. ¿Está encendido el Backend?");
+            alert("Error de conexion");
         }
     };
 
@@ -108,36 +105,29 @@ export default function Pqrs() {
         });
     };
 
-    const formatearFecha = (fechaRaw) => {
-        if (!fechaRaw) return "Pendiente";
-        return fechaRaw.replace('T', ' ').substring(0, 16);
-    };
-
     return (
         <div className="main-content-inner">
             <div className="card-panel">
                 <h3 className="text-primary">
-                    <i className="fa-solid fa-file-signature me-2"></i>
                     {editMode ? 'Gestionar Solicitud' : 'Nueva PQRS'}
                 </h3>
                 <hr />
                 <form onSubmit={guardar}>
                     <div className="row">
-                        <div className="col-md-6">
-                            <label className="fw-bold">Tipo de Trámite</label>
+                        <div className="col-md-6 mb-3">
+                            <label className="fw-bold">Tipo de Tramite</label>
                             <select className="input-bs" value={nuevo.tipo} onChange={e => setNuevo({...nuevo, tipo: e.target.value})} disabled={editMode}>
-                                <option value="Peticion">Petición</option>
+                                <option value="Peticion">Peticion</option>
                                 <option value="Queja">Queja</option>
                                 <option value="Reclamo">Reclamo</option>
                                 <option value="Sugerencia">Sugerencia</option>
                             </select>
                         </div>
                         {editMode && (
-                            <div className="col-md-6">
-                                <label className="fw-bold text-danger">Cambiar Estado</label>
-                                <select className="input-bs border-danger" value={nuevo.estado} onChange={e => setNuevo({...nuevo, estado: e.target.value})}>
+                            <div className="col-md-6 mb-3">
+                                <label className="fw-bold text-danger">Estado Actual</label>
+                                <select className="input-bs" value={nuevo.estado} onChange={e => setNuevo({...nuevo, estado: e.target.value})}>
                                     <option value="PENDIENTE">PENDIENTE</option>
-                                    <option value="RECIBIDO">RECIBIDO</option>
                                     <option value="EN PROCESO">EN PROCESO</option>
                                     <option value="RESPONDIDA">RESPONDIDA</option>
                                     <option value="CERRADA">CERRADA</option>
@@ -146,25 +136,26 @@ export default function Pqrs() {
                         )}
                     </div>
 
-                    <label className="mt-2 fw-bold">Asunto</label>
-                    <input className="input-bs" value={nuevo.asunto} onChange={e => setNuevo({...nuevo, asunto: e.target.value})} required disabled={editMode} placeholder="Ej: Problemas con mi factura" />
-                    
-                    <label className="fw-bold">Detalle de la Solicitud</label>
-                    <textarea className="input-bs" rows="3" value={nuevo.descripcion} onChange={e => setNuevo({...nuevo, descripcion: e.target.value})} required disabled={editMode} placeholder="Explica detalladamente..." />
+                    <div className="mb-3">
+                        <label className="fw-bold">Asunto</label>
+                        <input className="input-bs" value={nuevo.asunto} onChange={e => setNuevo({...nuevo, asunto: e.target.value})} required disabled={editMode} />
+                    </div>
 
-                    <label className="fw-bold mt-2 text-secondary">Comentario del Usuario</label>
-                    <input className="input-bs" value={nuevo.comentario_usuario} onChange={e => setNuevo({...nuevo, comentario_usuario: e.target.value})} required disabled={editMode} placeholder="Observación final del usuario..." />
+                    <div className="mb-3">
+                        <label className="fw-bold">Descripcion</label>
+                        <textarea className="input-bs" rows="3" value={nuevo.descripcion} onChange={e => setNuevo({...nuevo, descripcion: e.target.value})} required disabled={editMode} />
+                    </div>
 
                     {editMode && (
-                        <div className="mt-3 p-3 bg-light border border-success rounded">
-                            <label className="fw-bold text-success">Respuesta Oficial del Administrador</label>
-                            <textarea className="input-bs border-success" rows="3" value={nuevo.respuesta_admin} onChange={e => setNuevo({...nuevo, respuesta_admin: e.target.value})} placeholder="Escribe la solución aquí..." />
+                        <div className="mt-3 p-3 bg-light border rounded">
+                            <label className="fw-bold text-success">Respuesta del Administrador</label>
+                            <textarea className="input-bs" rows="3" value={nuevo.respuesta_admin} onChange={e => setNuevo({...nuevo, respuesta_admin: e.target.value})} />
                         </div>
                     )}
 
-                    <div className="d-flex gap-2 mt-3">
-                        <button type="submit" className={`btn-bs ${editMode ? 'btn-success' : 'btn-primary'} flex-grow-1`}>
-                            {editMode ? 'Actualizar y Responder' : 'Enviar Solicitud'}
+                    <div className="d-flex gap-2 mt-4">
+                        <button type="submit" className="btn-bs btn-primary flex-grow-1">
+                            {editMode ? 'Guardar Cambios' : 'Crear PQRS'}
                         </button>
                         {editMode && <button type="button" className="btn-bs btn-secondary" onClick={resetForm}>Cancelar</button>}
                     </div>
@@ -172,42 +163,41 @@ export default function Pqrs() {
             </div>
 
             <div className="card-panel mt-4">
-                <h5>Historial de Gestión de PQRS</h5>
+                <h4 className="mb-4">Listado General de PQRS</h4>
                 <div className="custom-table-container">
                     <div className="custom-table-header">
-                        <div>Enviado</div>
                         <div>Tipo</div>
                         <div>Asunto</div>
                         <div>Estado</div>
                         <div className="text-center">Acciones</div>
                     </div>
-                    {solicitudes.length > 0 ? solicitudes.map(p => (
+                    {solicitudes.map(p => (
                         <div className="custom-table-row" key={p.idPqrs}>
-                            <div className="small">{formatearFecha(p.fecha)}</div>
                             <div className="fw-bold">{p.tipo}</div>
                             <div>{p.asunto}</div>
                             <div>
-                                <span className={`badge ${p.estado === 'PENDIENTE' ? 'bg-warning' : p.estado === 'RESPONDIDA' ? 'bg-success' : 'bg-primary'}`}>
+                                <span className={`badge ${p.estado === 'PENDIENTE' ? 'bg-warning' : 'bg-success'}`}>
                                     {p.estado}
                                 </span>
                             </div>
-                            <div className="text-center d-flex gap-1 justify-content-center">
-                                <button className="btn-bs btn-success btn-sm" onClick={() => iniciarEdicion(p)} title="Editar/Atender">
-                                    <i className="fa-solid fa-pen-to-square"></i>
+                            <div className="text-center d-flex gap-2 justify-content-center">
+                                <button className="btn-bs btn-success btn-sm" onClick={() => iniciarEdicion(p)}>
+                                    Editar
                                 </button>
                                 <button className="btn-bs btn-danger btn-sm" onClick={async () => {
-                                    if(window.confirm("¿Deseas eliminar este registro de forma permanente?")) {
-                                        await fetch(`${API_URL}/${p.idPqrs}`, {method:'DELETE'});
+                                    if(window.confirm("¿Eliminar registro?")) {
+                                        await fetch(`${API_URL}/${p.idPqrs}`, {
+                                            method:'DELETE',
+                                            headers: { 'Authorization': `Bearer ${token}` }
+                                        });
                                         cargarDatos();
                                     }
                                 }}>
-                                    <i className="fa-solid fa-trash"></i>
+                                    Borrar
                                 </button>
                             </div>
                         </div>
-                    )) : (
-                        <div className="text-center p-4">No hay solicitudes registradas.</div>
-                    )}
+                    ))}
                 </div>
             </div>
         </div>
