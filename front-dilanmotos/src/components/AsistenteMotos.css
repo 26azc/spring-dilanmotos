@@ -20,6 +20,7 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    flex-shrink: 0;
 }
 
 .avatar {
@@ -33,6 +34,7 @@
     justify-content: center;
     font-weight: bold;
     font-size: 1.2rem;
+    flex-shrink: 0;
 }
 
 .header-info h2 { margin: 0; font-size: 1.1rem; }
@@ -45,6 +47,7 @@
     border-bottom: 1px solid #eee;
     font-size: 0.9rem;
     color: #555;
+    flex-shrink: 0;
 }
 
 /* Área de Mensajes */
@@ -133,6 +136,7 @@
     padding: 15px;
     background: white;
     border-top: 1px solid #eee;
+    flex-shrink: 0;
 }
 
 .chat-input-area form {
@@ -146,6 +150,7 @@
     border: 1px solid #ddd;
     border-radius: 25px;
     outline: none;
+    font-size: 0.95rem;
 }
 
 .chat-input-area button {
@@ -157,6 +162,119 @@
     cursor: pointer;
     font-weight: bold;
     transition: 0.3s;
+    flex-shrink: 0;
 }
 
 .chat-input-area button:disabled { background-color: #ccc; }
+
+/* ============================================= */
+/* --- RESPONSIVE: TABLET (max-width: 768px) --- */
+/* ============================================= */
+@media (max-width: 768px) {
+    .chat-container {
+        max-width: 100%;
+        margin: 0;
+        height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .chat-header {
+        padding: 12px 15px;
+        gap: 10px;
+    }
+
+    .avatar {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+
+    .header-info h2 {
+        font-size: 1rem;
+    }
+
+    .chat-messages {
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .bubble {
+        max-width: 90%;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+    }
+
+    .chat-input-area {
+        padding: 10px;
+    }
+
+    .chat-input-area input {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+    }
+
+    .chat-input-area button {
+        padding: 0 16px;
+        font-size: 0.9rem;
+    }
+
+    /* Tablas responsivas dentro del chat */
+    .bubble.ia table {
+        font-size: 0.75rem;
+    }
+
+    .bubble.ia th, .bubble.ia td {
+        padding: 5px;
+    }
+}
+
+/* ============================================= */
+/* --- RESPONSIVE: SMALL (max-width: 480px) --- */
+/* ============================================= */
+@media (max-width: 480px) {
+    .chat-header {
+        padding: 10px 12px;
+    }
+
+    .header-info h2 {
+        font-size: 0.9rem;
+    }
+
+    .header-info p {
+        font-size: 0.7rem;
+    }
+
+    .vehicle-selector {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+
+    .chat-messages {
+        padding: 10px;
+    }
+
+    .bubble {
+        max-width: 92%;
+        font-size: 0.85rem;
+    }
+
+    .bubble.ia li {
+        padding: 8px;
+        font-size: 0.8rem;
+    }
+
+    .chat-input-area form {
+        gap: 8px;
+    }
+
+    .chat-input-area input {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+
+    .chat-input-area button {
+        padding: 0 14px;
+        font-size: 0.85rem;
+    }
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 
 // ---  IMPORTACIÓN DE COMPONENTES ---
@@ -39,10 +39,12 @@ const PrivateRoute = ({ children, requireAdmin = false }) => {
     return children;
 };
 
-// ---  LAYOUT ADMIN (Sidebar) ---
+// ---  LAYOUT ADMIN (Sidebar con Hamburger Responsivo) ---
 // Este se aplica solo a las rutas de gestión para no ensuciar la vista del socio
 const AdminLayout = ({ children }) => {
     const location = useLocation();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
     const handleLogout = () => { 
         localStorage.clear(); 
         window.location.href = '/login'; 
@@ -50,44 +52,64 @@ const AdminLayout = ({ children }) => {
 
     const activeClass = (path) => location.pathname === path ? 'active' : '';
 
+    // Cerrar sidebar al navegar en móvil
+    const handleNavClick = () => {
+        setSidebarOpen(false);
+    };
+
     return (
         <div className="app-container">
-            <aside className="sidebar">
+            {/* Botón Hamburger (visible solo en móvil) */}
+            <button 
+                className="hamburger-btn" 
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                aria-label="Abrir menú"
+            >
+                <i className={`fa-solid ${sidebarOpen ? 'fa-xmark' : 'fa-bars'}`}></i>
+            </button>
+
+            {/* Overlay para cerrar sidebar al hacer click fuera */}
+            <div 
+                className={`sidebar-overlay ${sidebarOpen ? 'active' : ''}`} 
+                onClick={() => setSidebarOpen(false)}
+            ></div>
+
+            <aside className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
                 <div className="sidebar-header">🛠️ PANEL CONTROL</div>
                 <nav className="sidebar-nav">
-                    <Link to="/dashboard" className="nav-link">
+                    <Link to="/dashboard" className="nav-link" onClick={handleNavClick}>
                         <i className="fa-solid fa-house me-2"></i> Inicio Usuario
                     </Link>
                     <hr style={{opacity: 0.1, margin: '15px 0'}}/>
                     
-                    <Link to="/usuarios" className={`nav-link ${activeClass('/usuarios')}`}>
+                    <Link to="/usuarios" className={`nav-link ${activeClass('/usuarios')}`} onClick={handleNavClick}>
                         <i className="fa-solid fa-users me-2"></i> Usuarios
                     </Link>
-                    <Link to="/motos" className={`nav-link ${activeClass('/motos')}`}>
+                    <Link to="/motos" className={`nav-link ${activeClass('/motos')}`} onClick={handleNavClick}>
                         <i className="fa-solid fa-motorcycle me-2"></i> Motos
                     </Link>
-                    <Link to="/referencias" className={`nav-link ${activeClass('/referencias')}`}>
+                    <Link to="/referencias" className={`nav-link ${activeClass('/referencias')}`} onClick={handleNavClick}>
                         <i className="fa-solid fa-tags me-2"></i> Referencias
                     </Link>
-                    <Link to="/productos" className={`nav-link ${activeClass('/productos')}`}>
+                    <Link to="/productos" className={`nav-link ${activeClass('/productos')}`} onClick={handleNavClick}>
                         <i className="fa-solid fa-box me-2"></i> Productos
                     </Link>
 
-                    <Link to="/servicios" className={`nav-link ${activeClass('/servicios')}`}>
+                    <Link to="/servicios" className={`nav-link ${activeClass('/servicios')}`} onClick={handleNavClick}>
                         <i className="fa-solid fa-wrench me-2"></i> Servicios
                     </Link>
 
-                    <Link to="/caracteristicas" className={`nav-link ${activeClass('/caracteristicas')}`}> 
+                    <Link to="/caracteristicas" className={`nav-link ${activeClass('/caracteristicas')}`} onClick={handleNavClick}> 
                         <i className="fa-solid fa-list me-2"></i> Características
                     </Link>
-                    <Link to="/tipo-servicio" className={`nav-link ${activeClass('/tipo-servicio')}`}>
+                    <Link to="/tipo-servicio" className={`nav-link ${activeClass('/tipo-servicio')}`} onClick={handleNavClick}>
                         <i className="fa-solid fa-gear me-2"></i> Tipos de Servicio
                     </Link>
-                    <Link to="/mecanico" className={`nav-link ${activeClass('/mecanico')}`}>
+                    <Link to="/mecanico" className={`nav-link ${activeClass('/mecanico')}`} onClick={handleNavClick}>
                         <i className="fa-solid fa-gear me-2"></i> Mecanicos
                     </Link>
 
-                    <Link to="/pqrs" className={`nav-link ${activeClass('/pqrs')}`}>
+                    <Link to="/pqrs" className={`nav-link ${activeClass('/pqrs')}`} onClick={handleNavClick}>
                         <i className="fa-solid fa-comments me-2"></i> PQRS
                     </Link>
                 </nav>

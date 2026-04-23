@@ -35,6 +35,7 @@
     background: white;
     border-radius: 15px;
     overflow: hidden;
+    overflow-x: auto;
     border: none !important;
 }
 
@@ -64,6 +65,7 @@
     font-weight: 800;
     text-transform: uppercase;
     display: inline-block;
+    white-space: nowrap;
 }
 
 .status-pill.pendiente {
@@ -105,6 +107,18 @@
 }
 
 /* --- RESPONSIVIDAD --- */
+@media (max-width: 768px) {
+    .tab-navigation {
+        max-width: 100%;
+        margin: 15px 10px 20px;
+    }
+
+    .tab-item {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+}
+
 @media (max-width: 600px) {
     .tab-navigation {
         flex-direction: column;
@@ -114,5 +128,17 @@
     .tab-item {
         width: 100%;
         padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tab-item {
+        font-size: 0.8rem;
+        padding: 9px;
+    }
+
+    .status-pill {
+        padding: 4px 10px;
+        font-size: 0.65rem;
     }
 }
