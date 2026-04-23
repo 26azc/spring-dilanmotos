@@ -70,14 +70,14 @@ export default function Motos() {
             });
 
             if (res.ok) {
-                alert(editMode ? "✅ Moto actualizada" : "✅ Moto guardada");
+                alert(editMode ? " Moto actualizada" : " Moto guardada");
                 setNuevo({ modelo: '', cilindraje: '', idMarca: '', tipoServicio: '' });
                 setEditMode(false);
                 setSelectedId(null);
                 await cargarDatos();
             }
         } catch (error) {
-            alert("❌ Error al conectar con el servidor");
+            alert(" Error al conectar con el servidor");
         }
     };
 

@@ -4,7 +4,7 @@ import { authFetch } from "../api";
 const Referencia = () => {
     const [marcas, setMarcas] = useState([]);
     const [todasLasReferencias, setTodasLasReferencias] = useState([]);
-    const [filtroMarca, setFiltroMarca] = useState(''); // 👈 Estado para el select de filtro
+    const [filtroMarca, setFiltroMarca] = useState(''); 
     const [editMode, setEditMode] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
     const [formData, setFormData] = useState({
@@ -12,12 +12,19 @@ const Referencia = () => {
         cilindraje: '', 
         idMarca: ''
     });
+    
+    // 1. El token es indispensable aquí arriba
+    const token = localStorage.getItem('token');
 
     const cargarTodo = async () => {
         try {
             const [resMarcas, resRefs] = await Promise.all([
-                fetch("http://localhost:8080/api/marcas"),
-                fetch("http://localhost:8080/api/referencias")
+                fetch("http://localhost:8080/api/marcas", {
+                    headers: { 'Authorization': `Bearer ${token}` } // 👈 Agregado
+                }),
+                fetch("http://localhost:8080/api/referencias", {
+                    headers: { 'Authorization': `Bearer ${token}` } // 👈 Agregado
+                })
             ]);
             setMarcas(await resMarcas.json());
             setTodasLasReferencias(await resRefs.json());
@@ -28,7 +35,6 @@ const Referencia = () => {
 
     useEffect(() => { cargarTodo(); }, []);
 
-    // 🎯 Lógica del Filtro por Select
     const referenciasFiltradas = filtroMarca === '' 
         ? todasLasReferencias 
         : todasLasReferencias.filter(ref => ref.marca?.idMarca === parseInt(filtroMarca));
@@ -45,8 +51,7 @@ const Referencia = () => {
     };
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
-
+        e.preventDefault();
 
         const url = editMode 
         ? `http://localhost:8080/api/referencias/${selectedId}` 
@@ -58,26 +63,13 @@ const Referencia = () => {
             marca: { idMarca: parseInt(formData.idMarca) }
         };
 
-        const eliminarReferencia = async (id) => {
-        if(!id) return; 
-
-        if(window.confirm("¿Seguro que quieres borrar este modelo?")) {
-        const res = await fetch(`http://localhost:8080/api/referencias/${id}`, {
-            method: 'DELETE'
-        });
-
-        if (res.ok) {
-            alert("Eliminado");
-            cargarTodo(); 
-        } else {
-            alert("Error al eliminar: " + res.status);
-        }
-    }
-};
-
+        // 2. Limpiamos el fetch doble que tenías y dejamos el correcto con token
         const res = await fetch(url, {
             method: editMode ? "PUT" : "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}` // 👈 Agregado
+            },
             body: JSON.stringify(payload)
         });
 
@@ -91,7 +83,6 @@ const Referencia = () => {
 
     return (
         <div className="main-content-inner">
-            {/* FORMULARIO */}
             <div className="card-panel">
                 <h3 className="text-primary mb-4">
                     {editMode ? '✏️ Editar Modelo' : '⚙️ Nueva Referencia'}
@@ -117,7 +108,7 @@ const Referencia = () => {
                             {editMode ? 'Actualizar Cambios' : 'Guardar en Catálogo'}
                         </button>
                         {editMode && (
-                            <button className="btn-bs btn-secondary" onClick={() => {
+                            <button type="button" className="btn-bs btn-secondary" onClick={() => {
                                 setEditMode(false); 
                                 setFormData({nombre:'', cilindraje:'', idMarca:''})
                             }}>Cancelar</button>
@@ -126,7 +117,6 @@ const Referencia = () => {
                 </form>
             </div>
 
-            {/* TABLA CON FILTRO SELECT */}
             <div className="card-panel mt-4">
                 <div className="row align-items-center mb-3">
                     <div className="col-md-6">
@@ -134,12 +124,7 @@ const Referencia = () => {
                     </div>
                     <div className="col-md-6 d-flex align-items-center gap-2">
                         <span className="text-nowrap fw-bold">Filtrar por:</span>
-                        {/* 🔎 SELECT DE FILTRO */}
-                        <select 
-                            className="input-bs" 
-                            value={filtroMarca} 
-                            onChange={(e) => setFiltroMarca(e.target.value)}
-                        >
+                        <select className="input-bs" value={filtroMarca} onChange={(e) => setFiltroMarca(e.target.value)}>
                             <option value="">-- Ver todas las marcas --</option>
                             {marcas.map(m => <option key={m.idMarca} value={m.idMarca}>{m.nombre}</option>)}
                         </select>
@@ -162,7 +147,11 @@ const Referencia = () => {
                                     </button>
                                     <button className="btn-bs btn-danger btn-sm" onClick={async () => {
                                         if(window.confirm("¿Eliminar del catálogo?")) {
-                                            await fetch(`http://localhost:8080/api/referencias/${ref.idReferencia}`, {method:'DELETE'});
+                                            // 3. Agregamos el token al eliminar de la tabla
+                                            await fetch(`http://localhost:8080/api/referencias/${ref.idReferencia}`, {
+                                                method:'DELETE',
+                                                headers: { 'Authorization': `Bearer ${token}` } // 👈 Agregado
+                                            });
                                             cargarTodo();
                                         }
                                     }}>

@@ -16,7 +16,7 @@ const AsistenteMotos = () => {
 
     // Recuperamos credenciales del localStorage
     const idLogueado = localStorage.getItem("idUsuario");
-    const token = localStorage.getItem("token"); // 👈 Crucial para evitar el error 401
+    const token = localStorage.getItem("token"); //  Crucial para evitar el error 401
     const mensajesFinRef = useRef(null);
 
     // 🏍️ Efecto para cargar la moto al iniciar
@@ -26,7 +26,7 @@ const AsistenteMotos = () => {
             try {
                 const res = await fetch(`http://localhost:8080/api/motos/usuario/${idLogueado}`, {
                     headers: { 
-                        'Authorization': `Bearer ${token}` // 👈 Agregado seguridad
+                        'Authorization': `Bearer ${token}` 
                     }
                 });
                 
@@ -39,7 +39,7 @@ const AsistenteMotos = () => {
                         const nombreMoto = motoData.modelo.toUpperCase();
                         setModeloSeleccionado(nombreMoto);
                         
-                        // 🔥 SI VIENE DEL DASHBOARD, DISPARAR AUTOMÁTICAMENTE
+                        
                         if (location.state?.autoPrompt) {
                             dispararRecomendacionInicial(nombreMoto);
                         }
@@ -72,7 +72,7 @@ const AsistenteMotos = () => {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // 👈 Agregado seguridad
+                    'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify({ 
                     motor: motoActual || modeloSeleccionado,

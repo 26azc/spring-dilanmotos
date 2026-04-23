@@ -13,25 +13,25 @@ const CrearPqrs = () => {
     });
 
     const idLogueado = localStorage.getItem('idUsuario');
-
+    const token = localStorage.getItem('token'); // Importante para autenticación
     const handleEnviar = async (e) => {
         e.preventDefault();
         
-        if (!idLogueado) {
+        if (!idLogueado || !token) {
             alert("Sesion expirada. Inicia sesion de nuevo.");
             return;
         }
         
         setEnviando(true);
 
-        // 🛡️ PAYLOAD SINCRONIZADO CON TU MODELO JAVA
+        // PAYLOAD SINCRONIZADO CON TU MODELO JAVA
         const nuevaPqrs = {
-            idUsuario: parseInt(idLogueado), // En tu Java es un Integer
+            idUsuario: parseInt(idLogueado), 
             tipo: formulario.tipo,
             asunto: formulario.asunto,
             descripcion: formulario.descripcion,
             estado: 'PENDIENTE',
-            // 💡 IMPORTANTE: Tu Java tiene @NotBlank en comentario_usuario
+            
             comentario_usuario: formulario.descripcion, 
             // Inicializamos estos para evitar errores de nulos si la DB los pide
             respuesta_admin: "Sin respuesta",
@@ -44,7 +44,10 @@ const CrearPqrs = () => {
         try {
             const res = await fetch('http://localhost:8080/api/pqrs', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(nuevaPqrs)
             });
 

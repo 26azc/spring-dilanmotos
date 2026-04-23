@@ -3,6 +3,9 @@ import '../global.css';
 import { authFetch } from "../api";
 
 const Servicio = () => {
+    // Recuperamos el token para todas las peticiones
+    const token = localStorage.getItem('token');
+
     // Estados para las listas
     const [usuarios, setUsuarios] = useState([]);
     const [motos, setMotos] = useState([]);
@@ -32,8 +35,14 @@ const Servicio = () => {
     useEffect(() => {
         const cargarBase = async () => {
             try {
-                const u = await fetch('http://localhost:8080/api/usuarios').then(r => r.json());
-                const t = await fetch('http://localhost:8080/api/tiposervicio').then(r => r.json());
+                const u = await fetch('http://localhost:8080/api/usuarios', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }).then(r => r.json());
+                
+                const t = await fetch('http://localhost:8080/api/tiposervicio', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }).then(r => r.json());
+                
                 setUsuarios(u);
                 setTipos(t);
             } catch(e) { 
@@ -41,7 +50,7 @@ const Servicio = () => {
             }
         };
         cargarBase();
-    }, []);
+    }, [token]);
 
     // 2. Carga dinámica al seleccionar un cliente (CON MALLA DE SEGURIDAD)
     useEffect(() => {
@@ -54,11 +63,14 @@ const Servicio = () => {
         const cargarDatosCliente = async () => {
             try {
                 const [resMotos, resHistorial] = await Promise.all([
-                    fetch(`http://localhost:8080/api/motos/usuario/${form.usuario.idUsuario}`).then(r => r.json()),
-                    fetch(`${API}/usuario/${form.usuario.idUsuario}`).then(r => r.json())
+                    fetch(`http://localhost:8080/api/motos/usuario/${form.usuario.idUsuario}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    }).then(r => r.json()),
+                    fetch(`${API}/usuario/${form.usuario.idUsuario}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    }).then(r => r.json())
                 ]);
 
-                // Si no es un array, lo convertimos a array para que .map() no falle nunca
                 setMotos(Array.isArray(resMotos) ? resMotos : (resMotos.idMoto ? [resMotos] : []));
                 setHistorial(Array.isArray(resHistorial) ? resHistorial : (resHistorial.idServicio ? [resHistorial] : []));
                 
@@ -70,26 +82,29 @@ const Servicio = () => {
         };
 
         cargarDatosCliente();
-    }, [form.usuario.idUsuario]);
+    }, [form.usuario.idUsuario, token]);
 
     // 3. Lógica para EDITAR
     const handleEdit = (s) => {
         setEditMode(true);
         setEditId(s.idServicio);
         setForm({
-            ...s, // Copiamos todos los datos que vienen del backend
+            ...s, 
             usuario: { idUsuario: s.usuario.idUsuario },
             moto: { idMoto: s.moto.idMoto },
             tipoServicio: { id_tipo_servicio: s.tipoServicio.id_tipo_servicio }
         });
-        window.scrollTo(0, 0); // Sube la pantalla al formulario
+        window.scrollTo(0, 0); 
     };
 
     // 4. Lógica para BORRAR
     const handleDelete = async (id) => {
         if (window.confirm("¿Estás seguro de que deseas eliminar este servicio del historial?")) {
             try {
-                const res = await fetch(`${API}/${id}`, { method: 'DELETE' });
+                const res = await fetch(`${API}/${id}`, { 
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
                 if (res.ok) {
                     window.location.reload();
                 } else {
@@ -110,7 +125,10 @@ const Servicio = () => {
         try {
             const res = await fetch(url, {
                 method: method,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(form)
             });
 

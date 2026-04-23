@@ -109,30 +109,23 @@ function App() {
     return (
         <Router>
             <Routes>
-                {/* RUTAS PÚBLICAS */}
-                <Route path="/" element={<Navigate to="/login" />} />
+         {/* RUTAS PÚBLICAS (Cualquiera puede entrar) */}
+                <Route path="/" element={<Navigate to="/dashboard" />} /> {/* se cambio esto para que lo primero que vean sea el Dashboard */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/catalogoKit" element={<CatalogoKit />} />
                 <Route path="/catalogoAceites" element={<CatalogoAceites />} />
                 <Route path="/catalogoLlantas" element={<CatalogoLlantas />} />
+                
+                {/* ✅ DASHBOARD AHORA ES PÚBLICO */}
+                <Route path="/dashboard" element={<Dashboard />} /> 
 
-                {/* RUTAS DEL SOCIO (Vistas limpias, sin sidebar) */}
-                <Route path="/dashboard" element={
-                    <PrivateRoute><Dashboard /></PrivateRoute>
-                } />
+                {/* RUTAS DEL SOCIO (Privadas: solo con login) */}
                 <Route path="/historial" element={<PrivateRoute><Historial /></PrivateRoute>} />
                 <Route path="/nueva-pqrs" element={<PrivateRoute><CrearPqrs /></PrivateRoute>} />
-                <Route path="/perfil" element={
-                    <PrivateRoute><PerfilUsuario /></PrivateRoute>
-                } />
-                
-                <Route path="/asistente" element={
-                    <PrivateRoute><AsistenteMotos /></PrivateRoute>
-                } />
-                <Route path="/recomendaciones" element={
-                    <PrivateRoute><Recomendaciones /></PrivateRoute>
-                } />
+                <Route path="/perfil" element={<PrivateRoute><PerfilUsuario /></PrivateRoute>} />
+                <Route path="/asistente" element={<PrivateRoute><AsistenteMotos /></PrivateRoute>} />
+                <Route path="/recomendaciones" element={<PrivateRoute><Recomendaciones /></PrivateRoute>} />
 
                 {/* RUTAS ADMINISTRATIVAS (Con Sidebar y bloqueo de rol) */}
                 <Route path="/usuarios" element={

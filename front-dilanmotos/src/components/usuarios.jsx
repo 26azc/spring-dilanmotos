@@ -34,7 +34,7 @@ export default function Usuarios() {
                 method: method,
                 headers: { 
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Agregado
+                    'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify(nuevo)
             });

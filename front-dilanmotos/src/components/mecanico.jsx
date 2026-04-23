@@ -82,14 +82,14 @@ export default function Servicio() {
             });
 
             if (res.ok) {
-                alert("✅ Servicio registrado correctamente");
+                alert("Servicio registrado correctamente");
                 setNuevo({ idUsuario: '', idMoto: '', idTipoServicio: '', reporte: '' });
                 // Opcional: cargarHistorial(nuevo.idUsuario);
             } else {
-                alert("❌ Error al registrar: " + res.status);
+                alert("Error al registrar: " + res.status);
             }
         } catch (error) {
-            alert("❌ Error de conexión");
+            alert("Error de conexión");
         }
     };
 

@@ -60,9 +60,9 @@ export default function Productos() {
             if (res.ok) {
                 setNuevo({ nombre: '', descripcion: '', precio: '', idMarca: '', idCategoria: '' });
                 await cargarDatos();
-                alert("✅ Producto guardado");
+                alert("Producto guardado");
             } else {
-                alert("❌ Error al guardar: " + res.status);
+                alert("Error al guardar: " + res.status);
             }
         } catch (error) {
             console.error("Error en POST:", error);

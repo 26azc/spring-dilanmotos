@@ -10,13 +10,20 @@ const Historial = () => {
     const [cargando, setCargando] = useState(true);
     const idLogueado = localStorage.getItem('idUsuario');
 
+    const token = localStorage.getItem('token'); // Importante para autenticación
+    
     useEffect(() => {
         const cargarDatos = async () => {
-            if (!idLogueado) return;
+            if (!idLogueado || !token) return; //validamos token
             setCargando(true);
             const endpoint = tab === 'pqrs' ? 'pqrs' : 'servicios';
             try {
-                const res = await fetch(`http://localhost:8080/api/${endpoint}/usuario/${idLogueado}`);
+                const res = await fetch(`http://localhost:8080/api/${endpoint}/usuario/${idLogueado}`, {
+                    headers: { 
+                        'Authorization': `Bearer ${token}` 
+
+                    }
+                });
                 if (res.ok) {
                     const data = await res.json();
                     setDatos(Array.isArray(data) ? data : []);
