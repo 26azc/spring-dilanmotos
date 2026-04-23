@@ -36,7 +36,7 @@ export default function Servicio() {
             const [resU, resM, resT] = await Promise.all([
                 fetch('http://localhost:8080/api/usuarios', opciones),
                 fetch('http://localhost:8080/api/motos', opciones),
-                fetch('http://localhost:8080/api/tipo-servicio', opciones)
+                fetch('http://localhost:8080/api/tiposervicio', opciones)
             ]);
 
             // Solo ejecutamos .json() si el status es 200 (ok)
