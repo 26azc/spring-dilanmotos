@@ -34,20 +34,10 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/usuarios/login",
                                 "/api/usuarios",
-                "/api/marcas/**",
-                "/api/referencias/**",
-                "/api/productos/**",
-                "/api/categoria/**",
-                "/api/caracteristicas/**",
-                "/api/servicios/**", 
-                "/api/tiposervicio/**", // <--- CORREGIDO: Sin guiones bajos
-                "/api/motos/**",
-                "/api/pqrs/**",
-                "/api/mecanico/**",
-                "/api/categorias/**",
-                "/v3/api-docs/**",
-                "/swagger-ui/**",
-                "/swagger-ui.html").permitAll()
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
