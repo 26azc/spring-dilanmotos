@@ -91,7 +91,7 @@ const CatalogoAceites = () => {
                              <img src="/AceiteMotul.png" alt="Aceites" />
                         </div>
                         <h3>Nombre del producto</h3>
-                        <Link to="/CatalogoAceitesAutenticado" className="category-btn">Ver ficha técnica</Link>
+                        <Link to="/fichaTecnica/1" className="category-btn">Ver ficha técnica</Link>
                     </div>
 
                     {/* Llantas */}
@@ -100,7 +100,7 @@ const CatalogoAceites = () => {
                              <img src="/AceiteMotul.png" alt="Aceites" />
                         </div>
                         <h3>Nombre del producto</h3>
-                        <Link to="/catalogo/llantas" className="category-btn">Ver ficha técnica</Link>
+                        <Link to="/fichaTecnica/2" className="category-btn">Ver ficha técnica</Link>
                     </div>
 
                     {/* Aceites */}
@@ -109,7 +109,7 @@ const CatalogoAceites = () => {
                              <img src="/AceiteMotul.png" alt="Aceites" />
                         </div>
                         <h3>Nombre del producto</h3>
-                        <Link to="/catalogo/aceites" className="category-btn">Ver ficha técnica</Link>
+                        <Link to="/fichaTecnica/8" className="category-btn">Ver ficha técnica</Link>
                     </div>
                 </div>
             </main>

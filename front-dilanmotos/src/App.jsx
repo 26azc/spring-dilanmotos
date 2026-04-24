@@ -13,6 +13,7 @@ import ServicioAdmin from './components/Servicio';
 import CatalogoKit from './components/catalogoKit';
 import CatalogoAceites from './components/catalogoAceites';
 import CatalogoLlantas from './components/catalogoLlantas';
+import FichaTecnica from './components/fichaTecnica';
 
 // Componentes de Gestión (ADMIN)
 import Usuarios from './components/usuarios';
@@ -138,7 +139,8 @@ function App() {
                 <Route path="/catalogoKit" element={<CatalogoKit />} />
                 <Route path="/catalogoAceites" element={<CatalogoAceites />} />
                 <Route path="/catalogoLlantas" element={<CatalogoLlantas />} />
-                
+                <Route path="/fichaTecnica/:id" element={<FichaTecnica />} />
+
                 {/* ✅ DASHBOARD AHORA ES PÚBLICO */}
                 <Route path="/dashboard" element={<Dashboard />} /> 
 

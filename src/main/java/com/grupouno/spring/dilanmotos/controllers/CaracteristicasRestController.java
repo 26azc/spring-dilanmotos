@@ -50,4 +50,5 @@ public class CaracteristicasRestController {
         repository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
 }

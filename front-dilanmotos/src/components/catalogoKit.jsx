@@ -14,6 +14,7 @@ const CatalogoKit = () => {
         const nombre = localStorage.getItem('nombreUsuario');
         const rol = localStorage.getItem('rolUsuario');
         
+        
         if (nombre) {
             setUser({ nombre: nombre, rol: rol || "USER", id });
         }
@@ -91,7 +92,7 @@ const CatalogoKit = () => {
                             <img src="/KitDeArrastre.png" alt="Kits" />
                         </div>
                         <h3>Nombre del producto</h3>
-                        <Link to="/CatalogoKitArrastreAutenticado" className="category-btn">Ver ficha técnica</Link>
+                        <Link to="/fichaTecnica/5" className="category-btn">Ver ficha técnica</Link>
                     </div>
 
                     {/* Llantas */}
@@ -100,7 +101,7 @@ const CatalogoKit = () => {
                             <img src="/KitDeArrastre.png" alt="Kits" />
                         </div>
                         <h3>Nombre del producto</h3>
-                        <Link to="/catalogo/llantas" className="category-btn">Ver ficha técnica</Link>
+                        <Link to="/fichaTecnica/6" className="category-btn">Ver ficha técnica</Link>
                     </div>
 
                     {/* Aceites */}
@@ -109,7 +110,7 @@ const CatalogoKit = () => {
                             <img src="/KitDeArrastre.png" alt="Kits" />
                         </div>
                         <h3>Nombre del producto</h3>
-                        <Link to="/catalogo/aceites" className="category-btn">Ver ficha técnica</Link>
+                        <Link to="/fichaTecnica/7" className="category-btn">Ver ficha técnica</Link>
                     </div>
                 </div>
             </main>

@@ -91,7 +91,7 @@ const CatalogoLlantas = () => {
                             <img src="/Llanta.png" alt="Llantas" />
                         </div>
                         <h3>Nombre del producto</h3>
-                        <Link to="/CatalogoAceitesAutenticado" className="category-btn">Ver ficha técnica</Link>
+                        <Link to="/fichaTecnica/3" className="category-btn">Ver ficha técnica</Link>
                     </div>
                         
                     
@@ -100,7 +100,7 @@ const CatalogoLlantas = () => {
                             <img src="/Llanta.png" alt="Llantas" />
                         </div>
                         <h3>Nombre del producto</h3>
-                        <Link to="/catalogo/llantas" className="category-btn">Ver ficha técnica</Link>
+                        <Link to="/fichaTecnica/4" className="category-btn">Ver ficha técnica</Link>
                     </div>
 
                  
@@ -109,7 +109,7 @@ const CatalogoLlantas = () => {
                             <img src="/Llanta.png" alt="Llantas" />
                         </div>
                         <h3>Nombre del producto</h3>
-                        <Link to="/catalogo/aceites" className="category-btn">Ver ficha técnica</Link>
+                        <Link to="/fichaTecnica/9" className="category-btn">Ver ficha técnica</Link>
                     </div>
                 </div>
             </main>
